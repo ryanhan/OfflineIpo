@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OfflineIpo</string>
+    <string name="ipo_today">今日新股</string>
+    <string name="ipo_list">所有新股</string>
+    <string name="my_ipo">我的新股</string>
+
+</resources>
