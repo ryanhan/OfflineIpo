@@ -7,6 +7,7 @@
     tools:context="cn.ryanman.app.offlineipo.main.IpoListFragment">
 
     <TextView
+        android:id="@+id/IpoListText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ipo_list"/>

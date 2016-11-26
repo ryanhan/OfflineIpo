@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
-import cn.ryanman.app.offlineipo.utils.AppUtils;
+import cn.ryanman.app.offlineipo.utils.WebUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                return AppUtils.getIpoItems().size() + "";
+                return WebUtils.getIpoItems().size() + "";
             } catch (Exception e) {
                 return null;
             }

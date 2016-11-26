@@ -3,12 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="cn.ryanman.app.offlineipo.main.IpoTodayFragment">
+    android:orientation="vertical">
 
-    <ExpandableListView
-        android:id="@+id/ipo_today_list"
+    <TextView
+        android:id="@+id/adapter_event_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content" />
 </LinearLayout>

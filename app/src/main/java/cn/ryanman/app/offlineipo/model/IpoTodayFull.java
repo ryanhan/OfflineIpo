@@ -1,17 +1,15 @@
 package cn.ryanman.app.offlineipo.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hanyan on 11/24/2016.
+ * Created by ryan on 2016/11/26.
  */
 
-public class IpoToday {
-
+public class IpoTodayFull {
     private String event;
-    private String ipoName;
+    private IpoItem ipo;
 
     public String getEvent() {
         return event;
@@ -21,11 +19,11 @@ public class IpoToday {
         this.event = event;
     }
 
-    public String getIpoName() {
-        return ipoName;
+    public IpoItem getIpo() {
+        return ipo;
     }
 
-    public void setIpoName(String ipoName) {
-        this.ipoName = ipoName;
+    public void setIpo(IpoItem ipo) {
+        this.ipo = ipo;
     }
 }

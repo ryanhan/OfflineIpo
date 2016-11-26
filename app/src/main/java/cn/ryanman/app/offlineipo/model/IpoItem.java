@@ -9,7 +9,7 @@ public class IpoItem {
     private int id;
     private String name;
     private String code;
-    private String issuanceDate;
+    private String offlineDate;
     private String successResultDate;
     private String paymentDate;
     private double issuePrice;
@@ -39,12 +39,12 @@ public class IpoItem {
         this.code = code;
     }
 
-    public String getIssuanceDate() {
-        return issuanceDate;
+    public String getOfflineDate() {
+        return offlineDate;
     }
 
-    public void setIssuanceDate(String issuanceDate) {
-        this.issuanceDate = issuanceDate;
+    public void setOfflineDate(String offlineDate) {
+        this.offlineDate = offlineDate;
     }
 
     public String getSuccessResultDate() {
