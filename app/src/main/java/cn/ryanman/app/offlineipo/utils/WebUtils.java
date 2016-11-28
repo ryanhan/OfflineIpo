@@ -21,73 +21,93 @@ import cn.ryanman.app.offlineipo.model.IpoToday;
 
 public class WebUtils {
 
-    public static IpoToday getIpoToday() throws Exception{
-        IpoToday ipoToday = new IpoToday();
+    public static List<IpoToday> getIpoToday() throws Exception{
+        List<IpoToday> ipoTodayList = new ArrayList<>();
         String result = GetJson(Value.IpoToday);
         JSONObject json = new JSONObject(result);
         JSONObject resultJson = json.getJSONObject("returnData");
 
         JSONArray successRateArray = resultJson.getJSONArray("ANNOUNCE_SUCCESS_RATE_DATE_LIST"); //发布中签率
         for (int i = 0; i < successRateArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.SUCCESS_RATE);
-            ipoToday.addIpoName(successRateArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.SUCCESS_RATE);
+            ipoToday.setIpoName(successRateArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray successResultArray = resultJson.getJSONArray("ANNOUNCE_SUCCESS_RATE_RESULT_DATE_LIST"); //发布中签结果
         for (int i = 0; i < successResultArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.SUCCESS_RESULT);
-            ipoToday.addIpoName(successResultArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.SUCCESS_RESULT);
+            ipoToday.setIpoName(successResultArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray inquiryArray = resultJson.getJSONArray("INQUIRY_DATE_LIST"); //询价
         for (int i = 0; i < inquiryArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.INQUIRY);
-            ipoToday.addIpoName(inquiryArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.INQUIRY);
+            ipoToday.setIpoName(inquiryArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray noticeArray = resultJson.getJSONArray("IPO_NOTICE_DATE_LIST"); //招股公告
         for (int i = 0; i < noticeArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.NOTICE);
-            ipoToday.addIpoName(noticeArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.NOTICE);
+            ipoToday.setIpoName(noticeArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray announceArray = resultJson.getJSONArray("ISSUANCE_ANNOUNCEMENT_DATE_LIST"); //发行公告
         for (int i = 0; i < announceArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.ANNOUNCE);
-            ipoToday.addIpoName(announceArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.ANNOUNCE);
+            ipoToday.setIpoName(announceArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray listedArray = resultJson.getJSONArray("LISTED_DATE_LIST"); //上市
         for (int i = 0; i < listedArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.LISTED);
-            ipoToday.addIpoName(listedArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.LISTED);
+            ipoToday.setIpoName(listedArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray offlineArray = resultJson.getJSONArray("OFFLINE_ISSUANCE_DATE_LIST"); //网下发行
         for (int i = 0; i < offlineArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.OFFLINE);
-            ipoToday.addIpoName(offlineArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.OFFLINE);
+            ipoToday.setIpoName(offlineArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray onlineArray = resultJson.getJSONArray("ONLINE_ISSUANCE_DATE_LIST"); //申购
         for (int i = 0; i < onlineArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.ONLINE);
-            ipoToday.addIpoName(onlineArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.ONLINE);
+            ipoToday.setIpoName(onlineArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray roadshowArray = resultJson.getJSONArray("ONLINE_ROADSHOW_DATE_LIST"); //路演
         for (int i = 0; i < roadshowArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.ROADSHOW);
-            ipoToday.addIpoName(roadshowArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.ROADSHOW);
+            ipoToday.setIpoName(roadshowArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
         JSONArray paymentArray = resultJson.getJSONArray("PAYMENT_DATE_LIST"); //缴款日
         for (int i = 0; i < paymentArray.length(); i++) {
-            ipoToday.addEvent(IpoToday.PAY);
-            ipoToday.addIpoName(paymentArray.getString(i));
+            IpoToday ipoToday = new IpoToday();
+            ipoToday.setEvent(Value.PAYMENT);
+            ipoToday.setIpoName(paymentArray.getString(i));
+            ipoTodayList.add(ipoToday);
         }
 
-        return ipoToday;
+        return ipoTodayList;
     }
 
 

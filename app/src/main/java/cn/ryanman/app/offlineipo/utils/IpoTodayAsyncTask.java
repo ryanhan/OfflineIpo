@@ -6,14 +6,13 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
-import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
 
 /**
  * Created by ryan on 2016/11/25.
  */
 
-public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, IpoToday> {
+public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, List<IpoToday>> {
 
     private Context context;
     private OnDataLoadCompletedListener onDataLoadCompletedListener;
@@ -27,7 +26,7 @@ public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, IpoToday> {
     }
 
     @Override
-    protected IpoToday doInBackground(Void... params) {
+    protected List<IpoToday> doInBackground(Void... params) {
         try {
             return WebUtils.getIpoToday();
         } catch (Exception e) {
@@ -36,9 +35,9 @@ public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, IpoToday> {
     }
 
     @Override
-    protected void onPostExecute(IpoToday result) {
+    protected void onPostExecute(List<IpoToday> result) {
         if (result != null) {
-            DatabaseUtils.insertIpoToday(context, result);
+            DatabaseUtils.insertIpoTodayList(context, result);
             if (onDataLoadCompletedListener != null)
                 onDataLoadCompletedListener.onDataSuccessfully();
         } else {

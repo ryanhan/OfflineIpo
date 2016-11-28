@@ -6,15 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +29,7 @@ public class DatabaseUtils {
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         sqliteDatabase.delete(DatabaseHelper.IPO_TODAY, null, null);
 
-        for (int i = 0; i < ipoTodayList.size(); i++){
+        for (int i = 0; i < ipoTodayList.size(); i++) {
             ContentValues requestValues = createIpoTodayValues(ipoTodayList.get(i).getEvent(), ipoTodayList.get(i).getIpoName());
             sqliteDatabase.insert(DatabaseHelper.IPO_TODAY, null, requestValues);
         }
@@ -67,9 +58,7 @@ public class DatabaseUtils {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.IPO_TODAY, null,
-                null, null, null, null, null);
-        sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + "on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME, null);
+        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME, null);
 
         while (cursor.moveToNext()) {
             IpoTodayFull ipoTodayFull = parseIpoTodayCursor(cursor);
@@ -103,7 +92,7 @@ public class DatabaseUtils {
 
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
-            if (ipoItem != null){
+            if (ipoItem != null) {
                 ipoList.add(ipoItem);
             }
         }
@@ -137,7 +126,7 @@ public class DatabaseUtils {
         return values;
     }
 
-    private static IpoItem parseIpoCursor(Cursor cursor){
+    private static IpoItem parseIpoCursor(Cursor cursor) {
         IpoItem ipoItem = new IpoItem();
         ipoItem.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
         ipoItem.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE)));
@@ -149,14 +138,14 @@ public class DatabaseUtils {
         return ipoItem;
     }
 
-    private static IpoToday parseEventCursor(Cursor cursor){
+    private static IpoToday parseEventCursor(Cursor cursor) {
         IpoToday ipoToday = new IpoToday();
         ipoToday.setEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME)));
         ipoToday.setIpoName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
         return ipoToday;
     }
 
-    private static IpoTodayFull parseIpoTodayCursor(Cursor cursor){
+    private static IpoTodayFull parseIpoTodayCursor(Cursor cursor) {
         IpoTodayFull ipoTodayFull = new IpoTodayFull();
         ipoTodayFull.setEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME)));
 

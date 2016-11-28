@@ -3,5 +3,15 @@
     <string name="ipo_today">今日新股</string>
     <string name="ipo_list">所有新股</string>
     <string name="my_ipo">我的新股</string>
+    <string name="notice">招股公告</string>
+    <string name="inquiry">询价</string>
+    <string name="roadshow">路演</string>
+    <string name="announce">发行公告</string>
+    <string name="offline">网下发行</string>
+    <string name="online">申购</string>
+    <string name="success_rate">发布中签率</string>
+    <string name="success_result">发布中签结果</string>
+    <string name="payment">缴款日</string>
+    <string name="listed">上市</string>
 
 </resources>

@@ -8,5 +8,12 @@
     <TextView
         android:id="@+id/adapter_event_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/ipo_today_event_font_size"
+        android:paddingTop="@dimen/ipo_today_event_vertical_padding"
+        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
+        android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+        android:text="招股公告"/>
 </LinearLayout>

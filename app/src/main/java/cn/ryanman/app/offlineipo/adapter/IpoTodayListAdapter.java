@@ -11,6 +11,7 @@ import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.model.IpoItem;
+import cn.ryanman.app.offlineipo.utils.Value;
 
 /**
  * Created by ryan on 2016/11/26.
@@ -20,7 +21,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private LayoutInflater mInflater;
-    private String[] groupList;
+    private List<String> groupList;
     private List<List<IpoItem>> childList;
 
     public final class EventViewHolder {
@@ -32,7 +33,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         public TextView ipoCode;
     }
 
-    public IpoTodayListAdapter(Context context, String[] groupList, List<List<IpoItem>> childList) {
+    public IpoTodayListAdapter(Context context, List<String> groupList, List<List<IpoItem>> childList) {
         this.context = context;
         this.groupList = groupList;
         this.childList = childList;
@@ -42,7 +43,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return groupList.length;
+        return groupList.size();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public String getGroup(int groupPosition) {
-        return groupList[groupPosition];
+        return groupList.get(groupPosition);
     }
 
     @Override
@@ -93,7 +94,23 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (EventViewHolder) convertView.getTag();
         }
-        holder.eventName.setText(getGroup(groupPosition));
+
+        int resId = context.getResources().getIdentifier(getGroup(groupPosition), "string", Value.PACKAGENAME);
+        holder.eventName.setText(context.getString(resId));
+
+        if (getGroup(groupPosition).equals(Value.NOTICE)) {
+            holder.eventName.setTextColor(context.getResources().getColor(R.color.green));
+        } else if (getGroup(groupPosition).equals(Value.INQUIRY)) {
+            holder.eventName.setTextColor(context.getResources().getColor(R.color.yellow));
+        } else if (getGroup(groupPosition).equals(Value.OFFLINE)) {
+            holder.eventName.setTextColor(context.getResources().getColor(R.color.blue));
+        } else if (getGroup(groupPosition).equals(Value.PAYMENT)) {
+            holder.eventName.setTextColor(context.getResources().getColor(R.color.red));
+        }
+        else{
+            holder.eventName.setTextColor(context.getResources().getColor(R.color.dark_grey));
+        }
+
         return convertView;
     }
 
@@ -106,7 +123,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             convertView = mInflater.inflate(
                     R.layout.adapter_ipo_today_child, null);
             holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
-            holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
+            holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
             convertView.setTag(holder);
         } else {
             holder = (IpoViewHolder) convertView.getTag();

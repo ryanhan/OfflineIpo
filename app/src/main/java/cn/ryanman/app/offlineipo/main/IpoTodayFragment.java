@@ -11,7 +11,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
@@ -29,6 +34,7 @@ public class IpoTodayFragment extends Fragment {
 
     private ExpandableListView ipoTodayListView;
     private BaseExpandableListAdapter ipoTodayListAdapter;
+    private List<String> eventList;
     private List<List<IpoItem>> ipoNameList;
 
     @Override
@@ -37,12 +43,13 @@ public class IpoTodayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ipo_today, container, false);
         ipoTodayListView = (ExpandableListView) view.findViewById(R.id.ipo_today_list);
 
+        eventList = new ArrayList<>();
         ipoNameList = new ArrayList<>();
         for (int i = 0; i < Value.eventMap.size(); i++) {
             ipoNameList.add(new ArrayList<IpoItem>());
         }
 
-        ipoTodayListAdapter = new IpoTodayListAdapter(this.getActivity(), Value.eventArray, ipoNameList);
+        ipoTodayListAdapter = new IpoTodayListAdapter(this.getActivity(), eventList, ipoNameList);
         ipoTodayListView.setAdapter(ipoTodayListAdapter);
 
         for (int i = 0; i < Value.eventArray.length; i++) {
@@ -71,13 +78,26 @@ public class IpoTodayFragment extends Fragment {
         @Override
         protected void onPostExecute(List<IpoTodayFull> result) {
 
+            eventList.clear();
             for (int i = 0; i < Value.eventMap.size(); i++) {
                 ipoNameList.get(i).clear();
             }
 
+            Set<Integer> eventSet = new TreeSet<>();
+
             for (int i = 0; i < result.size(); i++) {
-                System.out.println(result.get(i).getIpo().getName());
+                eventSet.add(Value.eventMap.get(result.get(i).getEvent()));
                 ipoNameList.get(Value.eventMap.get(result.get(i).getEvent())).add(result.get(i).getIpo());
+            }
+
+            Iterator<Integer> iter = eventSet.iterator();
+            while (iter.hasNext()){
+                eventList.add(Value.eventArray[iter.next()]);
+            }
+            for (int i = Value.eventArray.length; i > 0; i--){
+                if (!eventSet.contains(i - 1)){
+                    ipoNameList.remove(i - 1);
+                }
             }
 
             ipoTodayListAdapter.notifyDataSetInvalidated();
