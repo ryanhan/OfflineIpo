@@ -9,10 +9,10 @@ public class IpoItem {
     private int id;
     private String name;
     private String code;
-    private String offlineDate;
-    private String successResultDate;
-    private String paymentDate;
-    private double issuePrice;
+    private String offlineDate; //线下申购日
+    private String successResultDate;  //发布中签结果
+    private String paymentDate; //缴款日
+    private double issuePrice;  //发行价
     private String url;
 
     public int getId() {
