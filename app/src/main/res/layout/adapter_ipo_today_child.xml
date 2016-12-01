@@ -3,25 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:paddingTop="@dimen/ipo_today_event_vertical_padding"
+    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
+    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding">
 
     <TextView
         android:id="@+id/adapter_ipo_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/ipo_today_event_vertical_padding"
-        android:layout_marginLeft="@dimen/ipo_today_event_horizontal_padding"
-        android:layout_marginTop="@dimen/ipo_today_event_vertical_padding"
-        android:textSize="@dimen/ipo_today_ipo_name_font_size" />
+        android:textSize="@dimen/ipo_today_ipo_name_font_size"
+        android:text="华安证券"/>
 
     <TextView
         android:id="@+id/adapter_ipo_code"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/adapter_ipo_name"
-        android:layout_below="@id/adapter_ipo_name"
-        android:textSize="@dimen/ipo_today_ipo_code_font_size" />
+        android:textSize="@dimen/ipo_today_ipo_code_font_size"
+        android:layout_alignLeft="@+id/adapter_ipo_name"
+        android:text="600123"
+        android:layout_below="@+id/adapter_ipo_name"
+        android:layout_alignStart="@+id/adapter_ipo_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/adapter_ipo_price"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="参与申购"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
