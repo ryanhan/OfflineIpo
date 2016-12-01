@@ -4,11 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="cn.ryanman.app.offlineipo.main.IpoTodayFragment">
 
     <ExpandableListView
         android:id="@+id/ipo_today_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:groupIndicator="@null"
+        android:divider="@null"
+        android:dividerHeight="1dp"
+        android:scrollbars="none"/>
 
 </LinearLayout>

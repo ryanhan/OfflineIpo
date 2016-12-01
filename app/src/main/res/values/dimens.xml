@@ -1,12 +1,17 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="ipo_today_event_font_size">18sp</dimen>
+    <dimen name="activity_horizontal_margin">12dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="ipo_today_event_font_size">16sp</dimen>
     <dimen name="ipo_today_event_vertical_padding">12dp</dimen>
     <dimen name="ipo_today_event_horizontal_padding">15dp</dimen>
 
+    <dimen name="ipo_today_name_code_margin">5dp</dimen>
+
     <dimen name="ipo_today_ipo_name_font_size">16sp</dimen>
     <dimen name="ipo_today_ipo_code_font_size">14sp</dimen>
+
+    <dimen name="ipo_today_button_font_size">12sp</dimen>
+
 
 </resources>

@@ -11,8 +11,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +19,6 @@ import java.util.TreeSet;
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
 import cn.ryanman.app.offlineipo.model.IpoItem;
-import cn.ryanman.app.offlineipo.model.IpoToday;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
@@ -42,6 +39,7 @@ public class IpoTodayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ipo_today, container, false);
         ipoTodayListView = (ExpandableListView) view.findViewById(R.id.ipo_today_list);
+        //ipoTodayListView.setGroupIndicator(null);
 
         eventList = new ArrayList<>();
         ipoNameList = new ArrayList<>();
