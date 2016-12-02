@@ -26,7 +26,7 @@
             android:layout_marginRight="20dp"
             android:text="招股公告"
             android:textStyle="bold"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/ipo_today_event_font_size" />
 
         <ImageView

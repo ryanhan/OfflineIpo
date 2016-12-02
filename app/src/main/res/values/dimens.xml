@@ -7,6 +7,8 @@
     <dimen name="ipo_today_event_horizontal_padding">15dp</dimen>
 
     <dimen name="ipo_today_name_code_margin">5dp</dimen>
+    <dimen name="ipo_today_vertical_gap">5dp</dimen>
+    <dimen name="ipo_today_horizontal_gap">5dp</dimen>
 
     <dimen name="ipo_today_ipo_name_font_size">16sp</dimen>
     <dimen name="ipo_today_ipo_code_font_size">14sp</dimen>

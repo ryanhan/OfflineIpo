@@ -119,8 +119,6 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 //            holder.eventName.setTextColor(context.getResources().getColor(R.color.dark_grey));
 //        }
 
-        holder.eventName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-
 
         if (isExpanded){
             holder.layout.setBackgroundResource(R.drawable.group_expanded);
@@ -150,7 +148,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder = (IpoViewHolder) convertView.getTag();
         }
         holder.ipoName.setText(getChild(groupPosition, childPosition).getName());
-        holder.ipoCode.setText(getChild(groupPosition, childPosition).getCode());
+        holder.ipoCode.setText("(" + getChild(groupPosition, childPosition).getCode() + ")");
         if (isLastChild){
             holder.layout.setBackgroundResource(R.drawable.child_last);
         }

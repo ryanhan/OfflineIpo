@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:groupIndicator="@null"
         android:divider="@null"
-        android:dividerHeight="1dp"
+        android:dividerHeight="0.5dp"
         android:scrollbars="none"/>
 
 </LinearLayout>

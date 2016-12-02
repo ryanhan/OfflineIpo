@@ -29,17 +29,48 @@
         android:textSize="@dimen/ipo_today_ipo_code_font_size" />
 
     <TextView
-        android:id="@+id/adapter_ipo_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
+        android:id="@+id/adapter_ipo_price_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/adapter_ipo_name"
+        android:layout_below="@id/adapter_ipo_name"
+        android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+        android:text="发行价" />
+
+    <TextView
+        android:id="@+id/adapter_ipo_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/adapter_ipo_price_title"
+        android:layout_marginLeft="@dimen/ipo_today_horizontal_gap"
+        android:layout_toRightOf="@id/adapter_ipo_price_title"
+        android:text="13.2" />
+
+    <TextView
+        android:id="@+id/adapter_ipo_next_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/adapter_ipo_price_title"
+        android:layout_below="@id/adapter_ipo_price_title"
+        android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+        android:text="下一步" />
+
+    <TextView
+        android:id="@+id/adapter_ipo_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/adapter_ipo_next_title"
+        android:layout_marginLeft="@dimen/ipo_today_horizontal_gap"
+        android:layout_toRightOf="@id/adapter_ipo_next_title"
+        android:text="申购" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/ipo_today_button"
-        android:text="参与申购"
+        android:text="+  参与"
         android:textColor="@android:color/white"
         android:textSize="@dimen/ipo_today_button_font_size"
         android:textStyle="bold" />
