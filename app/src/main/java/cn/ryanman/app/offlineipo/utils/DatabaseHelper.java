@@ -18,10 +18,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ID = "id";
     public static final String STOCK_NAME = "stock_name";
     public static final String STOCK_CODE = "stock_code";
+    public static final String NOTICE_DATE = "notice_date"; //招股公告
+    public static final String INQUIRY_DATE = "inquiry_date"; //询价开始
+    public static final String INQUIRY_END_DATE = "inquiry_end_date"; //询价结束
+    public static final String ANNOUNCE_DATE = "announce_date"; //发行公告
     public static final String OFFLINE_DATE = "offline_date"; //网下收购日
     public static final String SUCCESS_RESULT_DATE = "success_result_date";  //发布中签结果
     public static final String PAYMENT_DATE = "payment_date"; //缴款日
+    public static final String LISTED_DATE = "listed_date"; //上市日
     public static final String ISSUE_PRICE = "issue_price"; //发行价格
+    public static final String ESTIMATE_PRICE = "estimate_price"; //发行价格
     public static final String IPO_URL = "ipo_url"; //新股链接
 
     public static final String PERSON = "person";
@@ -37,7 +43,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String IPO_TODAY = "ipo_today";
     public static final String EVENT_NAME = "event_name";
-
 
 
     //private Context context;
@@ -60,9 +65,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("create table if not exists " + IPO + " (" + STOCK_CODE
-                + " text PRIMARY KEY, " + STOCK_NAME + " text, " + OFFLINE_DATE + " text, "
-                + SUCCESS_RESULT_DATE + " text, " + PAYMENT_DATE + " text, " + ISSUE_PRICE + " text, "
-                + IPO_URL + " text)");
+                + " text PRIMARY KEY, " + STOCK_NAME + " text, " + OFFLINE_DATE + " text, " +
+                NOTICE_DATE + " text, " + INQUIRY_DATE + " text, " + INQUIRY_END_DATE + " text, "
+                + ANNOUNCE_DATE + " text, " + SUCCESS_RESULT_DATE + " text, " + PAYMENT_DATE + " text, "
+                + LISTED_DATE + " text, " + ESTIMATE_PRICE + " real," + ISSUE_PRICE + " real, " + IPO_URL + " text)");
 
         db.execSQL("create table if not exists " + PERSON + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text)");
@@ -73,8 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME  + " text)");
-
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");
     }
 
     @Override

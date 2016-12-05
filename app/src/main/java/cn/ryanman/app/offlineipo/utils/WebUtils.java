@@ -128,6 +128,11 @@ public class WebUtils {
                 continue;
             }
 
+            String listedDate = ipoJson.getString("LISTED_DATE");
+            if (!listedDate.equals("-") && AppUtils.daysAfter(listedDate) > 60){
+                continue;
+            }
+
             try {
                 ipoItem.setIssuePrice(ipoJson.getDouble("ISSUE_PRICE"));
             }catch (Exception e){
@@ -135,11 +140,41 @@ public class WebUtils {
             }
 
             ipoItem.setOfflineDate(ipoJson.getString("OFFLINE_ISSUANCE_END_DATE"));
-            ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE"));
-            ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE"));
             ipoItem.setUrl(ipoJson.getString("ANNOUNCEMENT_URL"));
             ipoItems.add(ipoItem);
         }
+        return ipoItems;
+    }
+
+    public static List<IpoItem> getIpoSchedule() throws Exception{
+        List<IpoItem> ipoItems = new ArrayList<IpoItem>();
+        String result = GetJson(Value.IpoSchedule);
+        JSONObject json = new JSONObject(result);
+        JSONArray resultArray = json.getJSONArray("result");
+        for (int i = 0; i < resultArray.length(); i++) {
+            JSONObject ipoJson = resultArray.getJSONObject(i);
+            IpoItem ipoItem = new IpoItem();
+
+            try {
+                ipoItem.setCode(ipoJson.getString("SECURITY_CODE"));
+            } catch (Exception e) {
+                continue;
+            }
+
+            String listedDate = ipoJson.getString("LISTED_DATE");
+            if (!listedDate.equals("-") && AppUtils.daysAfter(listedDate) > 60){
+                continue;
+            }
+
+            ipoItem.setNoticeDate(ipoJson.getString("IPO_NOTICE_DATE")); //招股公告
+            ipoItem.setInquiryDate(ipoJson.getString("INQUIRY_DATE")); //询价开始
+            ipoItem.setInquiryEndDate(ipoJson.getString("INQUIRY_DATE_END")); //询价结束
+            ipoItem.setAnnounceDate(ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE")); //发行公告
+            ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE")); //中签结果
+            ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE")); //缴款日
+            ipoItem.setListedDate(ipoJson.getString("LISTED_DATE")); //上市日
+        }
+
         return ipoItems;
     }
 

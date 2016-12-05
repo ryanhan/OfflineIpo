@@ -30,8 +30,8 @@ public class DatabaseUtils {
         sqliteDatabase.delete(DatabaseHelper.IPO_TODAY, null, null);
 
         for (int i = 0; i < ipoTodayList.size(); i++) {
-            ContentValues requestValues = createIpoTodayValues(ipoTodayList.get(i).getEvent(), ipoTodayList.get(i).getIpoName());
-            sqliteDatabase.insert(DatabaseHelper.IPO_TODAY, null, requestValues);
+            ContentValues values = createIpoTodayValues(ipoTodayList.get(i).getEvent(), ipoTodayList.get(i).getIpoName());
+            sqliteDatabase.insert(DatabaseHelper.IPO_TODAY, null, values);
         }
         dbHelper.close();
     }
@@ -76,10 +76,25 @@ public class DatabaseUtils {
         sqliteDatabase.delete(DatabaseHelper.IPO, null, null);
 
         for (int i = 0; i < ipoList.size(); i++) {
-            ContentValues requestValues = createIpoItemValues(ipoList.get(i));
-            sqliteDatabase.insert(DatabaseHelper.IPO, null, requestValues);
+            ContentValues values = createIpoItemValues(ipoList.get(i));
+            sqliteDatabase.insert(DatabaseHelper.IPO, null, values);
         }
         dbHelper.close();
+    }
+
+    public static void updateIpoSchedule(Context context, List<IpoItem> ipoList){
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        sqliteDatabase.delete(DatabaseHelper.IPO, null, null);
+
+        for (int i = 0; i < ipoList.size(); i++) {
+            ContentValues values = createIpoScheduleValues(ipoList.get(i));
+            sqliteDatabase.update(DatabaseHelper.IPO, values,
+                    DatabaseHelper.STOCK_CODE + "=?",
+                    new String[]{ipoList.get(i).getCode()});
+        }
+
     }
 
     public static List<IpoItem> getIpoList(Context context) {
@@ -116,13 +131,29 @@ public class DatabaseUtils {
             values.put(DatabaseHelper.STOCK_CODE, ipoItem.getCode());
         if (ipoItem.getOfflineDate() != null)
             values.put(DatabaseHelper.OFFLINE_DATE, ipoItem.getOfflineDate());
+        if (ipoItem.getUrl() != null)
+            values.put(DatabaseHelper.IPO_URL, ipoItem.getUrl());
+        return values;
+    }
+
+    private static ContentValues createIpoScheduleValues(IpoItem ipoItem) {
+        ContentValues values = new ContentValues();
+        if (ipoItem.getCode() != null)
+            values.put(DatabaseHelper.STOCK_CODE, ipoItem.getCode());
+        if (ipoItem.getNoticeDate() != null)
+            values.put(DatabaseHelper.NOTICE_DATE, ipoItem.getNoticeDate());
+        if (ipoItem.getInquiryDate() != null)
+            values.put(DatabaseHelper.INQUIRY_DATE, ipoItem.getInquiryDate());
+        if (ipoItem.getInquiryEndDate() != null)
+            values.put(DatabaseHelper.INQUIRY_END_DATE, ipoItem.getInquiryEndDate());
+        if (ipoItem.getAnnounceDate() != null)
+            values.put(DatabaseHelper.ANNOUNCE_DATE, ipoItem.getAnnounceDate());
         if (ipoItem.getSuccessResultDate() != null)
             values.put(DatabaseHelper.SUCCESS_RESULT_DATE, ipoItem.getSuccessResultDate());
         if (ipoItem.getPaymentDate() != null)
             values.put(DatabaseHelper.PAYMENT_DATE, ipoItem.getPaymentDate());
-        if (ipoItem.getUrl() != null)
-            values.put(DatabaseHelper.IPO_URL, ipoItem.getUrl());
-
+        if (ipoItem.getListedDate() != null)
+            values.put(DatabaseHelper.PAYMENT_DATE, ipoItem.getListedDate());
         return values;
     }
 

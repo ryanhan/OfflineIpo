@@ -12,12 +12,10 @@ import java.util.Date;
 public class AppUtils {
 
     public static double daysAfter(String date) throws ParseException {
-
         Date d = parseDate(date);
         Date now = new Date();
         double days = (now.getTime() - d.getTime()) / 1000.0 / 3600 / 24;
         return days;
-
     }
 
     public static Date parseDate(String date) throws ParseException {
