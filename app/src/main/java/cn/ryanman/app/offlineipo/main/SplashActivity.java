@@ -21,7 +21,7 @@ public class SplashActivity extends Activity {
     private final int SPLASH_DISPLAY_LENGHT = 2000;
     private boolean time_out = false;
     private boolean ipo_list_completed = false;
-    private boolean ipo_today_completed = true;
+    private boolean ipo_today_completed = false;
 
 
     @Override

@@ -86,7 +86,6 @@ public class DatabaseUtils {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-        sqliteDatabase.delete(DatabaseHelper.IPO, null, null);
 
         for (int i = 0; i < ipoList.size(); i++) {
             ContentValues values = createIpoScheduleValues(ipoList.get(i));
@@ -94,7 +93,7 @@ public class DatabaseUtils {
                     DatabaseHelper.STOCK_CODE + "=?",
                     new String[]{ipoList.get(i).getCode()});
         }
-
+        dbHelper.close();
     }
 
     public static List<IpoItem> getIpoList(Context context) {
@@ -153,7 +152,7 @@ public class DatabaseUtils {
         if (ipoItem.getPaymentDate() != null)
             values.put(DatabaseHelper.PAYMENT_DATE, ipoItem.getPaymentDate());
         if (ipoItem.getListedDate() != null)
-            values.put(DatabaseHelper.PAYMENT_DATE, ipoItem.getListedDate());
+            values.put(DatabaseHelper.LISTED_DATE, ipoItem.getListedDate());
         return values;
     }
 
@@ -161,11 +160,16 @@ public class DatabaseUtils {
         IpoItem ipoItem = new IpoItem();
         ipoItem.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
         ipoItem.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE)));
+        ipoItem.setNoticeDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTICE_DATE)));
+        ipoItem.setInquiryDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.INQUIRY_DATE)));
+        ipoItem.setInquiryEndDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.INQUIRY_END_DATE)));
+        ipoItem.setAnnounceDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNOUNCE_DATE)));
         ipoItem.setOfflineDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.OFFLINE_DATE)));
         ipoItem.setPaymentDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PAYMENT_DATE)));
         ipoItem.setSuccessResultDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SUCCESS_RESULT_DATE)));
+        ipoItem.setListedDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.LISTED_DATE)));
         ipoItem.setUrl(cursor.getString(cursor.getColumnIndex(DatabaseHelper.IPO_URL)));
-        ipoItem.setIssuePrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.ISSUE_PRICE)));
+        //ipoItem.setIssuePrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.ISSUE_PRICE)));
         return ipoItem;
     }
 

@@ -11,7 +11,7 @@ public class Value {
     public static final String PACKAGENAME = "cn.ryanman.app.offlineipo";
 
     public static final String IpoList = "http://ipo.sseinfo.com/info/commonQuery.do?sqlId=COMMON_SSE_IPO_IPO_LIST_L";
-    public static final String IpoToday = "http://ipo.sseinfo.com/info/ipoInfoDisplay/searchTodayEvents.do"; //?search_date=2016-11-25";
+    public static final String IpoToday = "http://ipo.sseinfo.com/info/ipoInfoDisplay/searchTodayEvents.do?search_date=2016-11-25";
     public static final String IpoSchedule = "http://ipo.sseinfo.com/info/commonQuery.do?sqlId=COMMON_SSE_IPO_PROCESS_DETAILS_STATUS_C";
 
     public static final int CONNECT_TIMEOUT = 3000;

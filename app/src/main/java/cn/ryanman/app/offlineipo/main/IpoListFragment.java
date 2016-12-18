@@ -7,17 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
-import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
+import cn.ryanman.app.offlineipo.adapter.IpoListAdapter;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
-import cn.ryanman.app.offlineipo.utils.WebUtils;
 
 /**
  * Created by ryanh on 2016/11/25.
@@ -25,13 +23,20 @@ import cn.ryanman.app.offlineipo.utils.WebUtils;
 
 public class IpoListFragment extends Fragment {
 
-    private TextView textView;
+    private ListView ipoListView;
+    private IpoListAdapter ipoListAdapter;
+    private List<IpoItem> ipoList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ipo_list, container, false);
-        textView = (TextView) view.findViewById(R.id.IpoListText);
+        ipoListView = (ListView) view.findViewById(R.id.all_ipo_list);
+        ipoList = new ArrayList<>();
+
+        ipoListAdapter = new IpoListAdapter(this.getActivity(), ipoList);
+        ipoListView.setAdapter(ipoListAdapter);
+
         IpoListAsyncTask task = new IpoListAsyncTask(this.getActivity());
         task.execute();
 
@@ -53,7 +58,11 @@ public class IpoListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<IpoItem> result) {
-            textView.setText(result.get(0).getName());
+            if (result != null) {
+                ipoList.clear();
+                ipoList.addAll(result);
+                ipoListAdapter.notifyDataSetChanged();
+            }
         }
     }
 

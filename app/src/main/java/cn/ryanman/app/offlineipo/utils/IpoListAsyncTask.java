@@ -39,9 +39,23 @@ public class IpoListAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>> {
         if (result != null && result.size() > 0) {
             DatabaseUtils.insertIpoList(context, result);
             IpoScheduleAsyncTask ipoScheduleAsyncTask = new IpoScheduleAsyncTask(context);
+            ipoScheduleAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
+                @Override
+                public void onDataSuccessfully() {
+                    onDataLoadCompletedListener.onDataSuccessfully();
+                }
+
+                @Override
+                public void onDataFailed() {
+                    onDataLoadCompletedListener.onDataFailed();
+                }
+            });
+            ipoScheduleAsyncTask.execute();
+
         } else {
-            if (onDataLoadCompletedListener != null)
+            if (onDataLoadCompletedListener != null) {
                 onDataLoadCompletedListener.onDataFailed();
+            }
         }
     }
 

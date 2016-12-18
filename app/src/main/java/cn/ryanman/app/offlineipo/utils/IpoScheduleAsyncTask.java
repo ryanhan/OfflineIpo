@@ -2,6 +2,7 @@ package cn.ryanman.app.offlineipo.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class IpoScheduleAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>
     @Override
     protected void onPostExecute(List<IpoItem> result) {
         if (result != null && result.size() > 0) {
+            System.out.println("size = " + result.size());
             DatabaseUtils.updateIpoSchedule(context, result);
             if (onDataLoadCompletedListener != null)
                 onDataLoadCompletedListener.onDataSuccessfully();

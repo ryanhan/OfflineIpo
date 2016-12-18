@@ -172,7 +172,9 @@ public class WebUtils {
             ipoItem.setAnnounceDate(ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE")); //发行公告
             ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE")); //中签结果
             ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE")); //缴款日
-            ipoItem.setListedDate(ipoJson.getString("LISTED_DATE")); //上市日
+            if (!ipoJson.getString("LISTED_DATE").equals("-")){
+                ipoItem.setListedDate(ipoJson.getString("LISTED_DATE")); //上市日
+            }
         }
 
         return ipoItems;
