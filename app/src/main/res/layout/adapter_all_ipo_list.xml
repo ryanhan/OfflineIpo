@@ -27,11 +27,28 @@
         android:textSize="@dimen/ipo_today_ipo_code_font_size" />
 
     <TextView
-        android:id="@+id/adapter_ipo_next_title"
+        android:id="@+id/adapter_ipo_current_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/adapter_ipo_name"
         android:layout_below="@id/adapter_ipo_name"
+        android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+        android:text="今日任务" />
+
+    <TextView
+        android:id="@+id/adapter_ipo_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/adapter_ipo_current_title"
+        android:layout_marginLeft="@dimen/ipo_today_horizontal_gap"
+        android:layout_toRightOf="@id/adapter_ipo_current_title" />
+
+    <TextView
+        android:id="@+id/adapter_ipo_next_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/adapter_ipo_current_title"
+        android:layout_below="@id/adapter_ipo_current_title"
         android:layout_marginTop="@dimen/ipo_today_vertical_gap"
         android:text="下一步" />
 

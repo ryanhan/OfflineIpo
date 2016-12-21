@@ -46,10 +46,8 @@ public class AppUtils {
         }
 
         else if(now.before(parseDate(item.getOfflineDate()))){
-            status.setCurrent(Value.ANNOUNCE);
-            status.setCurrentDate(item.getAnnounceDate());
             status.setNext(Value.OFFLINE);
-            status.setNextDate(item.getPaymentDate());
+            status.setNextDate(item.getOfflineDate());
         }
 
         else if((int)daysAfter(item.getOfflineDate()) == 0){
@@ -58,29 +56,27 @@ public class AppUtils {
             status.setNextDate(item.getPaymentDate());
         }
         else if(now.before(parseDate(item.getPaymentDate()))){
-            status.setCurrent(Value.SUCCESS_RESULT);
-            status.setCurrentDate(item.getSuccessResultDate());
             status.setNext(Value.PAYMENT);
             status.setNextDate(item.getPaymentDate());
         }
         else if((int)daysAfter(item.getPaymentDate()) == 0){
             status.setCurrent(Value.PAYMENT);
             status.setNext(Value.LISTED);
-            status.setNextDate(item.getListedDate());
         }
-        else{
+        else if(now.after(parseDate(item.getPaymentDate()))){
             if (item.getListedDate() == null){
                 status.setNext(Value.LISTED);
             }
-            else if(now.before(parseDate(item.getListedDate()))){
-                status.setNext(Value.LISTED);
-                status.setNextDate(item.getListedDate());
-            }
             else{
-                status.setCurrent(Value.LISTED);
+                if (now.before(parseDate(item.getListedDate()))){
+                    status.setNext(Value.LISTED);
+                    status.setNextDate(item.getListedDate());
+                }
+                else {
+                    status.setCurrent(Value.LISTED);
+                }
             }
         }
-
         return status;
     }
 

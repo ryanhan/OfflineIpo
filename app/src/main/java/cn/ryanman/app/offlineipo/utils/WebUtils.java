@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.SynchronousQueue;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
@@ -139,7 +140,13 @@ public class WebUtils {
                 ipoItem.setIssuePrice(0);
             }
 
-            ipoItem.setOfflineDate(ipoJson.getString("OFFLINE_ISSUANCE_END_DATE"));
+            if (!ipoJson.getString("OFFLINE_ISSUANCE_END_DATE").equals("-")) {
+                ipoItem.setOfflineDate(ipoJson.getString("OFFLINE_ISSUANCE_END_DATE"));
+            }
+            else{
+                ipoItem.setOfflineDate(null);
+            }
+
             ipoItem.setUrl(ipoJson.getString("ANNOUNCEMENT_URL"));
             ipoItems.add(ipoItem);
         }
@@ -165,16 +172,28 @@ public class WebUtils {
             if (!listedDate.equals("-") && AppUtils.daysAfter(listedDate) > 60){
                 continue;
             }
-
-            ipoItem.setNoticeDate(ipoJson.getString("IPO_NOTICE_DATE")); //招股公告
-            ipoItem.setInquiryDate(ipoJson.getString("INQUIRY_DATE")); //询价开始
-            ipoItem.setInquiryEndDate(ipoJson.getString("INQUIRY_DATE_END")); //询价结束
-            ipoItem.setAnnounceDate(ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE")); //发行公告
-            ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE")); //中签结果
-            ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE")); //缴款日
             if (!ipoJson.getString("LISTED_DATE").equals("-")){
                 ipoItem.setListedDate(ipoJson.getString("LISTED_DATE")); //上市日
             }
+            if (!ipoJson.isNull("IPO_NOTICE_DATE") || !ipoJson.getString("IPO_NOTICE_DATE").equals("-")) {
+                ipoItem.setNoticeDate(ipoJson.getString("IPO_NOTICE_DATE")); //招股公告
+            }
+            if (!ipoJson.isNull("INQUIRY_DATE") || !ipoJson.getString("INQUIRY_DATE").equals("-")) {
+                ipoItem.setInquiryDate(ipoJson.getString("INQUIRY_DATE")); //询价开始
+            }
+            if (!ipoJson.isNull("INQUIRY_DATE_END") || !ipoJson.getString("INQUIRY_DATE_END").equals("-")) {
+                ipoItem.setInquiryEndDate(ipoJson.getString("INQUIRY_DATE_END")); //询价结束
+            }
+            if (!ipoJson.isNull("ISSUANCE_ANNOUNCEMENT_DATE") || !ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE").equals("-")) {
+                ipoItem.setAnnounceDate(ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE")); //发行公告
+            }
+            if (!ipoJson.isNull("ANNOUNCE_SUCCESS_RATE_RESULT_DATE") || !ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE").equals("-")) {
+                ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE")); //中签结果
+            }
+            if (!ipoJson.isNull("PAYMENT_END_DATE") || !ipoJson.getString("PAYMENT_END_DATE").equals("-")) {
+                ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE")); //缴款日
+            }
+            ipoItems.add(ipoItem);
         }
 
         return ipoItems;

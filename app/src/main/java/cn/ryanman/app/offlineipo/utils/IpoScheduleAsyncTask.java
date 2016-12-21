@@ -31,6 +31,7 @@ public class IpoScheduleAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>
         try {
             return WebUtils.getIpoSchedule();
         } catch (Exception e) {
+            System.out.println("schedule error");
             return null;
         }
     }
@@ -38,7 +39,6 @@ public class IpoScheduleAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>
     @Override
     protected void onPostExecute(List<IpoItem> result) {
         if (result != null && result.size() > 0) {
-            System.out.println("size = " + result.size());
             DatabaseUtils.updateIpoSchedule(context, result);
             if (onDataLoadCompletedListener != null)
                 onDataLoadCompletedListener.onDataSuccessfully();

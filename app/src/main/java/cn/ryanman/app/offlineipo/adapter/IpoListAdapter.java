@@ -27,6 +27,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
     public final class ViewHolder {
         public TextView ipoName;
         public TextView ipoCode;
+        public TextView current;
         public TextView next;
     }
 
@@ -46,6 +47,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     R.layout.adapter_all_ipo_list, null);
             holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
+            holder.current = (TextView) convertView.findViewById(R.id.adapter_ipo_current);
             holder.next = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
             convertView.setTag(holder);
         } else {
@@ -54,7 +56,31 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
 
         holder.ipoName.setText(getItem(position).getName());
         holder.ipoCode.setText(getItem(position).getCode());
-        holder.next.setText(getItem(position).getNoticeDate());
+
+        if (getItem(position).getOfflineDate() == null){
+            holder.current.setText("无网下申购");
+        }
+        else {
+            try {
+                IpoStatus status = AppUtils.getNextStep(getItem(position));
+                if (status.getCurrent() != null) {
+                    holder.current.setText(status.getCurrent());
+                }
+                else{
+                    holder.current.setText("不知道");
+                }
+                if (status.getNextDate() != null) {
+                    holder.next.setText(status.getNext() + "  " + status.getNextDate());
+                }
+                else{
+                    holder.next.setText(status.getNext() + "  " + "不知道");
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
 //        try {
 //            IpoStatus status = AppUtils.getNextStep(getItem(position));
 //            if (status.getNext() != null) {

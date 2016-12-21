@@ -7,7 +7,6 @@ package cn.ryanman.app.offlineipo.model;
 public class IpoStatus {
 
     private String current;
-    private String currentDate;
     private String next;
     private String nextDate;
 
@@ -17,14 +16,6 @@ public class IpoStatus {
 
     public void setCurrent(String current) {
         this.current = current;
-    }
-
-    public String getCurrentDate() {
-        return currentDate;
-    }
-
-    public void setCurrentDate(String currentDate) {
-        this.currentDate = currentDate;
     }
 
     public String getNext() {

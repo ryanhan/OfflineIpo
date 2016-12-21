@@ -82,7 +82,7 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
-    public static void updateIpoSchedule(Context context, List<IpoItem> ipoList){
+    public static void updateIpoSchedule(Context context, List<IpoItem> ipoList) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
@@ -128,8 +128,9 @@ public class DatabaseUtils {
             values.put(DatabaseHelper.STOCK_NAME, ipoItem.getName());
         if (ipoItem.getCode() != null)
             values.put(DatabaseHelper.STOCK_CODE, ipoItem.getCode());
-        if (ipoItem.getOfflineDate() != null)
+        if (ipoItem.getOfflineDate() != null) {
             values.put(DatabaseHelper.OFFLINE_DATE, ipoItem.getOfflineDate());
+        }
         if (ipoItem.getUrl() != null)
             values.put(DatabaseHelper.IPO_URL, ipoItem.getUrl());
         return values;
