@@ -156,11 +156,11 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder.layout.setBackgroundResource(R.drawable.child_middle);
         }
 
-        if (groupPosition == getGroupCount() - 1 && isLastChild){
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 0, 10);
-            holder.layout.setLayoutParams(params);
-        }
+//        if (groupPosition == getGroupCount() - 1 && isLastChild){
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            params.setMargins(0, 0, 0, 10);
+//            holder.layout.setLayoutParams(params);
+//        }
 
         return convertView;
     }

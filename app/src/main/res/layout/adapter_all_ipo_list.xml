@@ -1,76 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
     android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
     android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 
-    <TextView
-        android:id="@+id/adapter_ipo_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="@dimen/ipo_today_name_code_margin"
-        android:textSize="@dimen/ipo_today_ipo_name_font_size" />
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/adapter_ipo_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/adapter_ipo_name"
-        android:layout_toRightOf="@+id/adapter_ipo_name"
-        android:textSize="@dimen/ipo_today_ipo_code_font_size" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/adapter_ipo_current_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/adapter_ipo_name"
-        android:layout_below="@id/adapter_ipo_name"
-        android:layout_marginTop="@dimen/ipo_today_vertical_gap"
-        android:text="今日任务" />
+            <TextView
+                android:id="@+id/adapter_ipo_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ipo_today_name_code_margin"
+                android:textSize="@dimen/ipo_today_ipo_name_font_size"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/adapter_ipo_current"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/adapter_ipo_current_title"
-        android:layout_marginLeft="@dimen/ipo_today_horizontal_gap"
-        android:layout_toRightOf="@id/adapter_ipo_current_title" />
+            <TextView
+                android:id="@+id/adapter_ipo_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ipo_today_ipo_code_font_size" />
 
-    <TextView
-        android:id="@+id/adapter_ipo_next_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/adapter_ipo_current_title"
-        android:layout_below="@id/adapter_ipo_current_title"
-        android:layout_marginTop="@dimen/ipo_today_vertical_gap"
-        android:text="下一步" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/adapter_ipo_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/adapter_ipo_next_title"
-        android:layout_marginLeft="@dimen/ipo_today_horizontal_gap"
-        android:layout_toRightOf="@id/adapter_ipo_next_title"
-        android:text="申购" />
+        <LinearLayout
+            android:id="@+id/adapter_ipo_current_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/adapter_ipo_current_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap" />
+
+            <TextView
+                android:id="@+id/adapter_ipo_current"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adapter_ipo_next_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/adapter_ipo_next_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
+                android:text="@string/next_step"/>
+
+            <TextView
+                android:id="@+id/adapter_ipo_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap" />
+
+            <TextView
+                android:id="@+id/adapter_ipo_next_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
+        android:id="@+id/adapter_join_button"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/ipo_today_button"
         android:text="+  参与"
         android:textColor="@android:color/white"
         android:textSize="@dimen/ipo_today_button_font_size"
         android:textStyle="bold" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -14,4 +14,16 @@
     <string name="payment">缴款日</string>
     <string name="listed">上市</string>
 
+    <string name="no_offline">不参与网下发行</string>
+    <string name="have_listed">已上市</string>
+    <string name="today_task">今日任务</string>
+    <string name="next_step">下一步</string>
+
+    <string name="add_user">添加投资者</string>
+    <string name="my_profit">我的收益</string>
+    <string name="user_management">用户管理</string>
+    <string name="check_update">检查更新</string>
+    <string name="about">关于</string>
+
+
 </resources>

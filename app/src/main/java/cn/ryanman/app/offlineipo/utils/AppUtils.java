@@ -31,7 +31,7 @@ public class AppUtils {
         return df.parse(date);
     }
 
-    public static IpoStatus getNextStep(IpoItem item) throws ParseException{
+    public static IpoStatus getIpoStatus(IpoItem item) throws ParseException{
         Date now = new Date();
         IpoStatus status = new IpoStatus();
         if (now.before(parseDate(item.getInquiryDate()))){
