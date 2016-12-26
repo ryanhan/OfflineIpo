@@ -25,5 +25,8 @@
     <string name="check_update">检查更新</string>
     <string name="about">关于</string>
 
+    <string name="user_name">投资者姓名</string>
+    <string name="user_sh_code">上市股东代码</string>
+    <string name="market_value">市值</string>
 
 </resources>

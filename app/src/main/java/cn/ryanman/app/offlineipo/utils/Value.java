@@ -28,6 +28,8 @@ public class Value {
     public static final String PAYMENT = "payment"; //缴款日
     public static final String LISTED = "listed"; //上市
 
+    public static final int CREATE_USER = 0;
+
     public static final String[] eventArray = {NOTICE, INQUIRY, ROADSHOW, ANNOUNCE, OFFLINE, ONLINE, SUCCESS_RATE, SUCCESS_RESULT, PAYMENT, LISTED};
 
     public static final HashMap<String, Integer> eventMap = new HashMap<>();

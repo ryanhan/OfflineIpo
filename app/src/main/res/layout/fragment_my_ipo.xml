@@ -14,6 +14,7 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/my_ipo_user_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -43,6 +44,7 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/my_ipo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -72,6 +74,7 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/my_ipo_profit_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -98,10 +101,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginTop="10dp"
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/my_ipo_check_update_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -131,6 +140,7 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/my_ipo_about_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"

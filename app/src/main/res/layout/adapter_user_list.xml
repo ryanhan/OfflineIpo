@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
+    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+
+    <TextView
+        android:id="@+id/adapter_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="name"/>
+
+    <TextView
+        android:id="@+id/adapter_user_sh_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="code"/>
+
+    <TextView
+        android:id="@+id/adapter_user_market_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="5000"/>
+
+
+</RelativeLayout>
