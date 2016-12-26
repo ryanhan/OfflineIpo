@@ -12,6 +12,7 @@ import java.util.List;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
+import cn.ryanman.app.offlineipo.model.User;
 
 
 public class DatabaseUtils {
@@ -21,6 +22,40 @@ public class DatabaseUtils {
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
         dbHelper.close();
+    }
+
+    public static void saveUser(Context context, User user) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.PERSON_NAME, user.getName());
+        values.put(DatabaseHelper.SH_CODE, user.getCode());
+        values.put(DatabaseHelper.SH_MARKET_VALUE, user.getMarket());
+        if (user.getId() == -1) {
+            sqliteDatabase.insert(DatabaseHelper.PERSON, null, values);
+        } else {
+            sqliteDatabase.update(DatabaseHelper.PERSON, values,
+                    DatabaseHelper.ID + "=?",
+                    new String[]{String.valueOf(user.getId())});
+        }
+
+        dbHelper.close();
+    }
+
+    public static List<User> getUserList(Context context) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        List<User> userList = new ArrayList<>();
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.PERSON, null,
+                null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            User user = parseUserCursor(cursor);
+            userList.add(user);
+        }
+        dbHelper.close();
+        return userList;
     }
 
     public static void insertIpoTodayList(Context context, List<IpoToday> ipoTodayList) {
@@ -189,5 +224,14 @@ public class DatabaseUtils {
         ipoTodayFull.setIpo(ipoItem);
 
         return ipoTodayFull;
+    }
+
+    private static User parseUserCursor(Cursor cursor) {
+        User user = new User();
+        user.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ID)));
+        user.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        user.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_CODE)));
+        user.setMarket(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_MARKET_VALUE)));
+        return user;
     }
 }

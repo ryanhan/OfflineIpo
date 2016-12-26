@@ -5,15 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
-    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
-    android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+    android:paddingBottom="20dp"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="20dp">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/user"
+        android:layout_marginRight="10dp"/>
 
     <TextView
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="text"/>
+        android:layout_height="wrap_content"
+        android:text="@string/add_user"
+        android:textSize="@dimen/adapter_user_list_font"/>
 
 </LinearLayout>

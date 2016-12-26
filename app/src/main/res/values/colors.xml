@@ -8,8 +8,8 @@
     <color name="blue">#0D3ABF</color>
     <color name="red">#E71818</color>
     <color name="yellow">#EBC714</color>
-    <color name="dark_grey">#aaa</color>
-    <color name="light_grey">#d9dde0</color>
+    <color name="dark_grey">#757575</color>
+    <color name="light_grey">#e0e3e6</color>
 
 
 </resources>

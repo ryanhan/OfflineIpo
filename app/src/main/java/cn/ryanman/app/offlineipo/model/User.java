@@ -6,9 +6,18 @@ package cn.ryanman.app.offlineipo.model;
 
 public class User {
 
+    private int id;
     private String name;
     private String code;
     private String market;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

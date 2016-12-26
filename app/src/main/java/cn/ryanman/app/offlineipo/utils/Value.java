@@ -30,6 +30,11 @@ public class Value {
 
     public static final int CREATE_USER = 0;
 
+    public static final String USER_ID = "user_id";
+    public static final String USER_NAME = "user_name";
+    public static final String USER_SH_CODE = "user_sh_code";
+    public static final String USER_MARKET = "user_market";
+
     public static final String[] eventArray = {NOTICE, INQUIRY, ROADSHOW, ANNOUNCE, OFFLINE, ONLINE, SUCCESS_RATE, SUCCESS_RESULT, PAYMENT, LISTED};
 
     public static final HashMap<String, Integer> eventMap = new HashMap<>();

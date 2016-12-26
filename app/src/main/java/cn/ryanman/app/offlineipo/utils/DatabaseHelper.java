@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PERSON = "person";
     public static final String PERSON_NAME = "person_name";
     public static final String SH_CODE = "sh_code";
+    public static final String SH_MARKET_VALUE = "sh_market_value";
 
     public static final String MY_IPO = "my_ipo";
     public static final String HAVE_INQUIRY = "have_inquiry";
@@ -71,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + LISTED_DATE + " text, " + ESTIMATE_PRICE + " real," + ISSUE_PRICE + " real, " + IPO_URL + " text)");
 
         db.execSQL("create table if not exists " + PERSON + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text)");
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text, " + SH_MARKET_VALUE + " text)");
 
         db.execSQL("create table if not exists " + MY_IPO + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, " + PERSON_NAME + " text, "

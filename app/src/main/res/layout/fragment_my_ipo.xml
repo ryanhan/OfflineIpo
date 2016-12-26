@@ -20,8 +20,8 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
 
         <ImageView
             android:layout_width="20dp"
@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="@string/user_management"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
             android:textColor="@android:color/black" />
 
     </LinearLayout>
@@ -50,8 +51,8 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
 
         <ImageView
             android:layout_width="20dp"
@@ -64,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="@string/my_ipo"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
             android:textColor="@android:color/black" />
 
     </LinearLayout>
@@ -80,8 +82,8 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
 
         <ImageView
             android:layout_width="20dp"
@@ -93,6 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
             android:text="@string/my_profit"
             android:textColor="@android:color/black" />
 
@@ -116,8 +119,8 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
 
         <ImageView
             android:layout_width="20dp"
@@ -129,6 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
             android:text="@string/check_update"
             android:textColor="@android:color/black" />
 
@@ -146,8 +150,8 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
 
         <ImageView
             android:layout_width="20dp"
@@ -159,6 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
             android:text="@string/about"
             android:textColor="@android:color/black" />
 

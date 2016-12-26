@@ -27,10 +27,14 @@
 
     <string name="user_name">投资者姓名</string>
     <string name="user_sh_code">上市股东代码</string>
-    <string name="market_value">市值</string>
+    <string name="user_market_value">上市市值</string>
 
     <string name="input_user_name">请输入姓名</string>
-    <string name="input_user_sh_code">请输入上市股东代码</string>
+    <string name="input_user_sh_code">请输入股东代码</string>
     <string name="select_market_value">请选择市值</string>
+    <string name="save">保存</string>
+
+    <string name="change_user">修改</string>
+    <string name="delete_user">删除</string>
 
 </resources>

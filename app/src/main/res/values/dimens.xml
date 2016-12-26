@@ -15,5 +15,14 @@
 
     <dimen name="ipo_today_button_font_size">12sp</dimen>
 
+    <dimen name="activity_create_user_title_font">18sp</dimen>
+    <dimen name="activity_create_user_table_vertical_padding">15dp</dimen>
+    <dimen name="activity_create_user_table_horizontal_padding">15dp</dimen>
+
+    <dimen name="adapter_user_list_font">18sp</dimen>
+    <dimen name="fragment_my_ipo_title_font">16sp</dimen>
+
+    <dimen name="fragment_my_ipo_title_vertical_padding">20dp</dimen>
+
 
 </resources>
