@@ -29,4 +29,8 @@
     <string name="user_sh_code">上市股东代码</string>
     <string name="market_value">市值</string>
 
+    <string name="input_user_name">请输入姓名</string>
+    <string name="input_user_sh_code">请输入上市股东代码</string>
+    <string name="select_market_value">请选择市值</string>
+
 </resources>

@@ -36,26 +36,21 @@ public class UserListAdapter extends ArrayAdapter<User> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        if (position == getCount() - 1) {
+        ViewHolder holder = null;
+        if (convertView == null) {
+            holder = new ViewHolder();
             convertView = mInflater.inflate(
-                    R.layout.adapter_add_user, null);
+                    R.layout.adapter_user_list, null);
+            holder.userName = (TextView) convertView.findViewById(R.id.adapter_user_name);
+            holder.userShCode = (TextView) convertView.findViewById(R.id.adapter_user_sh_code);
+            holder.userMarket = (TextView) convertView.findViewById(R.id.adapter_user_market_value);
+            convertView.setTag(holder);
         } else {
-            ViewHolder holder = null;
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = mInflater.inflate(
-                        R.layout.adapter_user_list, null);
-                holder.userName = (TextView) convertView.findViewById(R.id.adapter_user_name);
-                holder.userShCode = (TextView) convertView.findViewById(R.id.adapter_user_sh_code);
-                holder.userMarket = (TextView) convertView.findViewById(R.id.adapter_user_market_value);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.userName.setText(getItem(position).getName());
-            holder.userShCode.setText(getItem(position).getCode());
-            holder.userMarket.setText(getItem(position).getMarket());
+            holder = (ViewHolder) convertView.getTag();
         }
+        holder.userName.setText(getItem(position).getName());
+        holder.userShCode.setText(getItem(position).getCode());
+        holder.userMarket.setText(getItem(position).getMarket());
 
         return convertView;
     }
