@@ -26,7 +26,7 @@
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".main.UserManagementActivity"/>
         <activity android:name=".main.CreateUserActivity"/>
-
+        <activity android:name=".main.MyIpoListActivity"/>
 
 
     </application>

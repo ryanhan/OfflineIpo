@@ -41,7 +41,7 @@ public class IpoScheduleAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>
         if (result != null && result.size() > 0) {
             DatabaseUtils.updateIpoSchedule(context, result);
             if (onDataLoadCompletedListener != null)
-                onDataLoadCompletedListener.onDataSuccessfully();
+                onDataLoadCompletedListener.onDataSuccessfully(null);
         } else {
             if (onDataLoadCompletedListener != null)
                 onDataLoadCompletedListener.onDataFailed();

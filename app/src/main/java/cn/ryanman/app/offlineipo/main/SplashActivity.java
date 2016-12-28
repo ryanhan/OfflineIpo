@@ -54,7 +54,7 @@ public class SplashActivity extends Activity {
         IpoListAsyncTask ipoListAsyncTask = new IpoListAsyncTask(this);
         ipoListAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
             @Override
-            public void onDataSuccessfully() {
+            public void onDataSuccessfully(Object object) {
                 if (ipo_today_completed && time_out) {
                     time_out = true;
                     completeSplash();
@@ -78,7 +78,7 @@ public class SplashActivity extends Activity {
         IpoTodayAsyncTask ipoTodayAsyncTask = new IpoTodayAsyncTask(this);
         ipoTodayAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
             @Override
-            public void onDataSuccessfully() {
+            public void onDataSuccessfully(Object object) {
                 if (ipo_list_completed && time_out) {
                     time_out = true;
                     completeSplash();

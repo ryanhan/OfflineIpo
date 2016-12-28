@@ -39,7 +39,6 @@ public class IpoTodayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ipo_today, container, false);
         ipoTodayListView = (ExpandableListView) view.findViewById(R.id.ipo_today_list);
-        //ipoTodayListView.setGroupIndicator(null);
 
         eventList = new ArrayList<>();
         ipoNameList = new ArrayList<>();
@@ -70,7 +69,7 @@ public class IpoTodayFragment extends Fragment {
 
         @Override
         protected List<IpoTodayFull> doInBackground(Void... params) {
-            return DatabaseUtils.getIpoTodayFullList(context);
+            return DatabaseUtils.getIpoTodayList(context);
         }
 
         @Override

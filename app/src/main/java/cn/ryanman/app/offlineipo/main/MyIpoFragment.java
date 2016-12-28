@@ -43,6 +43,15 @@ public class MyIpoFragment extends Fragment {
             }
         });
 
+        myIpoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MyIpoFragment.this.getActivity(),
+                        MyIpoListActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

@@ -6,7 +6,7 @@ package cn.ryanman.app.offlineipo.listener;
 
 public interface OnDataLoadCompletedListener {
 
-    public void onDataSuccessfully();
+    public void onDataSuccessfully(Object object);
 
     public void onDataFailed();
 

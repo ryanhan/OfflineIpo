@@ -39,7 +39,7 @@ public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, List<IpoToday>> 
         if (result != null) {
             DatabaseUtils.insertIpoTodayList(context, result);
             if (onDataLoadCompletedListener != null)
-                onDataLoadCompletedListener.onDataSuccessfully();
+                onDataLoadCompletedListener.onDataSuccessfully(null);
         } else {
             if (onDataLoadCompletedListener != null)
                 onDataLoadCompletedListener.onDataFailed();

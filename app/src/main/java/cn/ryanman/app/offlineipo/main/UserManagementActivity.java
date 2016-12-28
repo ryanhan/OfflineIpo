@@ -80,6 +80,8 @@ public class UserManagementActivity extends AppCompatActivity {
                                 startActivityForResult(intent, Value.CREATE_USER);
                                 break;
                             case 1:
+                                DeleteUserAsyncTask deleteUserAsyncTask = new DeleteUserAsyncTask(UserManagementActivity.this);
+                                deleteUserAsyncTask.execute(users.get(index).getId());
                                 break;
                         }
                     }
@@ -109,6 +111,28 @@ public class UserManagementActivity extends AppCompatActivity {
 
         @Override
         protected List<User> doInBackground(Void... voids) {
+            return DatabaseUtils.getUserList(context);
+        }
+
+        @Override
+        protected void onPostExecute(List<User> result) {
+            users.clear();
+            users.addAll(result);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class DeleteUserAsyncTask extends AsyncTask<Integer, Integer, List<User>> {
+
+        private Context context;
+
+        public DeleteUserAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected List<User> doInBackground(Integer... integers) {
+            DatabaseUtils.deleteUser(context, integers[0]);
             return DatabaseUtils.getUserList(context);
         }
 

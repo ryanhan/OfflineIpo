@@ -41,8 +41,8 @@ public class IpoListAsyncTask extends AsyncTask<Void, Integer, List<IpoItem>> {
             IpoScheduleAsyncTask ipoScheduleAsyncTask = new IpoScheduleAsyncTask(context);
             ipoScheduleAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
                 @Override
-                public void onDataSuccessfully() {
-                    onDataLoadCompletedListener.onDataSuccessfully();
+                public void onDataSuccessfully(Object object) {
+                    onDataLoadCompletedListener.onDataSuccessfully(null);
                 }
 
                 @Override

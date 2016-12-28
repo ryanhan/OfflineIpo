@@ -12,6 +12,7 @@ import java.util.List;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
+import cn.ryanman.app.offlineipo.model.MyIpo;
 import cn.ryanman.app.offlineipo.model.User;
 
 
@@ -43,6 +44,14 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
+    public static void deleteUser(Context context, int userId) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        sqliteDatabase.delete(DatabaseHelper.PERSON, DatabaseHelper.ID + "=?", new String[]{String.valueOf(userId)});
+        dbHelper.close();
+    }
+
     public static List<User> getUserList(Context context) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
@@ -71,24 +80,7 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
-    public static List<IpoToday> getIpoTodayList(Context context) {
-        List<IpoToday> ipoTodayList = new ArrayList<>();
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.IPO_TODAY, null,
-                null, null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            IpoToday ipoToday = parseEventCursor(cursor);
-            ipoTodayList.add(ipoToday);
-        }
-
-        dbHelper.close();
-        return ipoTodayList;
-    }
-
-    public static List<IpoTodayFull> getIpoTodayFullList(Context context) {
+    public static List<IpoTodayFull> getIpoTodayList(Context context) {
         List<IpoTodayFull> ipoTodayFullList = new ArrayList<>();
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
@@ -149,6 +141,83 @@ public class DatabaseUtils {
         dbHelper.close();
         return ipoList;
     }
+
+    public static void subscribe(Context context, String userName, String ipoCode) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.PERSON_NAME, userName);
+        values.put(DatabaseHelper.STOCK_CODE, ipoCode);
+        sqliteDatabase.insert(DatabaseHelper.MY_IPO, null, values);
+
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+        if (cursor.getCount() == 0) {
+            ContentValues values2 = new ContentValues();
+            values.put(DatabaseHelper.STOCK_CODE, ipoCode);
+            sqliteDatabase.insert(DatabaseHelper.PROGRESS, null, values2);
+        }
+
+        dbHelper.close();
+    }
+
+    public static boolean isSubscribed(Context context, String ipoCode) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+        int count = cursor.getCount();
+        dbHelper.close();
+        if (count > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static List<String> getSubscriber(Context context, String ipoCode) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+
+        List<String> nameList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME));
+            nameList.add(name);
+        }
+        return nameList;
+    }
+
+    public static List<MyIpo> getAllSubscription(Context context, String userName) {
+        List<MyIpo> myIpoList = new ArrayList<>();
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        if (userName == null) {
+            cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
+                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE
+                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE, null);
+        } else {
+            cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
+                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE
+                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
+                    + " where " + DatabaseHelper.PERSON_NAME + "=?", new String[]{userName});
+        }
+        while (cursor.moveToNext()) {
+            MyIpo myIpo = parseMyIpoCursor(cursor);
+            if (myIpo != null) {
+                myIpoList.add(myIpo);
+            }
+        }
+        dbHelper.close();
+        return myIpoList;
+    }
+
 
     private static ContentValues createIpoTodayValues(String event, String name) {
         ContentValues values = new ContentValues();
@@ -233,5 +302,38 @@ public class DatabaseUtils {
         user.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_CODE)));
         user.setMarket(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_MARKET_VALUE)));
         return user;
+    }
+
+    private static MyIpo parseMyIpoCursor(Cursor cursor) {
+        MyIpo myIpo = new MyIpo();
+        IpoItem ipoItem = parseIpoCursor(cursor);
+        myIpo.setIpoItem(ipoItem);
+        myIpo.setUserName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+        myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+
+        int hasInquiry = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_INQUIRY));
+        int hasApply = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_APPLY));
+        int hasPay = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_PAY));
+
+        if (hasInquiry == 0) {
+            myIpo.setInquiry(false);
+        } else if (hasInquiry == 1) {
+            myIpo.setInquiry(true);
+        }
+
+        if (hasApply == 0) {
+            myIpo.setApply(false);
+        } else if (hasApply == 1) {
+            myIpo.setApply(true);
+        }
+
+        if (hasPay == 0) {
+            myIpo.setPay(false);
+        } else if (hasPay == 1) {
+            myIpo.setPay(true);
+        }
+
+        return myIpo;
     }
 }
