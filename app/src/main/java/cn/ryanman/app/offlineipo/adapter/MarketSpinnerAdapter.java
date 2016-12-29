@@ -52,6 +52,7 @@ public class MarketSpinnerAdapter extends ArrayAdapter<String> {
         }
 
         holder.marketValue.setText(getItem(position));
+        holder.marketValue.setTextColor(context.getResources().getColor(R.color.dark_grey));
 
         return convertView;
     }

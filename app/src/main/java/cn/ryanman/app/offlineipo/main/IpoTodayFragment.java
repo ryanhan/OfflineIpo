@@ -1,6 +1,7 @@
 package cn.ryanman.app.offlineipo.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,6 +53,18 @@ public class IpoTodayFragment extends Fragment {
         for (int i = 0; i < Value.eventArray.length; i++) {
             ipoTodayListView.expandGroup(i);
         }
+
+        ipoTodayListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Intent intent = new Intent();
+                intent.setClass(IpoTodayFragment.this.getActivity(),
+                        IpoDetailActivity.class);
+                intent.putExtra(Value.IPO_CODE, ipoNameList.get(groupPosition).get(childPosition).getCode());
+                startActivity(intent);
+                return false;
+            }
+        });
 
         IpoTodayAsyncTask task = new IpoTodayAsyncTask(this.getActivity());
         task.execute();

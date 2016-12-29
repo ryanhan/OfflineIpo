@@ -10,10 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.model.IpoItem;
+import cn.ryanman.app.offlineipo.model.IpoStatus;
+import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
 
 /**
@@ -36,7 +40,11 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
     public final class IpoViewHolder {
         public TextView ipoName;
         public TextView ipoCode;
-        public RelativeLayout layout;
+        public LinearLayout layout;
+        public LinearLayout priceLayout;
+        public TextView issuePrice;
+        public TextView ipoNextDate;
+        public TextView ipoNext;
     }
 
     public IpoTodayListAdapter(Context context, List<String> groupList, List<List<IpoItem>> childList) {
@@ -106,26 +114,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         int resId = context.getResources().getIdentifier(getGroup(groupPosition), "string", Value.PACKAGENAME);
         holder.eventName.setText(context.getString(resId));
 
-//        if (getGroup(groupPosition).equals(Value.NOTICE)) {
-//            holder.eventName.setTextColor(context.getResources().getColor(R.color.green));
-//        } else if (getGroup(groupPosition).equals(Value.INQUIRY)) {
-//            holder.eventName.setTextColor(context.getResources().getColor(R.color.yellow));
-//        } else if (getGroup(groupPosition).equals(Value.OFFLINE)) {
-//            holder.eventName.setTextColor(context.getResources().getColor(R.color.blue));
-//        } else if (getGroup(groupPosition).equals(Value.PAYMENT)) {
-//            holder.eventName.setTextColor(context.getResources().getColor(R.color.red));
-//        }
-//        else{
-//            holder.eventName.setTextColor(context.getResources().getColor(R.color.dark_grey));
-//        }
-
-
-        if (isExpanded){
-            holder.layout.setBackgroundResource(R.drawable.group_expanded);
+        if (isExpanded) {
             holder.arrow.setBackgroundResource(R.drawable.down_arrow);
-        }
-        else{
-            holder.layout.setBackgroundResource(R.drawable.group_closed);
+        } else {
             holder.arrow.setBackgroundResource(R.drawable.right_arrow);
         }
 
@@ -142,31 +133,52 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                     R.layout.adapter_ipo_today_child, null);
             holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
-            holder.layout = (RelativeLayout) convertView.findViewById(R.id.ipo_child_layout);
+            holder.layout = (LinearLayout) convertView.findViewById(R.id.ipo_child_layout);
+            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.ipo_child_price_layout);
+            holder.ipoNext = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
+            holder.ipoNextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
+            holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
+
             convertView.setTag(holder);
         } else {
             holder = (IpoViewHolder) convertView.getTag();
         }
         holder.ipoName.setText(getChild(groupPosition, childPosition).getName());
-        holder.ipoCode.setText("(" + getChild(groupPosition, childPosition).getCode() + ")");
-        if (isLastChild){
-            holder.layout.setBackgroundResource(R.drawable.child_last);
-        }
-        else{
-            holder.layout.setBackgroundResource(R.drawable.child_middle);
+        holder.ipoCode.setText(getChild(groupPosition, childPosition).getCode());
+        if (getChild(groupPosition, childPosition).getIssuePrice() != 0) {
+            holder.priceLayout.setVisibility(View.VISIBLE);
+            DecimalFormat df = new DecimalFormat("#.00");
+            holder.issuePrice.setText(df.format(getChild(groupPosition, childPosition).getIssuePrice()));
+        } else {
+            holder.priceLayout.setVisibility(View.GONE);
         }
 
-//        if (groupPosition == getGroupCount() - 1 && isLastChild){
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//            params.setMargins(0, 0, 0, 10);
-//            holder.layout.setLayoutParams(params);
-//        }
+        try {
+            IpoStatus status = AppUtils.getIpoStatus(getChild(groupPosition, childPosition));
+            if (status.getNext() == null) {
+                holder.ipoNext.setVisibility(View.GONE);
+                holder.ipoNextDate.setVisibility(View.GONE);
+            } else {
+                holder.ipoNext.setVisibility(View.VISIBLE);
+                holder.ipoNextDate.setVisibility(View.VISIBLE);
+                int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
+                holder.ipoNext.setText(context.getString(resId));
+                if (status.getNextDate() != null) {
+                    holder.ipoNextDate.setText(status.getNextDate());
+                } else {
+                    holder.ipoNextDate.setText(context.getResources().getString(R.string.next_step));
+                }
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }

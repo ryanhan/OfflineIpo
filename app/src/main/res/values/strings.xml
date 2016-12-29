@@ -16,8 +16,10 @@
 
     <string name="no_offline">不参与网下发行</string>
     <string name="have_listed">已上市</string>
+    <string name="wait_listed">待上市</string>
     <string name="today_task">今日任务</string>
     <string name="next_step">下一步</string>
+    <string name="issue_price">发行价</string>
 
     <string name="add_user">添加投资者</string>
     <string name="my_profit">我的收益</string>

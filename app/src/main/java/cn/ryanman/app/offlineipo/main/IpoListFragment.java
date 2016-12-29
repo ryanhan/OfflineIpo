@@ -1,12 +1,14 @@
 package cn.ryanman.app.offlineipo.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoListAdapter;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
+import cn.ryanman.app.offlineipo.utils.Value;
 
 /**
  * Created by ryanh on 2016/11/25.
@@ -36,6 +39,17 @@ public class IpoListFragment extends Fragment {
 
         ipoListAdapter = new IpoListAdapter(this.getActivity(), ipoList);
         ipoListView.setAdapter(ipoListAdapter);
+
+        ipoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.setClass(IpoListFragment.this.getActivity(),
+                        IpoDetailActivity.class);
+                intent.putExtra(Value.IPO_CODE, ipoList.get(position).getCode());
+                startActivity(intent);
+            }
+        });
 
         IpoListAsyncTask task = new IpoListAsyncTask(this.getActivity());
         task.execute();

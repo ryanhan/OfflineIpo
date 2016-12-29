@@ -37,15 +37,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String MY_IPO = "my_ipo";
     public static final String PROGRESS = "progress";
-    public static final String HAS_INQUIRY = "have_inquiry";
-    public static final String HAS_APPLY = "have_apply";
-    public static final String HAS_PAY = "have_pay";
     public static final String STOCK_SHARE = "stock_share";
     public static final String EARN_AMOUNT = "earn_amount";
 
     public static final String IPO_TODAY = "ipo_today";
     public static final String EVENT_NAME = "event_name";
 
+    public static final String HAVE_DONE = "have_done";
 
     //private Context context;
 
@@ -80,8 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table if not exists " + PROGRESS + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, "
-                + HAS_INQUIRY + " integer, " + HAS_APPLY + " integer, " + HAS_PAY + " integer, "
-                + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
+                + HAVE_DONE + " integer, " + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");

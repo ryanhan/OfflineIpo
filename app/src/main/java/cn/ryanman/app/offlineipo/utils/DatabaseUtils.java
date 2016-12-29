@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
@@ -40,7 +41,6 @@ public class DatabaseUtils {
                     DatabaseHelper.ID + "=?",
                     new String[]{String.valueOf(user.getId())});
         }
-
         dbHelper.close();
     }
 
@@ -142,6 +142,46 @@ public class DatabaseUtils {
         return ipoList;
     }
 
+    public static MyIpo getIpoDetail(Context context, String ipoCode) {
+        MyIpo myIpo = new MyIpo();
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.IPO, null,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+
+        IpoItem ipoItem = null;
+        while (cursor.moveToNext()) {
+            ipoItem = parseIpoCursor(cursor);
+            break;
+        }
+        if (ipoItem == null) {
+            return null;
+        }
+        myIpo.setIpoItem(ipoItem);
+
+        cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, new String[]{DatabaseHelper.PERSON_NAME},
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+        List<String> nameList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            nameList.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        }
+        myIpo.setUserName(nameList);
+
+        cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+        while (cursor.moveToNext()) {
+            myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
+            myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+            myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+            break;
+        }
+
+        dbHelper.close();
+        return myIpo;
+    }
+
+
     public static void subscribe(Context context, String userName, String ipoCode) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
@@ -208,10 +248,18 @@ public class DatabaseUtils {
                     + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
                     + " where " + DatabaseHelper.PERSON_NAME + "=?", new String[]{userName});
         }
+        HashMap<String, Integer> map = new HashMap<>();
         while (cursor.moveToNext()) {
-            MyIpo myIpo = parseMyIpoCursor(cursor);
-            if (myIpo != null) {
-                myIpoList.add(myIpo);
+            String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE));
+            if (map.containsKey(code)){
+                myIpoList.get(map.get(code)).getUserName().add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+            }
+            else {
+                MyIpo myIpo = parseMyIpoCursor(cursor);
+                if (myIpo != null) {
+                    myIpoList.add(myIpo);
+                }
+                map.put(code, myIpoList.size() - 1);
             }
         }
         dbHelper.close();
@@ -235,6 +283,7 @@ public class DatabaseUtils {
         if (ipoItem.getOfflineDate() != null) {
             values.put(DatabaseHelper.OFFLINE_DATE, ipoItem.getOfflineDate());
         }
+        values.put(DatabaseHelper.ISSUE_PRICE, ipoItem.getIssuePrice());
         if (ipoItem.getUrl() != null)
             values.put(DatabaseHelper.IPO_URL, ipoItem.getUrl());
         return values;
@@ -274,7 +323,7 @@ public class DatabaseUtils {
         ipoItem.setSuccessResultDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SUCCESS_RESULT_DATE)));
         ipoItem.setListedDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.LISTED_DATE)));
         ipoItem.setUrl(cursor.getString(cursor.getColumnIndex(DatabaseHelper.IPO_URL)));
-        //ipoItem.setIssuePrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.ISSUE_PRICE)));
+        ipoItem.setIssuePrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.ISSUE_PRICE)));
         return ipoItem;
     }
 
@@ -308,31 +357,12 @@ public class DatabaseUtils {
         MyIpo myIpo = new MyIpo();
         IpoItem ipoItem = parseIpoCursor(cursor);
         myIpo.setIpoItem(ipoItem);
-        myIpo.setUserName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        List<String> names = new ArrayList<>();
+        names.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        myIpo.setUserName(names);
         myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
         myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
-
-        int hasInquiry = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_INQUIRY));
-        int hasApply = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_APPLY));
-        int hasPay = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAS_PAY));
-
-        if (hasInquiry == 0) {
-            myIpo.setInquiry(false);
-        } else if (hasInquiry == 1) {
-            myIpo.setInquiry(true);
-        }
-
-        if (hasApply == 0) {
-            myIpo.setApply(false);
-        } else if (hasApply == 1) {
-            myIpo.setApply(true);
-        }
-
-        if (hasPay == 0) {
-            myIpo.setPay(false);
-        } else if (hasPay == 1) {
-            myIpo.setPay(true);
-        }
+        myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
 
         return myIpo;
     }

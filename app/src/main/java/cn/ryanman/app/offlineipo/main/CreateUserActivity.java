@@ -51,7 +51,7 @@ public class CreateUserActivity extends AppCompatActivity {
         values = getResources().getStringArray(R.array.market_value);
 
         List<String> valueList = new ArrayList<>();
-        for (int i = 0; i < values.length; i++){
+        for (int i = 0; i < values.length; i++) {
             valueList.add(values[i]);
         }
 
@@ -77,7 +77,7 @@ public class CreateUserActivity extends AppCompatActivity {
         });
     }
 
-    private void getBundle(){
+    private void getBundle() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             id = bundle.getInt(Value.USER_ID);
@@ -95,8 +95,8 @@ public class CreateUserActivity extends AppCompatActivity {
 
             if (market != null && !market.equals("")) {
                 System.out.println("market adapter count = " + userMarket.getAdapter().getCount());
-                for (int i = 0; i < values.length; i++){
-                    if (market.equals(values[i])){
+                for (int i = 0; i < values.length; i++) {
+                    if (market.equals(values[i])) {
                         userMarket.setSelection(i, true);
                         break;
                     }

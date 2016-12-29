@@ -1,5 +1,7 @@
 package cn.ryanman.app.offlineipo.model;
 
+import java.util.List;
+
 /**
  * Created by ryanh on 2016/12/27.
  */
@@ -7,10 +9,8 @@ package cn.ryanman.app.offlineipo.model;
 public class MyIpo {
 
     private IpoItem ipoItem;
-    private String userName;
-    private boolean hasInquiry;
-    private boolean hasApply;
-    private boolean hasPay;
+    private List<String> userName;
+    private int progress;
     private int stockShare;
     private double earnAmount;
 
@@ -22,36 +22,20 @@ public class MyIpo {
         this.ipoItem = ipoItem;
     }
 
-    public String getUserName() {
+    public List<String> getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(List<String> userName) {
         this.userName = userName;
     }
 
-    public boolean hasInquiry() {
-        return hasInquiry;
+    public int getProgress() {
+        return progress;
     }
 
-    public void setInquiry(boolean hasInquiry) {
-        this.hasInquiry = hasInquiry;
-    }
-
-    public boolean hasApply() {
-        return hasApply;
-    }
-
-    public void setApply(boolean hasApply) {
-        this.hasApply = hasApply;
-    }
-
-    public boolean hasPay() {
-        return hasPay;
-    }
-
-    public void setPay(boolean hasPay) {
-        this.hasPay = hasPay;
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     public int getStockShare() {

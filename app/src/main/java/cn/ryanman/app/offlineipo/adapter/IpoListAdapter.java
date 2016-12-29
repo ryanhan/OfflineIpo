@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 
@@ -38,8 +39,10 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
     public final class ViewHolder {
         public TextView ipoName;
         public TextView ipoCode;
+        public LinearLayout priceLayout;
         public LinearLayout currentLayout;
         public LinearLayout nextLayout;
+        public TextView issuePrice;
         public TextView currentTitle;
         public TextView current;
         public TextView next;
@@ -64,8 +67,10 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     R.layout.adapter_all_ipo_list, null);
             holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
+            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
             holder.currentLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_current_layout);
             holder.nextLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_next_layout);
+            holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
             holder.currentTitle = (TextView) convertView.findViewById(R.id.adapter_ipo_current_title);
             holder.current = (TextView) convertView.findViewById(R.id.adapter_ipo_current);
             holder.next = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
@@ -81,12 +86,19 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
         if (DatabaseUtils.isSubscribed(context, getItem(position).getCode())) {
             //holder.joinButton.setClickable(false);
         }
+        if (getItem(position).getIssuePrice() != 0) {
+            holder.priceLayout.setVisibility(View.VISIBLE);
+            DecimalFormat df = new DecimalFormat("#.00");
+            holder.issuePrice.setText(df.format(getItem(position).getIssuePrice()));
+        } else {
+            holder.priceLayout.setVisibility(View.GONE);
+        }
 
 
         if (getItem(position).getOfflineDate() == null) {
             holder.currentLayout.setVisibility(View.VISIBLE);
             holder.nextLayout.setVisibility(View.GONE);
-            holder.currentTitle.setText(context.getString(R.string.no_offline));
+            holder.currentTitle.setText(R.string.no_offline);
             holder.current.setVisibility(View.GONE);
             holder.joinButton.setVisibility(View.INVISIBLE);
         } else {
@@ -151,21 +163,25 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     holder.currentLayout.setVisibility(View.GONE);
                 } else if (status.getCurrent().equals(Value.LISTED)) {
                     holder.currentLayout.setVisibility(View.VISIBLE);
-                    holder.currentTitle.setText(context.getString(R.string.have_listed));
+                    holder.currentTitle.setText(R.string.have_listed);
                     holder.current.setVisibility(View.GONE);
                 } else {
                     holder.currentLayout.setVisibility(View.VISIBLE);
-                    holder.currentTitle.setText(context.getString(R.string.today_task));
+                    holder.currentTitle.setText(R.string.today_task);
                     int resId = context.getResources().getIdentifier(status.getCurrent(), "string", Value.PACKAGENAME);
-                    holder.current.setText(context.getString(resId));
+                    holder.current.setText(resId);
                     holder.current.setVisibility(View.VISIBLE);
                 }
                 if (status.getNext() == null) {
                     holder.nextLayout.setVisibility(View.GONE);
                 } else {
                     holder.nextLayout.setVisibility(View.VISIBLE);
-                    int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
-                    holder.next.setText(context.getString(resId));
+                    if (status.getNext().equals(Value.LISTED)) {
+                        holder.next.setText(R.string.wait_listed);
+                    } else {
+                        int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
+                        holder.next.setText(resId);
+                    }
                     if (status.getNextDate() != null) {
                         holder.nextDate.setText(status.getNextDate());
                         holder.nextDate.setVisibility(View.VISIBLE);

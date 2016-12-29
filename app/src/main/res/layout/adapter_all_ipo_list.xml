@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
     android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+    android:descendantFocusability="blocksDescendants"
     android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 
     <LinearLayout
@@ -26,14 +27,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/ipo_today_name_code_margin"
-                android:textSize="@dimen/ipo_today_ipo_name_font_size"
-                android:textStyle="bold" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/ipo_today_ipo_title_font_size" />
 
             <TextView
                 android:id="@+id/adapter_ipo_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/ipo_today_ipo_code_font_size" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/ipo_today_ipo_title_font_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adapter_ipo_price_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ipo_today_vertical_gap"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/adapter_ipo_price_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size"
+                android:text="@string/issue_price"/>
+
+            <TextView
+                android:id="@+id/adapter_ipo_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
         </LinearLayout>
 
@@ -48,12 +73,14 @@
                 android:id="@+id/adapter_ipo_current_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/ipo_today_horizontal_gap" />
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
             <TextView
                 android:id="@+id/adapter_ipo_current"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
         </LinearLayout>
 
@@ -62,25 +89,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ipo_today_vertical_gap"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:textSize="@dimen/ipo_today_ipo_small_font_size">
 
             <TextView
-                android:id="@+id/adapter_ipo_next_title"
+                android:id="@+id/adapter_ipo_next_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
-                android:text="@string/next_step"/>
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
             <TextView
                 android:id="@+id/adapter_ipo_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/ipo_today_horizontal_gap" />
+                android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
-            <TextView
-                android:id="@+id/adapter_ipo_next_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
