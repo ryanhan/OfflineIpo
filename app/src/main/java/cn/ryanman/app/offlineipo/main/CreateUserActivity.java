@@ -4,15 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
@@ -21,14 +20,14 @@ import cn.ryanman.app.offlineipo.model.User;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
 
-import static cn.ryanman.app.offlineipo.R.drawable.user;
-
 /**
  * Created by hanyan on 12/26/2016.
  */
 
 public class CreateUserActivity extends AppCompatActivity {
 
+    private TextInputLayout userNameInput;
+    private TextInputLayout userCodeInput;
     private EditText userName;
     private EditText userCode;
     private Spinner userMarket;
@@ -43,8 +42,12 @@ public class CreateUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
-        userName = (EditText) findViewById(R.id.user_name_text);
-        userCode = (EditText) findViewById(R.id.user_sh_code_text);
+        userNameInput = (TextInputLayout) findViewById(R.id.user_name_input);
+        userName = userNameInput.getEditText();
+        //userName = (EditText) findViewById(R.id.user_name_text);
+        userCodeInput = (TextInputLayout) findViewById(R.id.user_sh_code_input);
+        userCode = userCodeInput.getEditText();
+        //userCode = (EditText) findViewById(R.id.user_sh_code_text);
         userMarket = (Spinner) findViewById(R.id.user_sh_market_spinner);
         saveButton = (Button) findViewById(R.id.adapter_create_user_save_button);
 
@@ -54,6 +57,9 @@ public class CreateUserActivity extends AppCompatActivity {
         for (int i = 0; i < values.length; i++) {
             valueList.add(values[i]);
         }
+
+        userNameInput.setHint(getString(R.string.input_user_name));
+        userCodeInput.setHint(getString(R.string.input_user_sh_code));
 
         adapter = new MarketSpinnerAdapter(CreateUserActivity.this, valueList);
         userMarket.setAdapter(adapter);
