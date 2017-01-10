@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -43,8 +43,10 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         public LinearLayout layout;
         public LinearLayout priceLayout;
         public TextView issuePrice;
+        public LinearLayout ipoNextLayout;
         public TextView ipoNextDate;
         public TextView ipoNext;
+        public Button joinButton;
     }
 
     public IpoTodayListAdapter(Context context, List<String> groupList, List<List<IpoItem>> childList) {
@@ -115,9 +117,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         holder.eventName.setText(context.getString(resId));
 
         if (isExpanded) {
-            holder.arrow.setBackgroundResource(R.drawable.down_arrow);
+            holder.arrow.setBackgroundResource(R.drawable.ic_down_arrow_15dp);
         } else {
-            holder.arrow.setBackgroundResource(R.drawable.right_arrow);
+            holder.arrow.setBackgroundResource(R.drawable.ic_right_arrow_15dp);
         }
 
         return convertView;
@@ -133,12 +135,13 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                     R.layout.adapter_ipo_today_child, null);
             holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
-            holder.layout = (LinearLayout) convertView.findViewById(R.id.ipo_child_layout);
-            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.ipo_child_price_layout);
+            holder.layout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_child_layout);
+            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
+            holder.ipoNextLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_next_layout);
             holder.ipoNext = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
             holder.ipoNextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
             holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
-
+            holder.joinButton = (Button) convertView.findViewById(R.id.adapter_join_button);
             convertView.setTag(holder);
         } else {
             holder = (IpoViewHolder) convertView.getTag();
@@ -156,11 +159,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         try {
             IpoStatus status = AppUtils.getIpoStatus(getChild(groupPosition, childPosition));
             if (status.getNext() == null) {
-                holder.ipoNext.setVisibility(View.GONE);
-                holder.ipoNextDate.setVisibility(View.GONE);
+                holder.ipoNextLayout.setVisibility(View.GONE);
             } else {
-                holder.ipoNext.setVisibility(View.VISIBLE);
-                holder.ipoNextDate.setVisibility(View.VISIBLE);
+                holder.ipoNextLayout.setVisibility(View.VISIBLE);
                 int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
                 holder.ipoNext.setText(context.getString(resId));
                 if (status.getNextDate() != null) {
@@ -172,6 +173,10 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (getChild(groupPosition, childPosition).getOfflineDate() == null) {
+            holder.joinButton.setVisibility(View.INVISIBLE);
         }
 
         return convertView;

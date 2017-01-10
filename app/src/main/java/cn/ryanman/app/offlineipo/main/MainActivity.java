@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.list_128px, getString(R.string.ipo_today)))
-                .addItem(new BottomNavigationItem(R.drawable.list_128px, getString(R.string.ipo_list)))
-                .addItem(new BottomNavigationItem(R.drawable.user, getString(R.string.my_ipo)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_list_24dp, getString(R.string.ipo_today)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_list_24dp, getString(R.string.ipo_list)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_user_24dp, getString(R.string.my_ipo)))
                 .initialise();
 
         bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener(){

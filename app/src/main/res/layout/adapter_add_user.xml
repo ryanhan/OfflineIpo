@@ -15,7 +15,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="20dp"
-        android:src="@drawable/user" />
+        android:src="@drawable/ic_user_24dp" />
 
     <TextView
         android:layout_width="wrap_content"

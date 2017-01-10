@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/ipo_today_event_horizontal_padding">
 
     <LinearLayout
-        android:id="@+id/ipo_child_layout"
+        android:id="@+id/adapter_ipo_child_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -43,7 +43,7 @@
 
 
         <LinearLayout
-            android:id="@+id/ipo_child_price_layout"
+            android:id="@+id/adapter_ipo_price_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ipo_today_vertical_gap"
@@ -67,6 +67,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/adapter_ipo_next_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ipo_today_vertical_gap"
@@ -100,6 +101,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/adapter_join_button"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
