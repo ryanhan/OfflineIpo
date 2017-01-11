@@ -136,7 +136,6 @@ public class DatabaseUtils {
             IpoItem ipoItem = parseIpoCursor(cursor);
             if (ipoItem != null) {
                 ipoItem.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
-                System.out.println(ipoItem.getProgress());
                 ipoList.add(ipoItem);
             }
         }

@@ -178,6 +178,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         if (getChild(groupPosition, childPosition).getOfflineDate() == null) {
             holder.joinButton.setVisibility(View.INVISIBLE);
         }
+        else{
+            holder.joinButton.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }

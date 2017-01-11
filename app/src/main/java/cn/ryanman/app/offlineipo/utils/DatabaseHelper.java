@@ -64,8 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table if not exists " + IPO + " (" + STOCK_CODE
-                + " text PRIMARY KEY, " + STOCK_NAME + " text, " + OFFLINE_DATE + " text, " +
+        db.execSQL("create table if not exists " + IPO + " (" + ID
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, " + STOCK_NAME + " text, " + OFFLINE_DATE + " text, " +
                 NOTICE_DATE + " text, " + INQUIRY_DATE + " text, " + INQUIRY_END_DATE + " text, "
                 + ANNOUNCE_DATE + " text, " + SUCCESS_RESULT_DATE + " text, " + PAYMENT_DATE + " text, "
                 + LISTED_DATE + " text, " + ESTIMATE_PRICE + " real," + ISSUE_PRICE + " real, " + IPO_URL + " text)");
@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table if not exists " + PROGRESS + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, "
-                + HAVE_DONE + " integer");
+                + HAVE_DONE + " integer)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");
