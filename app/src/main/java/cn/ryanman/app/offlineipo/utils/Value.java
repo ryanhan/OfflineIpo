@@ -36,13 +36,13 @@ public class Value {
     public static final String USER_MARKET = "user_market";
     public static final String IPO_CODE = "ipo_code";
 
-    public static final String NONE = "none";
-    public static final String HAS_INQUIRY = "have_inquiry";
-    public static final String HAS_APPLY = "have_apply";
-    public static final String HAS_PAY = "have_pay";
+    public static final int NONE = 0;
+    public static final int HAS_INQUIRY = 1;
+    public static final int HAS_APPLY = 2;
+    public static final int HAS_PAY = 3;
 
     public static final String[] eventArray = {NOTICE, INQUIRY, ROADSHOW, ANNOUNCE, OFFLINE, ONLINE, SUCCESS_RATE, SUCCESS_RESULT, PAYMENT, LISTED};
-    public static final String[] progressArray = {NONE, HAS_INQUIRY, HAS_APPLY, HAS_PAY};
+    public static final int[] progressArray = {NONE, HAS_INQUIRY, HAS_APPLY, HAS_PAY};
 
     public static final HashMap<String, Integer> eventMap = new HashMap<>();
 

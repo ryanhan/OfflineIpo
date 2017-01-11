@@ -74,11 +74,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text, " + SH_MARKET_VALUE + " text)");
 
         db.execSQL("create table if not exists " + MY_IPO + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, " + PERSON_NAME + " text)");
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, " + PERSON_NAME + " text"
+                + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
 
         db.execSQL("create table if not exists " + PROGRESS + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, "
-                + HAVE_DONE + " integer, " + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
+                + HAVE_DONE + " integer");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");

@@ -128,12 +128,15 @@ public class DatabaseUtils {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.IPO, null,
-                null, null, null, null, null);
+        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO + " left join "
+                + DatabaseHelper.PROGRESS + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
+                + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE, null);
 
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
             if (ipoItem != null) {
+                ipoItem.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
+                System.out.println(ipoItem.getProgress());
                 ipoList.add(ipoItem);
             }
         }
@@ -163,17 +166,22 @@ public class DatabaseUtils {
         cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, new String[]{DatabaseHelper.PERSON_NAME},
                 DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         List<String> nameList = new ArrayList<>();
+        List<Double> earnList = new ArrayList<>();
+        List<Integer> shareList = new ArrayList<>();
+
         while (cursor.moveToNext()) {
             nameList.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+            earnList.add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+            shareList.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
         }
         myIpo.setUserName(nameList);
+        myIpo.setEarnAmount(earnList);
+        myIpo.setStockShare(shareList);
 
         cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
                 DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         while (cursor.moveToNext()) {
             myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
-            myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
-            myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
             break;
         }
 
@@ -197,6 +205,22 @@ public class DatabaseUtils {
             ContentValues values2 = new ContentValues();
             values.put(DatabaseHelper.STOCK_CODE, ipoCode);
             sqliteDatabase.insert(DatabaseHelper.PROGRESS, null, values2);
+        }
+
+        dbHelper.close();
+    }
+
+    public static void unsubscribe(Context context, String userName, String ipoCode) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        if (userName == null) {
+            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
+        } else {
+            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, userName});
+        }
+        if (!isSubscribed(context, ipoCode)) {
+            sqliteDatabase.delete(DatabaseHelper.PROGRESS, DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
         }
 
         dbHelper.close();
@@ -229,8 +253,21 @@ public class DatabaseUtils {
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME));
             nameList.add(name);
         }
+        dbHelper.close();
         return nameList;
     }
+
+    public static void updateProgress(Context context, String ipoCode, int progress) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.HAVE_DONE, progress);
+        sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
+                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
+        dbHelper.close();
+    }
+
 
     public static List<MyIpo> getAllSubscription(Context context, String userName) {
         List<MyIpo> myIpoList = new ArrayList<>();
@@ -251,10 +288,11 @@ public class DatabaseUtils {
         HashMap<String, Integer> map = new HashMap<>();
         while (cursor.moveToNext()) {
             String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE));
-            if (map.containsKey(code)){
+            if (map.containsKey(code)) {
                 myIpoList.get(map.get(code)).getUserName().add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
-            }
-            else {
+                myIpoList.get(map.get(code)).getEarnAmount().add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+                myIpoList.get(map.get(code)).getStockShare().add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            } else {
                 MyIpo myIpo = parseMyIpoCursor(cursor);
                 if (myIpo != null) {
                     myIpoList.add(myIpo);
@@ -358,10 +396,17 @@ public class DatabaseUtils {
         IpoItem ipoItem = parseIpoCursor(cursor);
         myIpo.setIpoItem(ipoItem);
         List<String> names = new ArrayList<>();
+        List<Integer> shares = new ArrayList<>();
+        List<Double> amounts = new ArrayList<>();
+
         names.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
+        shares.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+        amounts.add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+
         myIpo.setUserName(names);
-        myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
-        myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+        myIpo.setStockShare(shares);
+        myIpo.setEarnAmount(amounts);
+
         myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
 
         return myIpo;

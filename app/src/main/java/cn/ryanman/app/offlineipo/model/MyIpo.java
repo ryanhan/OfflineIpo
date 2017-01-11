@@ -11,8 +11,8 @@ public class MyIpo {
     private IpoItem ipoItem;
     private List<String> userName;
     private int progress;
-    private int stockShare;
-    private double earnAmount;
+    private List<Integer> stockShare;
+    private List<Double> earnAmount;
 
     public IpoItem getIpoItem() {
         return ipoItem;
@@ -38,19 +38,19 @@ public class MyIpo {
         this.progress = progress;
     }
 
-    public int getStockShare() {
+    public List<Integer> getStockShare() {
         return stockShare;
     }
 
-    public void setStockShare(int stockShare) {
+    public void setStockShare(List<Integer> stockShare) {
         this.stockShare = stockShare;
     }
 
-    public double getEarnAmount() {
+    public List<Double> getEarnAmount() {
         return earnAmount;
     }
 
-    public void setEarnAmount(double earnAmount) {
+    public void setEarnAmount(List<Double> earnAmount) {
         this.earnAmount = earnAmount;
     }
 }

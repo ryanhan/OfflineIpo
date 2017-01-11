@@ -20,6 +20,7 @@ public class IpoItem {
     private double estimatePrice; //估价
     private double issuePrice;  //发行价
     private String url;
+    private int progress;
 
     public int getId() {
         return id;
@@ -131,5 +132,13 @@ public class IpoItem {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 }

@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="horizontal"
-    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
     android:descendantFocusability="blocksDescendants"
-    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
+    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 
     <LinearLayout
@@ -51,8 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/ipo_today_horizontal_gap"
-                android:textSize="@dimen/ipo_today_ipo_small_font_size"
-                android:text="@string/issue_price"/>
+                android:text="@string/issue_price"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
             <TextView
                 android:id="@+id/adapter_ipo_price"
@@ -111,16 +111,31 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/adapter_join_button"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/ipo_today_button"
-        android:text="+  参与"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/ipo_today_button_font_size"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/adapter_join_button"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/ipo_today_button"
+            android:text="+  参与"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/ipo_today_button_font_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/adapter_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/adapter_join_button"
+            android:layout_marginBottom="8dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/green"
+            android:text="aaaa"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
