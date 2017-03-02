@@ -13,7 +13,7 @@
     <dimen name="ipo_today_ipo_title_font_size">16sp</dimen>
     <dimen name="ipo_today_ipo_small_font_size">14sp</dimen>
 
-    <dimen name="ipo_today_button_font_size">12sp</dimen>
+    <dimen name="ipo_today_button_font_size">14sp</dimen>
 
     <dimen name="activity_create_user_title_font">18sp</dimen>
     <dimen name="activity_create_user_table_vertical_padding">15dp</dimen>

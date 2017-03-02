@@ -2,12 +2,14 @@ package cn.ryanman.app.offlineipo.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +49,9 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
         public TextView current;
         public TextView next;
         public TextView nextDate;
-        public Button joinButton;
+        public LinearLayout actionLayout;
+        public ImageView actionImage;
+        public TextView actionText;
     }
 
     public IpoListAdapter(Context context, List<IpoItem> objects) {
@@ -75,7 +79,9 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.current = (TextView) convertView.findViewById(R.id.adapter_ipo_current);
             holder.next = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
             holder.nextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
-            holder.joinButton = (Button) convertView.findViewById(R.id.adapter_join_button);
+            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adpater_action_layout);
+            holder.actionImage = (ImageView) convertView.findViewById(R.id.adpater_action_image);
+            holder.actionText = (TextView) convertView.findViewById(R.id.adapter_action_text);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -83,9 +89,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
 
         holder.ipoName.setText(getItem(position).getName());
         holder.ipoCode.setText(getItem(position).getCode());
-        if (DatabaseUtils.isSubscribed(context, getItem(position).getCode())) {
-            //holder.joinButton.setClickable(false);
-        }
+
         if (getItem(position).getIssuePrice() != 0) {
             holder.priceLayout.setVisibility(View.VISIBLE);
             DecimalFormat df = new DecimalFormat("#.00");
@@ -100,10 +104,10 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.nextLayout.setVisibility(View.GONE);
             holder.currentTitle.setText(R.string.no_offline);
             holder.current.setVisibility(View.GONE);
-            holder.joinButton.setVisibility(View.INVISIBLE);
+            holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
-            holder.joinButton.setVisibility(View.VISIBLE);
-            holder.joinButton.setOnClickListener(new View.OnClickListener() {
+            holder.actionLayout.setVisibility(View.VISIBLE);
+            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(context);

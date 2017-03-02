@@ -111,31 +111,29 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/adpater_action_layout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/adapter_join_button"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/ipo_today_button"
-            android:text="+  参与"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/ipo_today_button_font_size"
-            android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/adpater_action_image"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            />
 
         <TextView
-            android:id="@+id/adapter_status"
+            android:id="@+id/adapter_action_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/adapter_join_button"
-            android:layout_marginBottom="8dp"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/green"
-            android:text="aaaa"/>
+            android:text="@string/join"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/ipo_today_button_font_size"
+            android:textStyle="bold"
+            />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
