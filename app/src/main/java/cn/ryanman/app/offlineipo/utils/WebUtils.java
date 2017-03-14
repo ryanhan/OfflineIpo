@@ -15,6 +15,7 @@ import java.util.concurrent.SynchronousQueue;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
+import cn.ryanman.app.offlineipo.model.Status;
 
 /**
  * Created by ryan on 2016/11/25.
@@ -31,7 +32,7 @@ public class WebUtils {
         JSONArray successRateArray = resultJson.getJSONArray("ANNOUNCE_SUCCESS_RATE_DATE_LIST"); //发布中签率
         for (int i = 0; i < successRateArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.SUCCESS_RATE);
+            ipoToday.setEvent(Status.SUCCESS_RATE.toString());
             ipoToday.setIpoName(successRateArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -39,7 +40,7 @@ public class WebUtils {
         JSONArray successResultArray = resultJson.getJSONArray("ANNOUNCE_SUCCESS_RATE_RESULT_DATE_LIST"); //发布中签结果
         for (int i = 0; i < successResultArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.SUCCESS_RESULT);
+            ipoToday.setEvent(Status.SUCCESS_RESULT.toString());
             ipoToday.setIpoName(successResultArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -47,7 +48,7 @@ public class WebUtils {
         JSONArray inquiryArray = resultJson.getJSONArray("INQUIRY_DATE_LIST"); //询价
         for (int i = 0; i < inquiryArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.INQUIRY);
+            ipoToday.setEvent(Status.INQUIRY.toString());
             ipoToday.setIpoName(inquiryArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -55,7 +56,7 @@ public class WebUtils {
         JSONArray noticeArray = resultJson.getJSONArray("IPO_NOTICE_DATE_LIST"); //招股公告
         for (int i = 0; i < noticeArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.NOTICE);
+            ipoToday.setEvent(Status.NOTICE.toString());
             ipoToday.setIpoName(noticeArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -63,7 +64,7 @@ public class WebUtils {
         JSONArray announceArray = resultJson.getJSONArray("ISSUANCE_ANNOUNCEMENT_DATE_LIST"); //发行公告
         for (int i = 0; i < announceArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.ANNOUNCE);
+            ipoToday.setEvent(Status.ANNOUNCE.toString());
             ipoToday.setIpoName(announceArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -71,7 +72,7 @@ public class WebUtils {
         JSONArray listedArray = resultJson.getJSONArray("LISTED_DATE_LIST"); //上市
         for (int i = 0; i < listedArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.LISTED);
+            ipoToday.setEvent(Status.LISTED.toString());
             ipoToday.setIpoName(listedArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -79,7 +80,7 @@ public class WebUtils {
         JSONArray offlineArray = resultJson.getJSONArray("OFFLINE_ISSUANCE_DATE_LIST"); //网下发行
         for (int i = 0; i < offlineArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.OFFLINE);
+            ipoToday.setEvent(Status.OFFLINE.toString());
             ipoToday.setIpoName(offlineArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -87,7 +88,7 @@ public class WebUtils {
         JSONArray onlineArray = resultJson.getJSONArray("ONLINE_ISSUANCE_DATE_LIST"); //申购
         for (int i = 0; i < onlineArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.ONLINE);
+            ipoToday.setEvent(Status.ONLINE.toString());
             ipoToday.setIpoName(onlineArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -95,7 +96,7 @@ public class WebUtils {
         JSONArray roadshowArray = resultJson.getJSONArray("ONLINE_ROADSHOW_DATE_LIST"); //路演
         for (int i = 0; i < roadshowArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.ROADSHOW);
+            ipoToday.setEvent(Status.ROADSHOW.toString());
             ipoToday.setIpoName(roadshowArray.getString(i));
             ipoTodayList.add(ipoToday);
         }
@@ -103,7 +104,7 @@ public class WebUtils {
         JSONArray paymentArray = resultJson.getJSONArray("PAYMENT_DATE_LIST"); //缴款日
         for (int i = 0; i < paymentArray.length(); i++) {
             IpoToday ipoToday = new IpoToday();
-            ipoToday.setEvent(Value.PAYMENT);
+            ipoToday.setEvent(Status.PAYMENT.toString());
             ipoToday.setIpoName(paymentArray.getString(i));
             ipoTodayList.add(ipoToday);
         }

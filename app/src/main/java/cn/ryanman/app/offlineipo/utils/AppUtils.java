@@ -9,6 +9,7 @@ import java.util.Date;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoStatus;
+import cn.ryanman.app.offlineipo.model.Status;
 
 /**
  * Created by ryan on 2016/11/29.
@@ -36,46 +37,50 @@ public class AppUtils {
     public static IpoStatus getIpoStatus(IpoItem item) throws ParseException{
         Date now = new Date();
         IpoStatus status = new IpoStatus();
+        if (Value.ipoTodayMap.containsKey(item.getName())){
+            status.setCurrent(Value.ipoTodayMap.get(item.getName()));
+        }
+
         if (now.before(parseDate(item.getInquiryDate()))){
-            status.setCurrent(Value.NOTICE);
-            status.setNext(Value.INQUIRY);
+            //status.setCurrent(Value.NOTICE);
+            status.setNext(Status.INQUIRY.toString());
             status.setNextDate(item.getInquiryDate());
         }
-        else if(now.before(parseDate(item.getInquiryEndDate()))){
-            status.setCurrent(Value.INQUIRY);
-            status.setNext(Value.OFFLINE);
-            status.setNextDate(item.getOfflineDate());
-        }
+//        else if(now.before(parseDate(item.getInquiryEndDate()))){
+//            status.setCurrent(Value.INQUIRY);
+//            status.setNext(Value.OFFLINE);
+//            status.setNextDate(item.getOfflineDate());
+//        }
 
         else if(now.before(parseDate(item.getOfflineDate()))){
-            status.setNext(Value.OFFLINE);
+            status.setNext(Status.OFFLINE.toString());
             status.setNextDate(item.getOfflineDate());
         }
 
-        else if((int)daysAfter(item.getOfflineDate()) == 0){
-            status.setCurrent(Value.OFFLINE);
-            status.setNext(Value.PAYMENT);
-            status.setNextDate(item.getPaymentDate());
-        }
+//        else if((int)daysAfter(item.getOfflineDate()) == 0){
+//            status.setCurrent(Value.OFFLINE);
+//            status.setNext(Value.PAYMENT);
+//            status.setNextDate(item.getPaymentDate());
+//        }
         else if(now.before(parseDate(item.getPaymentDate()))){
-            status.setNext(Value.PAYMENT);
+            status.setNext(Status.PAYMENT.toString());
             status.setNextDate(item.getPaymentDate());
         }
         else if((int)daysAfter(item.getPaymentDate()) == 0){
-            status.setCurrent(Value.PAYMENT);
-            status.setNext(Value.LISTED);
+            //status.setCurrent(Value.PAYMENT);
+            status.setNext(Status.LISTED.toString());
         }
         else if(now.after(parseDate(item.getPaymentDate()))){
             if (item.getListedDate() == null){
-                status.setNext(Value.LISTED);
+                status.setNext(Status.LISTED.toString());
             }
             else{
                 if (now.before(parseDate(item.getListedDate()))){
-                    status.setNext(Value.LISTED);
+                    status.setNext(Status.LISTED.toString());
                     status.setNextDate(item.getListedDate());
                 }
                 else {
-                    status.setCurrent(Value.LISTED);
+                    status.setCurrent(Status.LISTED.toString());
                 }
             }
         }

@@ -18,6 +18,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ID = "id";
     public static final String STOCK_NAME = "stock_name";
     public static final String STOCK_CODE = "stock_code";
+    public static final String P_STOCK_CODE = "p_stock_code";
+    public static final String M_STOCK_CODE = "m_stock_code";
     public static final String NOTICE_DATE = "notice_date"; //招股公告
     public static final String INQUIRY_DATE = "inquiry_date"; //询价开始
     public static final String INQUIRY_END_DATE = "inquiry_end_date"; //询价结束
@@ -74,11 +76,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text, " + SH_MARKET_VALUE + " text)");
 
         db.execSQL("create table if not exists " + MY_IPO + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, " + PERSON_NAME + " text"
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + M_STOCK_CODE + " text, " + PERSON_NAME + " text"
                 + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
 
         db.execSQL("create table if not exists " + PROGRESS + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STOCK_CODE + " text, "
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + P_STOCK_CODE + " text, "
                 + HAVE_DONE + " integer)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID

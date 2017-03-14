@@ -22,6 +22,7 @@ import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoStatus;
+import cn.ryanman.app.offlineipo.model.Status;
 import cn.ryanman.app.offlineipo.model.User;
 import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
@@ -98,7 +99,6 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.priceLayout.setVisibility(View.GONE);
         }
 
-
         if (getItem(position).getOfflineDate() == null) {
             holder.currentLayout.setVisibility(View.VISIBLE);
             holder.nextLayout.setVisibility(View.GONE);
@@ -106,66 +106,13 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.current.setVisibility(View.GONE);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
-            holder.actionLayout.setVisibility(View.VISIBLE);
-            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(context);
-                    getUserAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
-                        @Override
-                        public void onDataSuccessfully(Object object) {
-                            final List<User> userList = (List<User>) object;
-                            if (userList.size() > 0) {
-                                String[] nameArray = new String[userList.size()];
-                                for (int i = 0; i < userList.size(); i++) {
-                                    nameArray[i] = userList.get(i).getName();
-                                }
 
-                                final boolean[] selected = new boolean[userList.size()];
-                                for (int i = 0; i < userList.size(); i++) {
-                                    selected[i] = true;
-                                }
-
-                                new AlertDialog.Builder(context).setMultiChoiceItems(nameArray, selected, new DialogInterface.OnMultiChoiceClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                        selected[which] = isChecked;
-                                    }
-                                }).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        for (int i = 0; i < selected.length; i++) {
-                                            if (selected[i] == true) {
-                                                selectCount++;
-                                                DatabaseUtils.subscribe(context, userList.get(i).getName(), getItem(position).getCode());
-                                            }
-                                        }
-                                        if (selectCount == 0) {
-                                            Toast.makeText(context, R.string.no_selected_user, Toast.LENGTH_LONG).show();
-                                        } else {
-                                            //holder.joinButton.setClickable(false);
-                                        }
-                                    }
-                                }).setNegativeButton(R.string.no, null).show();
-                            } else if (userList.size() == 0) {
-                                Toast.makeText(context, R.string.no_user, Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onDataFailed() {
-
-                        }
-                    });
-                    getUserAsyncTask.execute();
-                }
-            });
-
+            IpoStatus status = null;
             try {
-                IpoStatus status = AppUtils.getIpoStatus(getItem(position));
+                status = AppUtils.getIpoStatus(getItem(position));
                 if (status.getCurrent() == null) {
                     holder.currentLayout.setVisibility(View.GONE);
-                } else if (status.getCurrent().equals(Value.LISTED)) {
+                } else if (status.getCurrent().equals(Status.LISTED.toString())) {
                     holder.currentLayout.setVisibility(View.VISIBLE);
                     holder.currentTitle.setText(R.string.have_listed);
                     holder.current.setVisibility(View.GONE);
@@ -180,7 +127,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     holder.nextLayout.setVisibility(View.GONE);
                 } else {
                     holder.nextLayout.setVisibility(View.VISIBLE);
-                    if (status.getNext().equals(Value.LISTED)) {
+                    if (status.getNext().equals(Status.LISTED.toString())) {
                         holder.next.setText(R.string.wait_listed);
                     } else {
                         int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
@@ -197,6 +144,71 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+
+
+            holder.actionLayout.setVisibility(View.VISIBLE);
+            if (getItem(position).getProgress() == 0) {
+                holder.actionLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(context);
+                        getUserAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
+                            @Override
+                            public void onDataSuccessfully(Object object) {
+                                final List<User> userList = (List<User>) object;
+                                if (userList.size() > 0) {
+                                    String[] nameArray = new String[userList.size()];
+                                    for (int i = 0; i < userList.size(); i++) {
+                                        nameArray[i] = userList.get(i).getName();
+                                    }
+
+                                    final boolean[] selected = new boolean[userList.size()];
+                                    for (int i = 0; i < userList.size(); i++) {
+                                        selected[i] = true;
+                                    }
+
+                                    new AlertDialog.Builder(context).setMultiChoiceItems(nameArray, selected, new DialogInterface.OnMultiChoiceClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                            selected[which] = isChecked;
+                                        }
+                                    }).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            for (int i = 0; i < selected.length; i++) {
+                                                if (selected[i] == true) {
+                                                    selectCount++;
+                                                    DatabaseUtils.subscribe(context, userList.get(i).getName(), getItem(position).getCode());
+                                                }
+                                            }
+                                            if (selectCount == 0) {
+                                                Toast.makeText(context, R.string.no_selected_user, Toast.LENGTH_LONG).show();
+                                            } else {
+                                                //holder.joinButton.setClickable(false);
+                                            }
+                                        }
+                                    }).setNegativeButton(R.string.no, null).show();
+                                } else if (userList.size() == 0) {
+                                    Toast.makeText(context, R.string.no_user, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onDataFailed() {
+
+                            }
+                        });
+                        getUserAsyncTask.execute();
+                    }
+                });
+            }
+            else if (getItem(position).getProgress()){
+
+            }
+
+
+
         }
 
         return convertView;

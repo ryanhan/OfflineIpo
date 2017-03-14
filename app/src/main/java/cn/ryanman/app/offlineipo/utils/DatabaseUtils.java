@@ -130,7 +130,7 @@ public class DatabaseUtils {
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO + " left join "
                 + DatabaseHelper.PROGRESS + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
-                + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE, null);
+                + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE, null);
 
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
@@ -163,7 +163,7 @@ public class DatabaseUtils {
         myIpo.setIpoItem(ipoItem);
 
         cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, new String[]{DatabaseHelper.PERSON_NAME},
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         List<String> nameList = new ArrayList<>();
         List<Double> earnList = new ArrayList<>();
         List<Integer> shareList = new ArrayList<>();
@@ -178,7 +178,7 @@ public class DatabaseUtils {
         myIpo.setStockShare(shareList);
 
         cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         while (cursor.moveToNext()) {
             myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
             break;
@@ -195,14 +195,14 @@ public class DatabaseUtils {
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.PERSON_NAME, userName);
-        values.put(DatabaseHelper.STOCK_CODE, ipoCode);
+        values.put(DatabaseHelper.M_STOCK_CODE, ipoCode);
         sqliteDatabase.insert(DatabaseHelper.MY_IPO, null, values);
 
         Cursor cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         if (cursor.getCount() == 0) {
             ContentValues values2 = new ContentValues();
-            values.put(DatabaseHelper.STOCK_CODE, ipoCode);
+            values.put(DatabaseHelper.P_STOCK_CODE, ipoCode);
             sqliteDatabase.insert(DatabaseHelper.PROGRESS, null, values2);
         }
 
@@ -214,12 +214,12 @@ public class DatabaseUtils {
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         if (userName == null) {
-            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
+            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
         } else {
-            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, userName});
+            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, userName});
         }
         if (!isSubscribed(context, ipoCode)) {
-            sqliteDatabase.delete(DatabaseHelper.PROGRESS, DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
+            sqliteDatabase.delete(DatabaseHelper.PROGRESS, DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
         }
 
         dbHelper.close();
@@ -230,7 +230,7 @@ public class DatabaseUtils {
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         int count = cursor.getCount();
         dbHelper.close();
         if (count > 0) {
@@ -245,7 +245,7 @@ public class DatabaseUtils {
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
 
         List<String> nameList = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -263,7 +263,7 @@ public class DatabaseUtils {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.HAVE_DONE, progress);
         sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
-                DatabaseHelper.STOCK_CODE + "=?", new String[]{ipoCode});
+                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
         dbHelper.close();
     }
 
@@ -276,12 +276,12 @@ public class DatabaseUtils {
         Cursor cursor;
         if (userName == null) {
             cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
-                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE
-                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE, null);
+                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE
+                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE, null);
         } else {
             cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
-                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.STOCK_CODE
-                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
+                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE
+                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
                     + " where " + DatabaseHelper.PERSON_NAME + "=?", new String[]{userName});
         }
         HashMap<String, Integer> map = new HashMap<>();

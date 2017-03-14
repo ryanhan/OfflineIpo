@@ -21,6 +21,7 @@ import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
+import cn.ryanman.app.offlineipo.model.Status;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
 
@@ -92,20 +93,29 @@ public class IpoTodayFragment extends Fragment {
             for (int i = 0; i < Value.eventMap.size(); i++) {
                 ipoNameList.get(i).clear();
             }
+            Value.ipoTodayMap.clear();
 
             Set<Integer> eventSet = new TreeSet<>();
 
             for (int i = 0; i < result.size(); i++) {
                 eventSet.add(Value.eventMap.get(result.get(i).getEvent()));
                 ipoNameList.get(Value.eventMap.get(result.get(i).getEvent())).add(result.get(i).getIpo());
+                if (result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.NOTICE.toString()) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.INQUIRY.toString()) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.OFFLINE.toString()) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.PAYMENT.toString()) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.LISTED.toString())
+                        ) {
+                    Value.ipoTodayMap.put(result.get(i).getIpo().getName(), result.get(i).getEvent());
+                }
             }
 
             Iterator<Integer> iter = eventSet.iterator();
-            while (iter.hasNext()){
+            while (iter.hasNext()) {
                 eventList.add(Value.eventArray[iter.next()]);
             }
-            for (int i = Value.eventArray.length; i > 0; i--){
-                if (!eventSet.contains(i - 1)){
+            for (int i = Value.eventArray.length; i > 0; i--) {
+                if (!eventSet.contains(i - 1)) {
                     ipoNameList.remove(i - 1);
                 }
             }

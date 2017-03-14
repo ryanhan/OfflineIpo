@@ -44,7 +44,10 @@
     <string name="yes">确定</string>
     <string name="no">取消</string>
 
-    <string name="join">+   参与</string>
+    <string name="has_submit">已提交</string>
+    <string name="has_inquiry">已询价</string>
+    <string name="has_apply">已申购</string>
+    <string name="has_pay">已缴款</string>
 
 
 </resources>
