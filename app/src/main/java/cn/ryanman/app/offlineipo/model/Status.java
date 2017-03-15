@@ -6,30 +6,31 @@ package cn.ryanman.app.offlineipo.model;
 
 public enum Status {
 
-    NOTICE, INQUIRY, ROADSHOW, ANNOUNCE, OFFLINE, ONLINE, SUCCESS_RATE, SUCCESS_RESULT, PAYMENT, LISTED;
+    NONE, NOTICE, INQUIRY, ROADSHOW, ANNOUNCE, OFFLINE, ONLINE, SUCCESS_RATE, SUCCESS_RESULT, PAYMENT, LISTED;
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase();
+        return super.toString();
     }
 
-    public String next() {
+    public Status next() {
         switch (this) {
             case NOTICE:
-                return INQUIRY.toString();
+                return INQUIRY;
 
             case INQUIRY:
-                return OFFLINE.toString();
+                return OFFLINE;
 
             case OFFLINE:
-                return PAYMENT.toString();
+                return PAYMENT;
 
             case PAYMENT:
-                return LISTED.toString();
+                return LISTED;
 
             default:
                 return null;
         }
     }
+
 
 }

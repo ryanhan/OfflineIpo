@@ -107,34 +107,34 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
 
-            IpoStatus status = null;
+            IpoStatus ipoStatus = null;
             try {
-                status = AppUtils.getIpoStatus(getItem(position));
-                if (status.getCurrent() == null) {
+                ipoStatus = AppUtils.getIpoStatus(getItem(position));
+                if (ipoStatus.getCurrent() == null) {
                     holder.currentLayout.setVisibility(View.GONE);
-                } else if (status.getCurrent().equals(Status.LISTED.toString())) {
+                } else if (ipoStatus.getCurrent().equals(Status.LISTED.toString())) {
                     holder.currentLayout.setVisibility(View.VISIBLE);
                     holder.currentTitle.setText(R.string.have_listed);
                     holder.current.setVisibility(View.GONE);
                 } else {
                     holder.currentLayout.setVisibility(View.VISIBLE);
                     holder.currentTitle.setText(R.string.today_task);
-                    int resId = context.getResources().getIdentifier(status.getCurrent(), "string", Value.PACKAGENAME);
+                    int resId = context.getResources().getIdentifier(ipoStatus.getCurrent().toString(), "string", Value.PACKAGENAME);
                     holder.current.setText(resId);
                     holder.current.setVisibility(View.VISIBLE);
                 }
-                if (status.getNext() == null) {
+                if (ipoStatus.getNext() == null) {
                     holder.nextLayout.setVisibility(View.GONE);
                 } else {
                     holder.nextLayout.setVisibility(View.VISIBLE);
-                    if (status.getNext().equals(Status.LISTED.toString())) {
+                    if (ipoStatus.getNext().equals(Status.LISTED.toString())) {
                         holder.next.setText(R.string.wait_listed);
                     } else {
-                        int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
+                        int resId = context.getResources().getIdentifier(ipoStatus.getNext().toString(), "string", Value.PACKAGENAME);
                         holder.next.setText(resId);
                     }
-                    if (status.getNextDate() != null) {
-                        holder.nextDate.setText(status.getNextDate());
+                    if (ipoStatus.getNextDate() != null) {
+                        holder.nextDate.setText(ipoStatus.getNextDate());
                         holder.nextDate.setVisibility(View.VISIBLE);
                     } else {
                         holder.nextDate.setVisibility(View.GONE);
@@ -146,9 +146,8 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             }
 
 
-
             holder.actionLayout.setVisibility(View.VISIBLE);
-            if (getItem(position).getProgress() == 0) {
+            if (getItem(position).getProgress() == Status.NONE) {
                 holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -202,15 +201,37 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                         getUserAsyncTask.execute();
                     }
                 });
+            } else {
+                if (ipoStatus != null) {
+                    if (ipoStatus.getCurrent() != null) {
+                        final Status current = ipoStatus.getCurrent();
+                        if (getItem(position).getProgress().compareTo(current) == 0) { //相同进度，显示打钩完成状态
+                            holder.actionText.setText("已完成");
+                            holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
+                            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                        } else if (getItem(position).getProgress().compareTo(current) < 0) { //相同进度，显示打钩完成状态
+                            holder.actionText.setText("下一步");
+                            holder.actionText.setTextColor(context.getResources().getColor(R.color.red));
+                            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    DatabaseUtils.updateProgress(context, getItem(position).getCode(), current);
+                                }
+                            });
+                        }
+                    }
+
+                } else if (ipoStatus.getNext() != null) {
+
+                }
             }
-            else if (getItem(position).getProgress()){
-
-            }
-
-
 
         }
-
         return convertView;
     }
 

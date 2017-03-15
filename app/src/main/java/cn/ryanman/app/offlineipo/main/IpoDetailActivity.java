@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class IpoDetailActivity extends AppCompatActivity {
     private TextView priceText;
     private LinearLayout subscribeLayout;
     private TextView personText;
+    private TextView progressText;
 
 
     @Override
@@ -50,6 +53,7 @@ public class IpoDetailActivity extends AppCompatActivity {
         priceText = (TextView) findViewById(R.id.ipo_detail_price);
         subscribeLayout = (LinearLayout) findViewById(R.id.ipo_detail_subscribe_layout);
         personText = (TextView) findViewById(R.id.ipo_detail_person);
+        progressText = (TextView) findViewById(R.id.ipo_detail_progress);
 
         GetIpoDetailAsyncTask getIpoDetailAsyncTask = new GetIpoDetailAsyncTask(this);
         getIpoDetailAsyncTask.execute(ipoCode);
@@ -79,6 +83,7 @@ public class IpoDetailActivity extends AppCompatActivity {
             nameText.setText(result.getIpoItem().getName());
             codeText.setText(result.getIpoItem().getCode());
             priceText.setText(String.valueOf(result.getIpoItem().getIssuePrice()));
+            progressText.setText(result.getIpoItem().getProgress().toString());
             List<String> persons = result.getUserName();
             StringBuffer sb = new StringBuffer();
             if (persons.size() > 0){

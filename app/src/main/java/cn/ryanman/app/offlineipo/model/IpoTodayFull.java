@@ -8,14 +8,14 @@ import java.util.List;
  */
 
 public class IpoTodayFull {
-    private String event;
+    private Status event;
     private IpoItem ipo;
 
-    public String getEvent() {
+    public Status getEvent() {
         return event;
     }
 
-    public void setEvent(String event) {
+    public void setEvent(Status event) {
         this.event = event;
     }
 

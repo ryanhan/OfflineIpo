@@ -10,14 +10,14 @@ import java.util.List;
 
 public class IpoToday {
 
-    private String event;
+    private Status event;
     private String ipoName;
 
-    public String getEvent() {
+    public Status getEvent() {
         return event;
     }
 
-    public void setEvent(String event) {
+    public void setEvent(Status event) {
         this.event = event;
     }
 

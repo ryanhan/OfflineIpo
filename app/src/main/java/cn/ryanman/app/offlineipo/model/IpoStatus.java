@@ -6,23 +6,23 @@ package cn.ryanman.app.offlineipo.model;
 
 public class IpoStatus {
 
-    private String current;
-    private String next;
+    private Status current;
+    private Status next;
     private String nextDate;
 
-    public String getCurrent() {
+    public Status getCurrent() {
         return current;
     }
 
-    public void setCurrent(String current) {
+    public void setCurrent(Status current) {
         this.current = current;
     }
 
-    public String getNext() {
+    public Status getNext() {
         return next;
     }
 
-    public void setNext(String next) {
+    public void setNext(Status next) {
         this.next = next;
     }
 

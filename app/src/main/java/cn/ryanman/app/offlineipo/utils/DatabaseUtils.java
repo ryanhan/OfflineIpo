@@ -14,6 +14,7 @@ import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
 import cn.ryanman.app.offlineipo.model.MyIpo;
+import cn.ryanman.app.offlineipo.model.Status;
 import cn.ryanman.app.offlineipo.model.User;
 
 
@@ -74,7 +75,7 @@ public class DatabaseUtils {
         sqliteDatabase.delete(DatabaseHelper.IPO_TODAY, null, null);
 
         for (int i = 0; i < ipoTodayList.size(); i++) {
-            ContentValues values = createIpoTodayValues(ipoTodayList.get(i).getEvent(), ipoTodayList.get(i).getIpoName());
+            ContentValues values = createIpoTodayValues(ipoTodayList.get(i).getEvent().toString(), ipoTodayList.get(i).getIpoName());
             sqliteDatabase.insert(DatabaseHelper.IPO_TODAY, null, values);
         }
         dbHelper.close();
@@ -135,7 +136,11 @@ public class DatabaseUtils {
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
             if (ipoItem != null) {
-                ipoItem.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
+                if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
+                    ipoItem.setProgress(Status.NONE);
+                } else {
+                    ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+                }
                 ipoList.add(ipoItem);
             }
         }
@@ -160,9 +165,21 @@ public class DatabaseUtils {
         if (ipoItem == null) {
             return null;
         }
+
+        cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
+                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
+        if (cursor.getCount() == 0) {
+            ipoItem.setProgress(Status.NONE);
+        } else {
+            while (cursor.moveToNext()) {
+                ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+                break;
+            }
+        }
+
         myIpo.setIpoItem(ipoItem);
 
-        cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, new String[]{DatabaseHelper.PERSON_NAME},
+        cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
                 DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         List<String> nameList = new ArrayList<>();
         List<Double> earnList = new ArrayList<>();
@@ -177,12 +194,6 @@ public class DatabaseUtils {
         myIpo.setEarnAmount(earnList);
         myIpo.setStockShare(shareList);
 
-        cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
-                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
-        while (cursor.moveToNext()) {
-            myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
-            break;
-        }
 
         dbHelper.close();
         return myIpo;
@@ -202,7 +213,8 @@ public class DatabaseUtils {
                 DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         if (cursor.getCount() == 0) {
             ContentValues values2 = new ContentValues();
-            values.put(DatabaseHelper.P_STOCK_CODE, ipoCode);
+            values2.put(DatabaseHelper.P_STOCK_CODE, ipoCode);
+            values2.put(DatabaseHelper.HAVE_DONE, Status.NOTICE.toString());
             sqliteDatabase.insert(DatabaseHelper.PROGRESS, null, values2);
         }
 
@@ -256,12 +268,12 @@ public class DatabaseUtils {
         return nameList;
     }
 
-    public static void updateProgress(Context context, String ipoCode, int progress) {
+    public static void updateProgress(Context context, String ipoCode, Status progress) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.HAVE_DONE, progress);
+        values.put(DatabaseHelper.HAVE_DONE, progress.toString());
         sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
                 DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
         dbHelper.close();
@@ -366,14 +378,14 @@ public class DatabaseUtils {
 
     private static IpoToday parseEventCursor(Cursor cursor) {
         IpoToday ipoToday = new IpoToday();
-        ipoToday.setEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME)));
+        ipoToday.setEvent(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME))));
         ipoToday.setIpoName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
         return ipoToday;
     }
 
     private static IpoTodayFull parseIpoTodayCursor(Cursor cursor) {
         IpoTodayFull ipoTodayFull = new IpoTodayFull();
-        ipoTodayFull.setEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME)));
+        ipoTodayFull.setEvent(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME))));
 
         IpoItem ipoItem = parseIpoCursor(cursor);
         ipoTodayFull.setIpo(ipoItem);
@@ -393,6 +405,11 @@ public class DatabaseUtils {
     private static MyIpo parseMyIpoCursor(Cursor cursor) {
         MyIpo myIpo = new MyIpo();
         IpoItem ipoItem = parseIpoCursor(cursor);
+        if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
+            ipoItem.setProgress(Status.NONE);
+        } else {
+            ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+        }
         myIpo.setIpoItem(ipoItem);
         List<String> names = new ArrayList<>();
         List<Integer> shares = new ArrayList<>();
@@ -406,7 +423,6 @@ public class DatabaseUtils {
         myIpo.setStockShare(shares);
         myIpo.setEarnAmount(amounts);
 
-        myIpo.setProgress(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE)));
 
         return myIpo;
     }

@@ -48,18 +48,11 @@ public class Value {
     public static final int[] progressArray = {NONE, HAS_SUBMIT, HAS_INQUIRY, HAS_APPLY, HAS_PAY};
 
     public static final HashMap<String, Integer> eventMap = new HashMap<>();
-    public static HashMap<String, String> ipoTodayMap = new HashMap<>();
+    public static HashMap<String, Status> ipoTodayMap = new HashMap<>();
 
     static {
-        eventMap.put(eventArray[0], 0);
-        eventMap.put(eventArray[1], 1);
-        eventMap.put(eventArray[2], 2);
-        eventMap.put(eventArray[3], 3);
-        eventMap.put(eventArray[4], 4);
-        eventMap.put(eventArray[5], 5);
-        eventMap.put(eventArray[6], 6);
-        eventMap.put(eventArray[7], 7);
-        eventMap.put(eventArray[8], 8);
-        eventMap.put(eventArray[9], 9);
+        for (int i = 0; i < eventArray.length; i++){
+            eventMap.put(eventArray[i], i);
+        }
     }
 }

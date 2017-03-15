@@ -162,7 +162,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                 holder.ipoNextLayout.setVisibility(View.GONE);
             } else {
                 holder.ipoNextLayout.setVisibility(View.VISIBLE);
-                int resId = context.getResources().getIdentifier(status.getNext(), "string", Value.PACKAGENAME);
+                int resId = context.getResources().getIdentifier(status.getNext().toString(), "string", Value.PACKAGENAME);
                 holder.ipoNext.setText(context.getString(resId));
                 if (status.getNextDate() != null) {
                     holder.ipoNextDate.setText(status.getNextDate());

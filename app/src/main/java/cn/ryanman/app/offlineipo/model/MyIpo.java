@@ -10,7 +10,6 @@ public class MyIpo {
 
     private IpoItem ipoItem;
     private List<String> userName;
-    private int progress;
     private List<Integer> stockShare;
     private List<Double> earnAmount;
 
@@ -28,14 +27,6 @@ public class MyIpo {
 
     public void setUserName(List<String> userName) {
         this.userName = userName;
-    }
-
-    public int getProgress() {
-        return progress;
-    }
-
-    public void setProgress(int progress) {
-        this.progress = progress;
     }
 
     public List<Integer> getStockShare() {

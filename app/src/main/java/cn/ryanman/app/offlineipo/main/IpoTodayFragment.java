@@ -98,13 +98,13 @@ public class IpoTodayFragment extends Fragment {
             Set<Integer> eventSet = new TreeSet<>();
 
             for (int i = 0; i < result.size(); i++) {
-                eventSet.add(Value.eventMap.get(result.get(i).getEvent()));
-                ipoNameList.get(Value.eventMap.get(result.get(i).getEvent())).add(result.get(i).getIpo());
-                if (result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.NOTICE.toString()) ||
-                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.INQUIRY.toString()) ||
-                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.OFFLINE.toString()) ||
-                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.PAYMENT.toString()) ||
-                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.LISTED.toString())
+                eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
+                ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
+                if (result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.NOTICE) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.INQUIRY) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.OFFLINE) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.PAYMENT) ||
+                        result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.LISTED)
                         ) {
                     Value.ipoTodayMap.put(result.get(i).getIpo().getName(), result.get(i).getEvent());
                 }
