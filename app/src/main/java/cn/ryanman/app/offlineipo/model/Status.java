@@ -13,6 +13,28 @@ public enum Status {
         return super.toString();
     }
 
+    public Status floor(){
+        switch (this){
+            case NOTICE:
+                return NOTICE;
+            case INQUIRY:
+            case ROADSHOW:
+            case ANNOUNCE:
+                return INQUIRY;
+            case OFFLINE:
+            case ONLINE:
+            case SUCCESS_RATE:
+            case SUCCESS_RESULT:
+                return OFFLINE;
+            case PAYMENT:
+                return PAYMENT;
+            case LISTED:
+                return LISTED;
+            default:
+                return NONE;
+        }
+    }
+
     public Status next() {
         switch (this) {
             case NOTICE:

@@ -203,9 +203,15 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                 });
             } else {
                 if (ipoStatus != null) {
+                    Status current = null;
                     if (ipoStatus.getCurrent() != null) {
-                        final Status current = ipoStatus.getCurrent();
-                        if (getItem(position).getProgress().compareTo(current) == 0) { //相同进度，显示打钩完成状态
+                        current = ipoStatus.getCurrent();
+                    } else if (ipoStatus.getNext() != null) {
+                        current = ipoStatus.getNext().floor();
+                    }
+                    if (current != null) {
+                        final Status _current = current;
+                        if (getItem(position).getProgress().compareTo(_current) == 0) { //相同进度，显示打钩完成状态
                             holder.actionText.setText("已完成");
                             holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
                             holder.actionLayout.setOnClickListener(new View.OnClickListener() {
@@ -214,21 +220,20 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
 
                                 }
                             });
-                        } else if (getItem(position).getProgress().compareTo(current) < 0) { //相同进度，显示打钩完成状态
+                        } else if (getItem(position).getProgress().compareTo(_current) < 0) { //相同进度，显示打钩完成状态
                             holder.actionText.setText("下一步");
                             holder.actionText.setTextColor(context.getResources().getColor(R.color.red));
                             holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    DatabaseUtils.updateProgress(context, getItem(position).getCode(), current);
+                                    DatabaseUtils.updateProgress(context, getItem(position).getCode(), _current);
                                 }
                             });
                         }
                     }
-
-                } else if (ipoStatus.getNext() != null) {
-
                 }
+
+
             }
 
         }
