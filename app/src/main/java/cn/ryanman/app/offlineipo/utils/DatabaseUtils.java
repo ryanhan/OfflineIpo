@@ -86,7 +86,7 @@ public class DatabaseUtils {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME, null);
+        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME + " left join " + DatabaseHelper.PROGRESS + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE, null);
 
         while (cursor.moveToNext()) {
             IpoTodayFull ipoTodayFull = parseIpoTodayCursor(cursor);
@@ -388,6 +388,11 @@ public class DatabaseUtils {
         ipoTodayFull.setEvent(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME))));
 
         IpoItem ipoItem = parseIpoCursor(cursor);
+        if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
+            ipoItem.setProgress(Status.NONE);
+        } else {
+            ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+        }
         ipoTodayFull.setIpo(ipoItem);
 
         return ipoTodayFull;

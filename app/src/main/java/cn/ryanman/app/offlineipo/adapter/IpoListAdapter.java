@@ -3,6 +3,7 @@ package cn.ryanman.app.offlineipo.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.Image;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
+import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoStatus;
 import cn.ryanman.app.offlineipo.model.Status;
@@ -38,6 +40,11 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
     private Context context;
     private LayoutInflater mInflater;
     private int selectCount;
+    private OnViewReloadListener onViewReloadListener;
+
+    public void setOnViewReloadListener(OnViewReloadListener onViewReloadListener) {
+        this.onViewReloadListener = onViewReloadListener;
+    }
 
     public final class ViewHolder {
         public TextView ipoName;
@@ -144,10 +151,14 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
             holder.actionLayout.setVisibility(View.VISIBLE);
             if (getItem(position).getProgress() == Status.NONE) {
+
+                holder.actionImage.setImageResource(R.drawable.ic_add);
+                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                holder.actionText.setText(context.getString(R.string.has_submit));
+                holder.actionText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
                 holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -184,7 +195,8 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                                             if (selectCount == 0) {
                                                 Toast.makeText(context, R.string.no_selected_user, Toast.LENGTH_LONG).show();
                                             } else {
-                                                //holder.joinButton.setClickable(false);
+                                                if (onViewReloadListener != null)
+                                                    onViewReloadListener.reload(null);
                                             }
                                         }
                                     }).setNegativeButton(R.string.no, null).show();
@@ -207,35 +219,39 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     if (ipoStatus.getCurrent() != null) {
                         current = ipoStatus.getCurrent();
                     } else if (ipoStatus.getNext() != null) {
-                        current = ipoStatus.getNext().floor();
+                        current = ipoStatus.getNext().before();
                     }
                     if (current != null) {
                         final Status _current = current;
+                        if (_current.equals(Status.NOTICE)) {
+                            holder.actionText.setText(R.string.has_submit);
+                        } else if (_current.equals(Status.INQUIRY)) {
+                            holder.actionText.setText(R.string.has_inquiry);
+                        } else if (_current.equals(Status.OFFLINE)) {
+                            holder.actionText.setText(R.string.has_apply);
+                        } else if (_current.equals(Status.PAYMENT)) {
+                            holder.actionText.setText(R.string.has_pay);
+                        }
                         if (getItem(position).getProgress().compareTo(_current) == 0) { //相同进度，显示打钩完成状态
-                            holder.actionText.setText("已完成");
+                            holder.actionImage.setImageResource(R.drawable.ic_correct);
+                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
                             holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
-                            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            });
-                        } else if (getItem(position).getProgress().compareTo(_current) < 0) { //相同进度，显示打钩完成状态
-                            holder.actionText.setText("下一步");
+                        } else if (getItem(position).getProgress().compareTo(_current) < 0) { //落后进度，显示TODO状态
+                            holder.actionImage.setImageResource(R.drawable.ic_flag);
+                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.red));
                             holder.actionText.setTextColor(context.getResources().getColor(R.color.red));
                             holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     DatabaseUtils.updateProgress(context, getItem(position).getCode(), _current);
+                                    if (onViewReloadListener != null)
+                                        onViewReloadListener.reload(null);
                                 }
                             });
                         }
                     }
                 }
-
-
             }
-
         }
         return convertView;
     }

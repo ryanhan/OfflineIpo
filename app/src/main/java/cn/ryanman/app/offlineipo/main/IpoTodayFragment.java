@@ -19,6 +19,7 @@ import java.util.TreeSet;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
+import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
 import cn.ryanman.app.offlineipo.model.Status;
@@ -32,7 +33,7 @@ import cn.ryanman.app.offlineipo.utils.Value;
 public class IpoTodayFragment extends Fragment {
 
     private ExpandableListView ipoTodayListView;
-    private BaseExpandableListAdapter ipoTodayListAdapter;
+    private IpoTodayListAdapter ipoTodayListAdapter;
     private List<String> eventList;
     private List<List<IpoItem>> ipoNameList;
 
@@ -43,17 +44,19 @@ public class IpoTodayFragment extends Fragment {
         ipoTodayListView = (ExpandableListView) view.findViewById(R.id.ipo_today_list);
 
         eventList = new ArrayList<>();
-        ipoNameList = new ArrayList<>();
-        for (int i = 0; i < Value.eventMap.size(); i++) {
-            ipoNameList.add(new ArrayList<IpoItem>());
-        }
+        ipoNameList = new ArrayList<>(Value.eventMap.size());
+
 
         ipoTodayListAdapter = new IpoTodayListAdapter(this.getActivity(), eventList, ipoNameList);
         ipoTodayListView.setAdapter(ipoTodayListAdapter);
 
-        for (int i = 0; i < Value.eventArray.length; i++) {
-            ipoTodayListView.expandGroup(i);
-        }
+        ipoTodayListAdapter.setOnViewReloadListener(new OnViewReloadListener() {
+            @Override
+            public void reload(Object object) {
+                IpoTodayAsyncTask task = new IpoTodayAsyncTask(IpoTodayFragment.this.getActivity());
+                task.execute();
+            }
+        });
 
         ipoTodayListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -90,9 +93,12 @@ public class IpoTodayFragment extends Fragment {
         protected void onPostExecute(List<IpoTodayFull> result) {
 
             eventList.clear();
+            ipoNameList.clear();
+
             for (int i = 0; i < Value.eventMap.size(); i++) {
-                ipoNameList.get(i).clear();
+                ipoNameList.add(new ArrayList<IpoItem>());
             }
+
             Value.ipoTodayMap.clear();
 
             Set<Integer> eventSet = new TreeSet<>();
@@ -120,7 +126,11 @@ public class IpoTodayFragment extends Fragment {
                 }
             }
 
-            ipoTodayListAdapter.notifyDataSetInvalidated();
+            for (int i = 0; i < ipoNameList.size(); i++) {
+                ipoTodayListView.expandGroup(i);
+            }
+
+            ipoTodayListAdapter.notifyDataSetChanged();
 
         }
     }

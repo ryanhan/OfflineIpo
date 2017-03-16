@@ -16,6 +16,7 @@ import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoListAdapter;
+import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
@@ -48,6 +49,14 @@ public class IpoListFragment extends Fragment {
                         IpoDetailActivity.class);
                 intent.putExtra(Value.IPO_CODE, ipoList.get(position).getCode());
                 startActivity(intent);
+            }
+        });
+
+        ipoListAdapter.setOnViewReloadListener(new OnViewReloadListener() {
+            @Override
+            public void reload(Object object) {
+                IpoListAsyncTask task = new IpoListAsyncTask(IpoListFragment.this.getActivity());
+                task.execute();
             }
         });
 
