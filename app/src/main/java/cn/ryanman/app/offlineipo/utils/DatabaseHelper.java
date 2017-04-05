@@ -46,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String EVENT_NAME = "event_name";
 
     public static final String HAVE_DONE = "have_done";
+    public static final String SOLD_DATE = "sold_date";
 
     //private Context context;
 
@@ -81,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table if not exists " + PROGRESS + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + P_STOCK_CODE + " text, "
-                + HAVE_DONE + " text)");
+                + HAVE_DONE + " text, " + SOLD_DATE + " text)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");

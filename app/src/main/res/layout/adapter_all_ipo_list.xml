@@ -7,8 +7,6 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
-    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 
     <LinearLayout

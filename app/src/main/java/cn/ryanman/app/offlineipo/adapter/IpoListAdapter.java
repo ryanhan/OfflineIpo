@@ -113,13 +113,14 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.current.setVisibility(View.GONE);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
-
             IpoStatus ipoStatus = null;
+            holder.actionLayout.setVisibility(View.VISIBLE);
             try {
                 ipoStatus = AppUtils.getIpoStatus(getItem(position));
                 if (ipoStatus.getCurrent() == null) {
                     holder.currentLayout.setVisibility(View.GONE);
-                } else if (ipoStatus.getCurrent().equals(Status.LISTED.toString())) {
+                } else if (ipoStatus.getCurrent().equals(Status.LISTED)) {
+                    holder.actionLayout.setVisibility(View.INVISIBLE);
                     holder.currentLayout.setVisibility(View.VISIBLE);
                     holder.currentTitle.setText(R.string.have_listed);
                     holder.current.setVisibility(View.GONE);
@@ -134,8 +135,11 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     holder.nextLayout.setVisibility(View.GONE);
                 } else {
                     holder.nextLayout.setVisibility(View.VISIBLE);
-                    if (ipoStatus.getNext().equals(Status.LISTED.toString())) {
+                    if (ipoStatus.getNext().equals(Status.LISTED)) {
                         holder.next.setText(R.string.wait_listed);
+                        if (ipoStatus.getCurrent() == null){
+                            holder.actionLayout.setVisibility(View.INVISIBLE);
+                        }
                     } else {
                         int resId = context.getResources().getIdentifier(ipoStatus.getNext().toString(), "string", Value.PACKAGENAME);
                         holder.next.setText(resId);
@@ -151,7 +155,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            holder.actionLayout.setVisibility(View.VISIBLE);
+
             if (getItem(position).getProgress() == Status.NONE) {
 
                 holder.actionImage.setImageResource(R.drawable.ic_add);
@@ -232,7 +236,12 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                         } else if (_current.equals(Status.PAYMENT)) {
                             holder.actionText.setText(R.string.has_pay);
                         }
-                        if (getItem(position).getProgress().compareTo(_current) == 0) { //相同进度，显示打钩完成状态
+                        if (getItem(position).getProgress().equals(Status.PAYMENT)){ //完成所有进度
+                            holder.actionImage.setImageResource(R.drawable.ic_correct);
+                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
+                            holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
+                        }
+                        else if (getItem(position).getProgress().compareTo(_current) == 0) { //相同进度，显示打钩完成状态
                             holder.actionImage.setImageResource(R.drawable.ic_correct);
                             holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
                             holder.actionText.setTextColor(context.getResources().getColor(R.color.green));

@@ -19,6 +19,12 @@
     <dimen name="activity_create_user_table_vertical_padding">15dp</dimen>
     <dimen name="activity_create_user_table_horizontal_padding">15dp</dimen>
 
+    <dimen name="activity_ipo_detail_margin_vertical">15dp</dimen>
+    <dimen name="activity_ipo_detail_progress_margin">5dp</dimen>
+    <dimen name="activity_ipo_detail_title_font">18sp</dimen>
+    <dimen name="activity_ipo_detail_font">16sp</dimen>
+
+
     <dimen name="adapter_user_list_font">18sp</dimen>
     <dimen name="fragment_my_ipo_title_font">16sp</dimen>
 

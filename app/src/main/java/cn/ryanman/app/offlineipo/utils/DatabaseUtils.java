@@ -279,6 +279,38 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
+    public static void updateStockNumber(Context context, String ipoCode, String personName, String stock) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        int stockNumber = 0;
+        try {
+            stockNumber = Integer.parseInt(stock);
+        } catch (Exception e) {
+        }
+        values.put(DatabaseHelper.STOCK_SHARE, stockNumber);
+        sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
+                DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, personName});
+        dbHelper.close();
+    }
+
+    public static void updateEarnAmount(Context context, String ipoCode, String personName, String earn) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        double earnAmount = 0;
+        try {
+            earnAmount = Double.parseDouble(earn);
+        } catch (Exception e) {
+        }
+        values.put(DatabaseHelper.EARN_AMOUNT, earnAmount);
+        sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
+                DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, personName});
+        dbHelper.close();
+    }
+
 
     public static List<MyIpo> getAllSubscription(Context context, String userName) {
         List<MyIpo> myIpoList = new ArrayList<>();
