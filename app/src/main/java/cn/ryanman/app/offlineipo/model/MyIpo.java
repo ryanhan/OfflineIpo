@@ -12,6 +12,7 @@ public class MyIpo {
     private List<String> userName;
     private List<Integer> stockShare;
     private List<Double> earnAmount;
+    private String soldDate;
 
     public IpoItem getIpoItem() {
         return ipoItem;
@@ -43,5 +44,13 @@ public class MyIpo {
 
     public void setEarnAmount(List<Double> earnAmount) {
         this.earnAmount = earnAmount;
+    }
+
+    public String getSoldDate() {
+        return soldDate;
+    }
+
+    public void setSoldDate(String soldDate) {
+        this.soldDate = soldDate;
     }
 }

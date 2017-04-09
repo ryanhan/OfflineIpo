@@ -173,6 +173,7 @@ public class DatabaseUtils {
         } else {
             while (cursor.moveToNext()) {
                 ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+                myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
                 break;
             }
         }
@@ -311,6 +312,16 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
+    public static void updateSoldDate(Context context, String ipoCode, String soldDate) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.SOLD_DATE, soldDate);
+        sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
+                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
+        dbHelper.close();
+    }
 
     public static List<MyIpo> getAllSubscription(Context context, String userName) {
         List<MyIpo> myIpoList = new ArrayList<>();

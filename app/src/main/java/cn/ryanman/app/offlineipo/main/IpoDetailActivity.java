@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.utils.Utils;
+import com.fourmob.datetimepicker.date.DatePickerDialog;
 
 import org.w3c.dom.Text;
 
@@ -27,6 +28,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +46,7 @@ import cn.ryanman.app.offlineipo.utils.Value;
  * Created by hanyan on 12/26/2016.
  */
 
-public class IpoDetailActivity extends AppCompatActivity {
+public class IpoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private String ipoCode;
     private TextView nameText;
@@ -62,6 +64,7 @@ public class IpoDetailActivity extends AppCompatActivity {
     private LinearLayout paymentLayout;
     private LinearLayout benefitLayout;
     private TextView soldDateText;
+    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +90,20 @@ public class IpoDetailActivity extends AppCompatActivity {
         benefitLayout = (LinearLayout) findViewById(R.id.ipo_detail_benefit_layout);
         soldDateText = (TextView) findViewById(R.id.ipo_detail_sold_date);
 
+        final Calendar calendar = Calendar.getInstance();
+        datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
+
         GetIpoDetailAsyncTask getIpoDetailAsyncTask = new GetIpoDetailAsyncTask(this);
         getIpoDetailAsyncTask.execute(ipoCode);
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(year).append("-").append(month + 1).append("-").append(day);
+        DatabaseUtils.updateSoldDate(IpoDetailActivity.this, ipoCode, sb.toString());
+        soldDateText.setText(sb.toString());
+    }
 
     private void getBundle() {
         Bundle bundle = getIntent().getExtras();
@@ -235,7 +248,21 @@ public class IpoDetailActivity extends AppCompatActivity {
 
                 Date now = new Date();
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                soldDateText.setText(df.format(now));
+                if (result.getSoldDate() == null) {
+                    soldDateText.setText("请选择");
+                    soldDateText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            datePickerDialog.setVibrate(false);
+                            datePickerDialog.setYearRange(1985, 2028);
+                            datePickerDialog.setCloseOnSingleTapDay(false);
+                            datePickerDialog.show(getSupportFragmentManager(), "datepicker");
+                        }
+                    });
+                }
+                else{
+                    soldDateText.setText(result.getSoldDate());
+                }
             }
         }
     }
