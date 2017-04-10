@@ -1,10 +1,12 @@
 package cn.ryanman.app.offlineipo.main;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -60,6 +63,7 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
     private TextView applyText;
     private TextView split_3;
     private TextView paymentText;
+    private ImageButton paymentNotifyButton;
     private LinearLayout subscriptionLayout;
     private LinearLayout paymentLayout;
     private LinearLayout benefitLayout;
@@ -85,6 +89,7 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
         applyText = (TextView) findViewById(R.id.ipo_progress_apply);
         split_3 = (TextView) findViewById(R.id.ipo_progress_split_3);
         paymentText = (TextView) findViewById(R.id.ipo_progress_payment);
+        paymentNotifyButton = (ImageButton) findViewById(R.id.payment_amount_notify_button);
         subscriptionLayout = (LinearLayout) findViewById(R.id.ipo_detail_subscription_layout);
         paymentLayout = (LinearLayout) findViewById(R.id.ipo_detail_payment_layout);
         benefitLayout = (LinearLayout) findViewById(R.id.ipo_detail_benefit_layout);
@@ -171,6 +176,7 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                 List<String> users = result.getUserName();
                 if (users != null && users.size() > 0) {
                     for (int i = 0; i < users.size(); i++) {
+                        final int index = i;
                         final String user = users.get(i);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -210,9 +216,47 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
 
                             @Override
                             public void afterTextChanged(Editable editable) {
-                                DatabaseUtils.updateStockNumber(IpoDetailActivity.this, result.getIpoItem().getCode(), user, editable.toString());
+                                try{
+                                    int stockNumber = Integer.parseInt(editable.toString());
+                                    DatabaseUtils.updateStockNumber(IpoDetailActivity.this, result.getIpoItem().getCode(), user, stockNumber);
+                                    result.getStockShare().set(index, stockNumber);
+                                } catch (Exception e) {
+                                }
                             }
                         });
+
+                        paymentNotifyButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                List<String> users = result.getUserName();
+                                List<Integer> stockNumber = result.getStockShare();
+                                StringBuffer sb = new StringBuffer();
+                                for (int i = 0; i < users.size(); i++){
+                                    if (stockNumber.get(i) == 0 || result.getIpoItem().getIssuePrice() == 0)
+                                        continue;
+                                    String notification = getString(R.string.payment_notification);
+                                    BigDecimal stock = new BigDecimal(String.valueOf(result.getStockShare().get(i)));
+                                    BigDecimal price = new BigDecimal(Double.toString(result.getIpoItem().getIssuePrice()));
+                                    DecimalFormat df = new DecimalFormat("#0.00");
+                                    notification = notification.replace("#MONEY#", df.format(stock.multiply(price).doubleValue())).replace("#CODE#", ipoCode);
+                                    sb.append(notification).append("\n");
+                                }
+                                if (sb.length() != 0) {
+                                    Intent intent = new Intent();
+                                    ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+                                    intent.setComponent(comp);
+                                    intent.setAction("android.intent.action.SEND");
+                                    intent.setType("text/plain");
+                                    intent.setFlags(0x3000001);
+                                    intent.putExtra(intent.EXTRA_TEXT, sb.toString().trim());
+                                    context.startActivity(intent);
+                                }
+                                else{
+                                    Toast.makeText(IpoDetailActivity.this, "缴款金额不正确", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
                         view.setLayoutParams(lp);
                         paymentLayout.addView(view);
 
@@ -250,19 +294,19 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 if (result.getSoldDate() == null) {
                     soldDateText.setText("请选择");
-                    soldDateText.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            datePickerDialog.setVibrate(false);
-                            datePickerDialog.setYearRange(1985, 2028);
-                            datePickerDialog.setCloseOnSingleTapDay(false);
-                            datePickerDialog.show(getSupportFragmentManager(), "datepicker");
-                        }
-                    });
                 }
                 else{
                     soldDateText.setText(result.getSoldDate());
                 }
+                soldDateText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        datePickerDialog.setVibrate(false);
+                        datePickerDialog.setYearRange(1985, 2028);
+                        datePickerDialog.setCloseOnSingleTapDay(false);
+                        datePickerDialog.show(getSupportFragmentManager(), "datepicker");
+                    }
+                });
             }
         }
     }

@@ -61,6 +61,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         public TextView issuePrice;
         public LinearLayout ipoNextLayout;
         public TextView ipoNextDate;
+        public TextView ipoNextDot;
         public TextView ipoNext;
         public LinearLayout actionLayout;
         public ImageView actionImage;
@@ -157,6 +158,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
             holder.ipoNextLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_next_layout);
             holder.ipoNext = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
+            holder.ipoNextDot = (TextView) convertView.findViewById(R.id.adapter_ipo_dot);
             holder.ipoNextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
             holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
             holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adpater_action_layout);
@@ -180,8 +182,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
         if (ipoItem.getOfflineDate() == null) {
             holder.ipoNextLayout.setVisibility(View.VISIBLE);
-            holder.ipoNext.setText(R.string.no_offline);
-            holder.ipoNextDate.setVisibility(View.GONE);
+            holder.ipoNextDate.setText(R.string.no_offline);
+            holder.ipoNextDot.setVisibility(View.GONE);
+            holder.ipoNext.setVisibility(View.GONE);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
             IpoStatus ipoStatus = null;
@@ -191,6 +194,8 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                     holder.ipoNextLayout.setVisibility(View.GONE);
                 } else {
                     holder.ipoNextLayout.setVisibility(View.VISIBLE);
+                    holder.ipoNextDot.setVisibility(View.VISIBLE);
+                    holder.ipoNext.setVisibility(View.VISIBLE);
                     int resId = context.getResources().getIdentifier(ipoStatus.getNext().toString(), "string", Value.PACKAGENAME);
                     holder.ipoNext.setText(context.getString(resId));
                     if (ipoStatus.getNextDate() != null) {

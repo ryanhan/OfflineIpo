@@ -280,16 +280,11 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
-    public static void updateStockNumber(Context context, String ipoCode, String personName, String stock) {
+    public static void updateStockNumber(Context context, String ipoCode, String personName, int stockNumber) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        int stockNumber = 0;
-        try {
-            stockNumber = Integer.parseInt(stock);
-        } catch (Exception e) {
-        }
         values.put(DatabaseHelper.STOCK_SHARE, stockNumber);
         sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
                 DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, personName});

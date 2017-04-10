@@ -14,6 +14,9 @@
     <string name="PAYMENT">缴款日</string>
     <string name="LISTED">上市</string>
 
+    <string name="show_all">显示全部事件</string>
+    <string name="show_only_related">网下申购相关</string>
+
     <string name="no_offline">不参与网下发行</string>
     <string name="have_listed">已上市</string>
     <string name="wait_listed">待上市</string>
@@ -53,5 +56,7 @@
     <string name="ipo_info">配售信息</string>
     <string name="benefit">收益</string>
     <string name="sold_date">卖出日期</string>
+
+    <string name="payment_notification">股票代码#CODE#, 缴款￥#MONEY#元</string>
 
 </resources>

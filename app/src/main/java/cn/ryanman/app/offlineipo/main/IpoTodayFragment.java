@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -36,6 +39,7 @@ public class IpoTodayFragment extends Fragment {
     private IpoTodayListAdapter ipoTodayListAdapter;
     private List<String> eventList;
     private List<List<IpoItem>> ipoNameList;
+    private boolean isShowRelated;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,9 +47,11 @@ public class IpoTodayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ipo_today, container, false);
         ipoTodayListView = (ExpandableListView) view.findViewById(R.id.ipo_today_list);
 
+        isShowRelated = false;
+        setHasOptionsMenu(true);
+
         eventList = new ArrayList<>();
         ipoNameList = new ArrayList<>(Value.eventMap.size());
-
 
         ipoTodayListAdapter = new IpoTodayListAdapter(this.getActivity(), eventList, ipoNameList);
         ipoTodayListView.setAdapter(ipoTodayListAdapter);
@@ -53,8 +59,7 @@ public class IpoTodayFragment extends Fragment {
         ipoTodayListAdapter.setOnViewReloadListener(new OnViewReloadListener() {
             @Override
             public void reload(Object object) {
-                IpoTodayAsyncTask task = new IpoTodayAsyncTask(IpoTodayFragment.this.getActivity());
-                task.execute();
+                updateList();
             }
         });
 
@@ -70,18 +75,47 @@ public class IpoTodayFragment extends Fragment {
             }
         });
 
-        IpoTodayAsyncTask task = new IpoTodayAsyncTask(this.getActivity());
-        task.execute();
+        updateList();
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_ipo_today, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.show_related:
+                if (!isShowRelated) {
+                    isShowRelated = true;
+                    item.setTitle(R.string.show_all);
+                } else {
+                    isShowRelated = false;
+                    item.setTitle(R.string.show_only_related);
+                }
+                updateList();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateList() {
+        IpoTodayAsyncTask task = new IpoTodayAsyncTask(IpoTodayFragment.this.getActivity(), isShowRelated);
+        task.execute();
     }
 
     private class IpoTodayAsyncTask extends AsyncTask<Void, Integer, List<IpoTodayFull>> {
 
         private Context context;
+        private boolean isShowRelated;
 
-        public IpoTodayAsyncTask(Context context) {
+        public IpoTodayAsyncTask(Context context, boolean isShowRelated) {
             this.context = context;
+            this.isShowRelated = isShowRelated;
         }
 
         @Override
@@ -104,8 +138,6 @@ public class IpoTodayFragment extends Fragment {
             Set<Integer> eventSet = new TreeSet<>();
 
             for (int i = 0; i < result.size(); i++) {
-                eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
-                ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
                 if (result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.NOTICE) ||
                         result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.INQUIRY) ||
                         result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.OFFLINE) ||
@@ -113,6 +145,12 @@ public class IpoTodayFragment extends Fragment {
                         result.get(i).getEvent().equals(cn.ryanman.app.offlineipo.model.Status.LISTED)
                         ) {
                     Value.ipoTodayMap.put(result.get(i).getIpo().getName(), result.get(i).getEvent());
+                    eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
+                    ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
+                }
+                else if (!isShowRelated){
+                    eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
+                    ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
                 }
             }
 
