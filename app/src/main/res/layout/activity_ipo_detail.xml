@@ -173,23 +173,77 @@
                     android:id="@+id/ipo_detail_person_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
                     android:text="@string/ipo_info"
                     android:textColor="@color/colorPrimary"
-                    android:layout_marginRight="15dp"
                     android:textSize="@dimen/activity_ipo_detail_title_font" />
 
                 <ImageButton
-                    android:id="@+id/payment_amount_notify_button"
+                    android:id="@+id/ipo_detail_weixin_button"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_wechat"/>
-
+                    android:src="@drawable/ic_wechat" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ipo_detail_stock_number"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:inputType="number"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="股"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="应缴款 ￥"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:id="@+id/ipo_detail_payment_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="元"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="x"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:id="@+id/ipo_detail_person_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ipo_detail_benefit_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -203,29 +257,69 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/activity_ipo_detail_title_font" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="￥"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <EditText
+                    android:id="@+id/ipo_detail_earn_amount"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:inputType="numberDecimal"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="元"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="x"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+                <TextView
+                    android:id="@+id/ipo_detail_person_number_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_ipo_detail_font" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/sold_date"
-                android:textSize="@dimen/activity_ipo_detail_font" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/activity_ipo_detail_title_font" />
 
             <TextView
                 android:id="@+id/ipo_detail_sold_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2017-03-02"
-                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/activity_ipo_detail_font" />
 
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>

@@ -6,12 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
@@ -22,10 +18,10 @@ import java.util.TreeSet;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
+import cn.ryanman.app.offlineipo.listener.OnArrowClickListener;
 import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
-import cn.ryanman.app.offlineipo.model.Status;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
 
@@ -76,32 +72,31 @@ public class IpoTodayFragment extends Fragment {
         });
 
         updateList();
-
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_ipo_today, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.show_related:
-                if (!isShowRelated) {
-                    isShowRelated = true;
-                    item.setTitle(R.string.show_all);
-                } else {
-                    isShowRelated = false;
-                    item.setTitle(R.string.show_only_related);
-                }
-                updateList();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.fragment_ipo_today, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.show_related:
+//                if (!isShowRelated) {
+//                    isShowRelated = true;
+//                    item.setTitle(R.string.show_all);
+//                } else {
+//                    isShowRelated = false;
+//                    item.setTitle(R.string.show_only_related);
+//                }
+//                updateList();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void updateList() {
         IpoTodayAsyncTask task = new IpoTodayAsyncTask(IpoTodayFragment.this.getActivity(), isShowRelated);
@@ -147,8 +142,7 @@ public class IpoTodayFragment extends Fragment {
                     Value.ipoTodayMap.put(result.get(i).getIpo().getName(), result.get(i).getEvent());
                     eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
                     ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
-                }
-                else if (!isShowRelated){
+                } else if (!isShowRelated) {
                     eventSet.add(Value.eventMap.get(result.get(i).getEvent().toString()));
                     ipoNameList.get(Value.eventMap.get(result.get(i).getEvent().toString())).add(result.get(i).getIpo());
                 }

@@ -1,34 +1,31 @@
 package cn.ryanman.app.offlineipo.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
-import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
 import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoStatus;
 import cn.ryanman.app.offlineipo.model.Status;
-import cn.ryanman.app.offlineipo.model.User;
 import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
-import cn.ryanman.app.offlineipo.utils.GetUserAsyncTask;
 import cn.ryanman.app.offlineipo.utils.Value;
 
 /**
@@ -137,7 +134,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     holder.nextLayout.setVisibility(View.VISIBLE);
                     if (ipoStatus.getNext().equals(Status.LISTED)) {
                         holder.next.setText(R.string.wait_listed);
-                        if (ipoStatus.getCurrent() == null){
+                        if (ipoStatus.getCurrent() == null) {
                             holder.actionLayout.setVisibility(View.INVISIBLE);
                         }
                     } else {
@@ -156,110 +153,57 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                 e.printStackTrace();
             }
 
-            if (getItem(position).getProgress() == Status.NONE) {
+            System.out.println(getItem(position).getCode() + " " + getItem(position).isApplied());
+
+            if (!getItem(position).isApplied()) {
 
                 holder.actionImage.setImageResource(R.drawable.ic_add);
                 holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
-                holder.actionText.setText(context.getString(R.string.has_submit));
+                holder.actionText.setText(R.string.has_submit);
                 holder.actionText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.actionLayout.setOnClickListener(new View.OnClickListener() {
 
+                    @Override
+                    public void onClick(View v) {
+                        LayoutInflater layoutInflater = LayoutInflater.from(context);
+                        View view = layoutInflater.inflate(R.layout.dialog_number_picker, null);
+                        final NumberPicker numberPicker = (NumberPicker)view.findViewById(R.id.dialog_number);
+                        numberPicker.setMinValue(1);
+                        numberPicker.setMaxValue(10);
+                        numberPicker.setValue(2);
+                        numberPicker.setWrapSelectorWheel(false);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(R.string.select_number).setView(view).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseUtils.subscribe(context, getItem(position).getCode(), numberPicker.getValue());
+                                if (onViewReloadListener != null)
+                                    onViewReloadListener.reload(null);
+                            }
+                        }).setNegativeButton(R.string.no, null).show();
+
+                    }
+
+                });
+            } else {
+                holder.actionImage.setImageResource(R.drawable.ic_correct);
+                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
+                holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
                 holder.actionLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(context);
-                        getUserAsyncTask.setOnDataLoadCompletedListener(new OnDataLoadCompletedListener() {
+                        new AlertDialog.Builder(context).setTitle(R.string.cancel_applied).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onDataSuccessfully(Object object) {
-                                final List<User> userList = (List<User>) object;
-                                if (userList.size() > 0) {
-                                    String[] nameArray = new String[userList.size()];
-                                    for (int i = 0; i < userList.size(); i++) {
-                                        nameArray[i] = userList.get(i).getName();
-                                    }
-
-                                    final boolean[] selected = new boolean[userList.size()];
-                                    for (int i = 0; i < userList.size(); i++) {
-                                        selected[i] = true;
-                                    }
-
-                                    new AlertDialog.Builder(context).setMultiChoiceItems(nameArray, selected, new DialogInterface.OnMultiChoiceClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                            selected[which] = isChecked;
-                                        }
-                                    }).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            for (int i = 0; i < selected.length; i++) {
-                                                if (selected[i] == true) {
-                                                    selectCount++;
-                                                    DatabaseUtils.subscribe(context, userList.get(i).getName(), getItem(position).getCode());
-                                                }
-                                            }
-                                            if (selectCount == 0) {
-                                                Toast.makeText(context, R.string.no_selected_user, Toast.LENGTH_LONG).show();
-                                            } else {
-                                                if (onViewReloadListener != null)
-                                                    onViewReloadListener.reload(null);
-                                            }
-                                        }
-                                    }).setNegativeButton(R.string.no, null).show();
-                                } else if (userList.size() == 0) {
-                                    Toast.makeText(context, R.string.no_user, Toast.LENGTH_LONG).show();
-                                }
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseUtils.unsubscribe(context, getItem(position).getCode());
+                                if (onViewReloadListener != null)
+                                    onViewReloadListener.reload(null);
                             }
+                        }).setNegativeButton(R.string.no, null).show();
 
-                            @Override
-                            public void onDataFailed() {
-
-                            }
-                        });
-                        getUserAsyncTask.execute();
                     }
                 });
-            } else {
-                if (ipoStatus != null) {
-                    Status current = null;
-                    if (ipoStatus.getCurrent() != null) {
-                        current = ipoStatus.getCurrent();
-                    } else if (ipoStatus.getNext() != null) {
-                        current = ipoStatus.getNext().before();
-                    }
-                    if (current != null) {
-                        final Status _current = current;
-                        if (_current.equals(Status.NOTICE)) {
-                            holder.actionText.setText(R.string.has_submit);
-                        } else if (_current.equals(Status.INQUIRY)) {
-                            holder.actionText.setText(R.string.has_inquiry);
-                        } else if (_current.equals(Status.OFFLINE)) {
-                            holder.actionText.setText(R.string.has_apply);
-                        } else if (_current.equals(Status.PAYMENT)) {
-                            holder.actionText.setText(R.string.has_pay);
-                        }
-                        if (getItem(position).getProgress().equals(Status.PAYMENT)){ //完成所有进度
-                            holder.actionImage.setImageResource(R.drawable.ic_correct);
-                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
-                            holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
-                        }
-                        else if (getItem(position).getProgress().compareTo(_current) == 0) { //相同进度，显示打钩完成状态
-                            holder.actionImage.setImageResource(R.drawable.ic_correct);
-                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
-                            holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
-                        } else if (getItem(position).getProgress().compareTo(_current) < 0) { //落后进度，显示TODO状态
-                            holder.actionImage.setImageResource(R.drawable.ic_flag);
-                            holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.red));
-                            holder.actionText.setTextColor(context.getResources().getColor(R.color.red));
-                            holder.actionLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    DatabaseUtils.updateProgress(context, getItem(position).getCode(), _current);
-                                    if (onViewReloadListener != null)
-                                        onViewReloadListener.reload(null);
-                                }
-                            });
-                        }
-                    }
-                }
             }
         }
         return convertView;

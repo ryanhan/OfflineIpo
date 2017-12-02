@@ -9,9 +9,9 @@ import java.util.List;
 public class MyIpo {
 
     private IpoItem ipoItem;
-    private List<String> userName;
-    private List<Integer> stockShare;
-    private List<Double> earnAmount;
+    private int personNumber;
+    private int stockShare;
+    private double earnAmount;
     private String soldDate;
 
     public IpoItem getIpoItem() {
@@ -22,27 +22,27 @@ public class MyIpo {
         this.ipoItem = ipoItem;
     }
 
-    public List<String> getUserName() {
-        return userName;
+    public int getPersonNumber() {
+        return personNumber;
     }
 
-    public void setUserName(List<String> userName) {
-        this.userName = userName;
+    public void setPersonNumber(int personNumber) {
+        this.personNumber = personNumber;
     }
 
-    public List<Integer> getStockShare() {
+    public int getStockShare() {
         return stockShare;
     }
 
-    public void setStockShare(List<Integer> stockShare) {
+    public void setStockShare(int stockShare) {
         this.stockShare = stockShare;
     }
 
-    public List<Double> getEarnAmount() {
+    public double getEarnAmount() {
         return earnAmount;
     }
 
-    public void setEarnAmount(List<Double> earnAmount) {
+    public void setEarnAmount(double earnAmount) {
         this.earnAmount = earnAmount;
     }
 

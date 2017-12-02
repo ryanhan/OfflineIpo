@@ -46,28 +46,17 @@ public class AppUtils {
             status.setNext(Status.INQUIRY);
             status.setNextDate(item.getInquiryDate());
         }
-//        else if(now.before(parseDate(item.getInquiryEndDate()))){
-//            status.setCurrent(Value.INQUIRY);
-//            status.setNext(Value.OFFLINE);
-//            status.setNextDate(item.getOfflineDate());
-//        }
 
         else if(now.before(parseDate(item.getOfflineDate()))){
             status.setNext(Status.OFFLINE);
             status.setNextDate(item.getOfflineDate());
         }
 
-//        else if((int)daysAfter(item.getOfflineDate()) == 0){
-//            status.setCurrent(Value.OFFLINE);
-//            status.setNext(Value.PAYMENT);
-//            status.setNextDate(item.getPaymentDate());
-//        }
         else if(now.before(parseDate(item.getPaymentDate()))){
             status.setNext(Status.PAYMENT);
             status.setNextDate(item.getPaymentDate());
         }
         else if((int)daysAfter(item.getPaymentDate()) == 0){
-            //status.setCurrent(Value.PAYMENT);
             status.setNext(Status.LISTED);
         }
         else if(now.after(parseDate(item.getPaymentDate()))){

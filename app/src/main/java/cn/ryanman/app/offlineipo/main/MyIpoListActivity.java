@@ -39,7 +39,7 @@ public class MyIpoListActivity extends AppCompatActivity {
 
         @Override
         protected List<MyIpo> doInBackground(Void... voids) {
-            return DatabaseUtils.getAllSubscription(context, null);
+            return DatabaseUtils.getAllSubscription(context);
         }
 
         @Override

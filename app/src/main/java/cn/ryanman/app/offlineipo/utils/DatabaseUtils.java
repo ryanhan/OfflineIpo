@@ -27,47 +27,6 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
-    public static void saveUser(Context context, User user) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.PERSON_NAME, user.getName());
-        values.put(DatabaseHelper.SH_CODE, user.getCode());
-        values.put(DatabaseHelper.SH_MARKET_VALUE, user.getMarket());
-        if (user.getId() == -1) {
-            sqliteDatabase.insert(DatabaseHelper.PERSON, null, values);
-        } else {
-            sqliteDatabase.update(DatabaseHelper.PERSON, values,
-                    DatabaseHelper.ID + "=?",
-                    new String[]{String.valueOf(user.getId())});
-        }
-        dbHelper.close();
-    }
-
-    public static void deleteUser(Context context, int userId) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-        sqliteDatabase.delete(DatabaseHelper.PERSON, DatabaseHelper.ID + "=?", new String[]{String.valueOf(userId)});
-        dbHelper.close();
-    }
-
-    public static List<User> getUserList(Context context) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        List<User> userList = new ArrayList<>();
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.PERSON, null,
-                null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            User user = parseUserCursor(cursor);
-            userList.add(user);
-        }
-        dbHelper.close();
-        return userList;
-    }
-
     public static void insertIpoTodayList(Context context, List<IpoToday> ipoTodayList) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
@@ -86,7 +45,7 @@ public class DatabaseUtils {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME + " left join " + DatabaseHelper.PROGRESS + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE, null);
+        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO_TODAY + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.IPO_TODAY + "." + DatabaseHelper.STOCK_NAME + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_NAME + " left join " + DatabaseHelper.MY_IPO + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE + "=" + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE, null);
 
         while (cursor.moveToNext()) {
             IpoTodayFull ipoTodayFull = parseIpoTodayCursor(cursor);
@@ -130,16 +89,16 @@ public class DatabaseUtils {
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.IPO + " left join "
-                + DatabaseHelper.PROGRESS + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
-                + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE, null);
+                + DatabaseHelper.MY_IPO + " on " + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
+                + "=" + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE, null);
 
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
             if (ipoItem != null) {
-                if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
-                    ipoItem.setProgress(Status.NONE);
+                if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.M_STOCK_CODE))) {
+                    ipoItem.setApplied(false);
                 } else {
-                    ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+                    ipoItem.setApplied(true);
                 }
                 ipoList.add(ipoItem);
             }
@@ -166,74 +125,43 @@ public class DatabaseUtils {
             return null;
         }
 
-        cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
-                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
-        if (cursor.getCount() == 0) {
-            ipoItem.setProgress(Status.NONE);
-        } else {
-            while (cursor.moveToNext()) {
-                ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
-                myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
-                break;
-            }
-        }
-
         myIpo.setIpoItem(ipoItem);
 
         cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
                 DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
-        List<String> nameList = new ArrayList<>();
-        List<Double> earnList = new ArrayList<>();
-        List<Integer> shareList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            nameList.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
-            earnList.add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
-            shareList.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            myIpo.getIpoItem().setApplied(true);
+            myIpo.setPersonNumber(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.PERSON_NUMBER)));
+            myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+            myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            break;
         }
-        myIpo.setUserName(nameList);
-        myIpo.setEarnAmount(earnList);
-        myIpo.setStockShare(shareList);
-
 
         dbHelper.close();
         return myIpo;
     }
 
 
-    public static void subscribe(Context context, String userName, String ipoCode) {
+    public static void subscribe(Context context, String ipoCode, int personNumber) {
+        if (isSubscribed(context, ipoCode)){
+            return;
+        }
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.PERSON_NAME, userName);
+        values.put(DatabaseHelper.PERSON_NUMBER, personNumber);
         values.put(DatabaseHelper.M_STOCK_CODE, ipoCode);
         sqliteDatabase.insert(DatabaseHelper.MY_IPO, null, values);
-
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.PROGRESS, null,
-                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
-        if (cursor.getCount() == 0) {
-            ContentValues values2 = new ContentValues();
-            values2.put(DatabaseHelper.P_STOCK_CODE, ipoCode);
-            values2.put(DatabaseHelper.HAVE_DONE, Status.NOTICE.toString());
-            sqliteDatabase.insert(DatabaseHelper.PROGRESS, null, values2);
-        }
-
         dbHelper.close();
     }
 
-    public static void unsubscribe(Context context, String userName, String ipoCode) {
+    public static void unsubscribe(Context context, String ipoCode) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-        if (userName == null) {
-            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
-        } else {
-            sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, userName});
-        }
-        if (!isSubscribed(context, ipoCode)) {
-            sqliteDatabase.delete(DatabaseHelper.PROGRESS, DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
-        }
+        sqliteDatabase.delete(DatabaseHelper.MY_IPO, DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
 
         dbHelper.close();
     }
@@ -246,52 +174,21 @@ public class DatabaseUtils {
                 DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
         int count = cursor.getCount();
         dbHelper.close();
-        if (count > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return count > 0 ? true : false;
     }
 
-    public static List<String> getSubscriber(Context context, String ipoCode) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
-                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode}, null, null, null);
-
-        List<String> nameList = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME));
-            nameList.add(name);
-        }
-        dbHelper.close();
-        return nameList;
-    }
-
-    public static void updateProgress(Context context, String ipoCode, Status progress) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.HAVE_DONE, progress.toString());
-        sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
-                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
-        dbHelper.close();
-    }
-
-    public static void updateStockNumber(Context context, String ipoCode, String personName, int stockNumber) {
+    public static void updateStockNumber(Context context, String ipoCode, int stockNumber) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.STOCK_SHARE, stockNumber);
         sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
-                DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, personName});
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
         dbHelper.close();
     }
 
-    public static void updateEarnAmount(Context context, String ipoCode, String personName, String earn) {
+    public static void updateEarnAmount(Context context, String ipoCode, String earn) {
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
@@ -303,7 +200,7 @@ public class DatabaseUtils {
         }
         values.put(DatabaseHelper.EARN_AMOUNT, earnAmount);
         sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
-                DatabaseHelper.M_STOCK_CODE + "=? and " + DatabaseHelper.PERSON_NAME + "=?", new String[]{ipoCode, personName});
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
         dbHelper.close();
     }
 
@@ -313,41 +210,25 @@ public class DatabaseUtils {
         SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.SOLD_DATE, soldDate);
-        sqliteDatabase.update(DatabaseHelper.PROGRESS, values,
-                DatabaseHelper.P_STOCK_CODE + "=?", new String[]{ipoCode});
+        sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
         dbHelper.close();
     }
 
-    public static List<MyIpo> getAllSubscription(Context context, String userName) {
+    public static List<MyIpo> getAllSubscription(Context context) {
         List<MyIpo> myIpoList = new ArrayList<>();
         DatabaseHelper dbHelper = new DatabaseHelper(context,
                 DatabaseHelper.DATABASENAME);
         SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor;
-        if (userName == null) {
-            cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
-                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE
-                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE, null);
-        } else {
-            cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.PROGRESS + " on "
-                    + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.PROGRESS + "." + DatabaseHelper.P_STOCK_CODE
-                    + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE
-                    + " where " + DatabaseHelper.PERSON_NAME + "=?", new String[]{userName});
-        }
-        HashMap<String, Integer> map = new HashMap<>();
+        Cursor cursor = sqliteDatabase.rawQuery("select * from " + DatabaseHelper.MY_IPO + " left join " + DatabaseHelper.IPO + " on " + DatabaseHelper.MY_IPO + "." + DatabaseHelper.M_STOCK_CODE + "=" + DatabaseHelper.IPO + "." + DatabaseHelper.STOCK_CODE, null);
         while (cursor.moveToNext()) {
-            String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE));
-            if (map.containsKey(code)) {
-                myIpoList.get(map.get(code)).getUserName().add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
-                myIpoList.get(map.get(code)).getEarnAmount().add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
-                myIpoList.get(map.get(code)).getStockShare().add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
-            } else {
-                MyIpo myIpo = parseMyIpoCursor(cursor);
-                if (myIpo != null) {
-                    myIpoList.add(myIpo);
-                }
-                map.put(code, myIpoList.size() - 1);
-            }
+            MyIpo myIpo = new MyIpo();
+            myIpo.setIpoItem(parseIpoCursor(cursor));
+            myIpo.getIpoItem().setApplied(true);
+            myIpo.setPersonNumber(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.PERSON_NUMBER)));
+            myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
+            myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            myIpoList.add(myIpo);
         }
         dbHelper.close();
         return myIpoList;
@@ -426,47 +307,14 @@ public class DatabaseUtils {
         ipoTodayFull.setEvent(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME))));
 
         IpoItem ipoItem = parseIpoCursor(cursor);
-        if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
-            ipoItem.setProgress(Status.NONE);
+        if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.M_STOCK_CODE))) {
+            ipoItem.setApplied(false);
         } else {
-            ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
+            ipoItem.setApplied(true);
         }
         ipoTodayFull.setIpo(ipoItem);
 
         return ipoTodayFull;
     }
 
-    private static User parseUserCursor(Cursor cursor) {
-        User user = new User();
-        user.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.ID)));
-        user.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
-        user.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_CODE)));
-        user.setMarket(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SH_MARKET_VALUE)));
-        return user;
-    }
-
-    private static MyIpo parseMyIpoCursor(Cursor cursor) {
-        MyIpo myIpo = new MyIpo();
-        IpoItem ipoItem = parseIpoCursor(cursor);
-        if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))) {
-            ipoItem.setProgress(Status.NONE);
-        } else {
-            ipoItem.setProgress(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HAVE_DONE))));
-        }
-        myIpo.setIpoItem(ipoItem);
-        List<String> names = new ArrayList<>();
-        List<Integer> shares = new ArrayList<>();
-        List<Double> amounts = new ArrayList<>();
-
-        names.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PERSON_NAME)));
-        shares.add(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
-        amounts.add(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
-
-        myIpo.setUserName(names);
-        myIpo.setStockShare(shares);
-        myIpo.setEarnAmount(amounts);
-
-
-        return myIpo;
-    }
 }

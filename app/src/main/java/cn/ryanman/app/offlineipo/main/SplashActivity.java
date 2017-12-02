@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
-
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
@@ -28,6 +26,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseUtils.createDatabase(this);
+
 //        if (AppUtils.isWifiConnected(this)) {
 //            //Toast.makeText(this, "Wifi Connected", Toast.LENGTH_SHORT).show();
 //            CheckUpdateAsyncTask checkUpdateAysncTask = new CheckUpdateAsyncTask(this, false);

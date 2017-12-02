@@ -57,6 +57,12 @@
                 android:textSize="@dimen/ipo_today_ipo_small_font_size" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥"
+                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
+
+            <TextView
                 android:id="@+id/adapter_ipo_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -32,15 +32,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ESTIMATE_PRICE = "estimate_price"; //发行价格
     public static final String IPO_URL = "ipo_url"; //新股链接
 
-    public static final String PERSON = "person";
-    public static final String PERSON_NAME = "person_name";
-    public static final String SH_CODE = "sh_code";
-    public static final String SH_MARKET_VALUE = "sh_market_value";
-
     public static final String MY_IPO = "my_ipo";
-    public static final String PROGRESS = "progress";
     public static final String STOCK_SHARE = "stock_share";
     public static final String EARN_AMOUNT = "earn_amount";
+    public static final String PERSON_NUMBER = "person_number";
 
     public static final String IPO_TODAY = "ipo_today";
     public static final String EVENT_NAME = "event_name";
@@ -73,16 +68,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ANNOUNCE_DATE + " text, " + SUCCESS_RESULT_DATE + " text, " + PAYMENT_DATE + " text, "
                 + LISTED_DATE + " text, " + ESTIMATE_PRICE + " real," + ISSUE_PRICE + " real, " + IPO_URL + " text)");
 
-        db.execSQL("create table if not exists " + PERSON + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PERSON_NAME + " text, " + SH_CODE + " text, " + SH_MARKET_VALUE + " text)");
-
         db.execSQL("create table if not exists " + MY_IPO + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + M_STOCK_CODE + " text, " + PERSON_NAME + " text, "
-                + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real)");
-
-        db.execSQL("create table if not exists " + PROGRESS + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + P_STOCK_CODE + " text, "
-                + HAVE_DONE + " text, " + SOLD_DATE + " text)");
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + M_STOCK_CODE + " text, " + PERSON_NUMBER + " integer, "
+                + STOCK_SHARE + " integer, " + EARN_AMOUNT + " real, " + SOLD_DATE + " text)");
 
         db.execSQL("create table if not exists " + IPO_TODAY + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_NAME + " text, " + STOCK_NAME + " text)");
