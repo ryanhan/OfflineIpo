@@ -8,9 +8,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="abc"
         android:layout_marginLeft="@dimen/actionbar_title_margin"
         android:layout_marginRight="@dimen/actionbar_title_margin"
+        android:text="abc"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -19,15 +19,23 @@
         android:layout_width="@dimen/actionbar_icon_size"
         android:layout_height="@dimen/actionbar_icon_size"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_action_left_arrow"
-        android:layout_toLeftOf="@id/actionbar_today"/>
+        android:layout_toLeftOf="@id/actionbar_today"
+        android:src="@drawable/ic_action_left_arrow" />
 
     <ImageView
         android:id="@+id/actionbar_right"
         android:layout_width="@dimen/actionbar_icon_size"
         android:layout_height="@dimen/actionbar_icon_size"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_action_right_arrow"
-        android:layout_toRightOf="@id/actionbar_today"/>
+        android:layout_toRightOf="@id/actionbar_today"
+        android:src="@drawable/ic_action_right_arrow" />
+
+    <ImageView
+        android:id="@+id/actionbar_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_today_white" />
 
 </RelativeLayout>

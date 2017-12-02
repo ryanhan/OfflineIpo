@@ -9,22 +9,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import cn.ryanman.app.offlineipo.R;
+import cn.ryanman.app.offlineipo.listener.OnDateChangeListener;
+import cn.ryanman.app.offlineipo.utils.AppUtils;
+import cn.ryanman.app.offlineipo.utils.Value;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationBar bottomNavigationBar;
     private Fragment[] fragments;
     private ActionBar actionBar;
+    private String date;
+    private TextView todayText;
+    private OnDateChangeListener onDateChangeListener;
+
+    public void setOnDateChangeListener(OnDateChangeListener onDateChangeListener) {
+        this.onDateChangeListener = onDateChangeListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private void setViews() {
 
         actionBar = getSupportActionBar();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        date = df.format(new Date());
 
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
@@ -85,9 +101,24 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        TextView todayText = (TextView) view.findViewById(R.id.actionbar_today);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        todayText.setText(df.format(new Date()));
+        todayText = (TextView) view.findViewById(R.id.actionbar_today);
+        ImageView left = (ImageView) view.findViewById(R.id.actionbar_left);
+        ImageView right = (ImageView) view.findViewById(R.id.actionbar_right);
+        ImageView back = (ImageView) view.findViewById(R.id.actionbar_back);
+        todayText.setText(date);
+        left.setOnClickListener(new DateChangeListener(-1));
+        right.setOnClickListener(new DateChangeListener(1));
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                date = df.format(new Date());
+                todayText.setText(date);
+                IpoTodayFragment fragment = (IpoTodayFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+                fragment.updateList(date, true);
+            }
+        });
+
         actionBar.setCustomView(view);
 
     }
@@ -105,10 +136,43 @@ public class MainActivity extends AppCompatActivity {
         fragments[1] = new IpoListFragment();
         fragments[2] = new MyIpoFragment();
 
+        Bundle bundle = new Bundle();
+        bundle.putString(Value.DATE, date);  //被传递的对象一定要实现Serializable接口
+        fragments[0].setArguments(bundle);
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.fragment, fragments[0]);
         ft.commit();
+        customizeActionBar();
+    }
+
+    private class DateChangeListener implements View.OnClickListener{
+
+        private int amount;
+
+        public DateChangeListener(int amount){
+            this.amount = amount;
+        }
+
+        @Override
+        public void onClick(View v) {
+            try {
+                Date d = AppUtils.parseDate(date);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(d);
+                cal.add(Calendar.DATE, amount);
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                date = df.format(cal.getTime());
+                todayText.setText(date);
+
+                IpoTodayFragment fragment = (IpoTodayFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
+                fragment.updateList(date, true);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

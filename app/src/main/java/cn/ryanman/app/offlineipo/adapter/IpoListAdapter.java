@@ -153,8 +153,6 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                 e.printStackTrace();
             }
 
-            System.out.println(getItem(position).getCode() + " " + getItem(position).isApplied());
-
             if (!getItem(position).isApplied()) {
 
                 holder.actionImage.setImageResource(R.drawable.ic_add);

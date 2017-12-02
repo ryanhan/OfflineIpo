@@ -23,9 +23,9 @@ import cn.ryanman.app.offlineipo.model.Status;
 
 public class WebUtils {
 
-    public static List<IpoToday> getIpoToday() throws Exception{
+    public static List<IpoToday> getIpoToday(String date) throws Exception{
         List<IpoToday> ipoTodayList = new ArrayList<>();
-        String result = GetJson(Value.IpoToday);
+        String result = GetJson(Value.IpoToday + date);
         JSONObject json = new JSONObject(result);
         JSONObject resultJson = json.getJSONObject("returnData");
 

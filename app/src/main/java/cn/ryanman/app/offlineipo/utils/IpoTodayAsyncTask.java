@@ -12,7 +12,7 @@ import cn.ryanman.app.offlineipo.model.IpoToday;
  * Created by ryan on 2016/11/25.
  */
 
-public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, List<IpoToday>> {
+public class IpoTodayAsyncTask extends AsyncTask<String, Integer, List<IpoToday>> {
 
     private Context context;
     private OnDataLoadCompletedListener onDataLoadCompletedListener;
@@ -26,9 +26,9 @@ public class IpoTodayAsyncTask extends AsyncTask<Void, Integer, List<IpoToday>> 
     }
 
     @Override
-    protected List<IpoToday> doInBackground(Void... params) {
+    protected List<IpoToday> doInBackground(String... params) {
         try {
-            return WebUtils.getIpoToday();
+            return WebUtils.getIpoToday(params[0]);
         } catch (Exception e) {
             return null;
         }

@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.listener.OnDataLoadCompletedListener;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
@@ -96,7 +101,9 @@ public class SplashActivity extends Activity {
                 }
             }
         });
-        ipoTodayAsyncTask.execute();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        ipoTodayAsyncTask.execute(df.format(new Date()));
     }
 
     private void completeSplash() {
