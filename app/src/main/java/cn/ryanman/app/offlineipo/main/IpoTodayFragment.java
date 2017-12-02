@@ -18,7 +18,6 @@ import java.util.TreeSet;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoTodayListAdapter;
-import cn.ryanman.app.offlineipo.listener.OnArrowClickListener;
 import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;

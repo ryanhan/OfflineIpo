@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     private void customizeActionBar() {
 
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
