@@ -117,7 +117,6 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                 if (ipoStatus.getCurrent() == null) {
                     holder.currentLayout.setVisibility(View.GONE);
                 } else if (ipoStatus.getCurrent().equals(Status.LISTED)) {
-                    holder.actionLayout.setVisibility(View.INVISIBLE);
                     holder.currentLayout.setVisibility(View.VISIBLE);
                     holder.currentTitle.setText(R.string.have_listed);
                     holder.current.setVisibility(View.GONE);
@@ -165,7 +164,7 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
                     public void onClick(View v) {
                         LayoutInflater layoutInflater = LayoutInflater.from(context);
                         View view = layoutInflater.inflate(R.layout.dialog_number_picker, null);
-                        final NumberPicker numberPicker = (NumberPicker)view.findViewById(R.id.dialog_number);
+                        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.dialog_number);
                         numberPicker.setMinValue(1);
                         numberPicker.setMaxValue(10);
                         numberPicker.setValue(2);

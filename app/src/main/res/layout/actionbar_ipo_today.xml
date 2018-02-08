@@ -10,7 +10,6 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/actionbar_title_margin"
         android:layout_marginRight="@dimen/actionbar_title_margin"
-        android:text="abc"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -30,12 +29,14 @@
         android:layout_toRightOf="@id/actionbar_today"
         android:src="@drawable/ic_action_right_arrow" />
 
-    <ImageView
+    <TextView
         android:id="@+id/actionbar_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_action_today_white" />
+        android:text="@string/today"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
 </RelativeLayout>

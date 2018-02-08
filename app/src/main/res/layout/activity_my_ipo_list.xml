@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_user_management"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
-    android:paddingBottom="40dp"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:paddingTop="40dp"
+    android:background="@color/white"
     tools:context="cn.ryanman.app.offlineipo.main.MyIpoListActivity">
 
-    <TextView
-        android:id="@+id/my_ipo_list_size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ListView
+        android:id="@+id/my_ipo_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+        android:paddingRight="@dimen/ipo_today_event_horizontal_padding" />
 
 
 </LinearLayout>

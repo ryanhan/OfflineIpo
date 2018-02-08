@@ -204,59 +204,55 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                 e.printStackTrace();
             }
 
-            if (ipoStatus.getCurrent() != null && ipoStatus.getCurrent().compareTo(Status.PAYMENT) > 0) {
-                holder.actionLayout.setVisibility(View.INVISIBLE);
+            holder.actionLayout.setVisibility(View.VISIBLE);
+            if (!ipoItem.isApplied()) {
+                holder.actionImage.setImageResource(R.drawable.ic_add);
+                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                holder.actionText.setText(R.string.has_submit);
+                holder.actionText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
+                holder.actionLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        LayoutInflater layoutInflater = LayoutInflater.from(context);
+                        View view = layoutInflater.inflate(R.layout.dialog_number_picker, null);
+                        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.dialog_number);
+                        numberPicker.setMinValue(1);
+                        numberPicker.setMaxValue(10);
+                        numberPicker.setValue(2);
+                        numberPicker.setWrapSelectorWheel(false);
+
+                        new AlertDialog.Builder(context).setTitle(R.string.select_number).setView(view).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseUtils.subscribe(context, ipoItem.getCode(), numberPicker.getValue());
+                                if (onViewReloadListener != null)
+                                    onViewReloadListener.reload(null);
+                            }
+                        }).setNegativeButton(R.string.no, null).show();
+
+                    }
+                });
             } else {
-                holder.actionLayout.setVisibility(View.VISIBLE);
-                if (!ipoItem.isApplied()) {
-                    holder.actionImage.setImageResource(R.drawable.ic_add);
-                    holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
-                    holder.actionText.setText(R.string.has_submit);
-                    holder.actionText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.actionImage.setImageResource(R.drawable.ic_correct);
+                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
+                holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
+                holder.actionLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(context).setTitle(R.string.cancel_applied).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseUtils.unsubscribe(context, ipoItem.getCode());
+                                if (onViewReloadListener != null)
+                                    onViewReloadListener.reload(null);
+                            }
+                        }).setNegativeButton(R.string.no, null).show();
 
-                    holder.actionLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    }
+                });
 
-                            LayoutInflater layoutInflater = LayoutInflater.from(context);
-                            View view = layoutInflater.inflate(R.layout.dialog_number_picker, null);
-                            final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.dialog_number);
-                            numberPicker.setMinValue(1);
-                            numberPicker.setMaxValue(10);
-                            numberPicker.setValue(2);
-                            numberPicker.setWrapSelectorWheel(false);
-
-                            new AlertDialog.Builder(context).setTitle(R.string.select_number).setView(view).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseUtils.subscribe(context, ipoItem.getCode(), numberPicker.getValue());
-                                    if (onViewReloadListener != null)
-                                        onViewReloadListener.reload(null);
-                                }
-                            }).setNegativeButton(R.string.no, null).show();
-
-                        }
-                    });
-                } else {
-                    holder.actionImage.setImageResource(R.drawable.ic_correct);
-                    holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.green));
-                    holder.actionText.setTextColor(context.getResources().getColor(R.color.green));
-                    holder.actionLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new AlertDialog.Builder(context).setTitle(R.string.cancel_applied).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseUtils.unsubscribe(context, ipoItem.getCode());
-                                    if (onViewReloadListener != null)
-                                        onViewReloadListener.reload(null);
-                                }
-                            }).setNegativeButton(R.string.no, null).show();
-
-                        }
-                    });
-
-                }
             }
         }
 

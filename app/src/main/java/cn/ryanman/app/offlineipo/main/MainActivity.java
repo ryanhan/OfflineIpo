@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
 
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.drawable.ic_list_24dp, getString(R.string.ipo_today)))
+                .addItem(new BottomNavigationItem(R.drawable.ic_today_24dp, getString(R.string.ipo_today)))
                 .addItem(new BottomNavigationItem(R.drawable.ic_list_24dp, getString(R.string.ipo_list)))
                 .addItem(new BottomNavigationItem(R.drawable.ic_user_24dp, getString(R.string.my_ipo)))
                 .initialise();
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         todayText = (TextView) view.findViewById(R.id.actionbar_today);
         ImageView left = (ImageView) view.findViewById(R.id.actionbar_left);
         ImageView right = (ImageView) view.findViewById(R.id.actionbar_right);
-        ImageView back = (ImageView) view.findViewById(R.id.actionbar_back);
+        TextView back = (TextView) view.findViewById(R.id.actionbar_back);
         todayText.setText(date);
         left.setOnClickListener(new DateChangeListener(-1));
         right.setOnClickListener(new DateChangeListener(1));

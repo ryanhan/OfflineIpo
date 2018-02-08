@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">12dp</dimen>
     <dimen name="activity_vertical_margin">10dp</dimen>
 
-    <dimen name="actionbar_title_margin">40dp</dimen>
+    <dimen name="actionbar_title_margin">20dp</dimen>
     <dimen name="actionbar_icon_size">25dp</dimen>
 
     <dimen name="ipo_today_event_font_size">16sp</dimen>

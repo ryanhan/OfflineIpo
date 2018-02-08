@@ -14,6 +14,7 @@
     <string name="PAYMENT">缴款日</string>
     <string name="LISTED">上市</string>
 
+    <string name="today">今天</string>
     <string name="show_all">显示全部事件</string>
     <string name="show_only_related">网下申购相关</string>
 
@@ -37,8 +38,7 @@
     <string name="save">保存</string>
 
     <string name="select_number">参与申购人数</string>
-    <string name="cancel_applied">退出网下申购？</string>
-    <string name="will_delete_data">将会删除所有申购数据</string>
+    <string name="cancel_applied">删除该股申购数据？</string>
 
     <string name="yes">确定</string>
     <string name="no">取消</string>

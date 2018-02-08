@@ -179,13 +179,17 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                     if (current != null) {
                         switch (current) {
                             case PAYMENT:
-                                paymentText.setTextColor(getColor(R.color.colorPrimary));
+                                paymentText.setTextColor(getColor(R.color.red));
+                                break;
                             case OFFLINE:
-                                applyText.setTextColor(getColor(R.color.colorPrimary));
+                                applyText.setTextColor(getColor(R.color.red));
+                                break;
                             case INQUIRY:
-                                inquiryText.setTextColor(getColor(R.color.colorPrimary));
+                                inquiryText.setTextColor(getColor(R.color.red));
+                                break;
                             case NOTICE:
-                                submitText.setTextColor(getColor(R.color.colorPrimary));
+                                submitText.setTextColor(getColor(R.color.red));
+                                break;
                             default:
                                 break;
                         }

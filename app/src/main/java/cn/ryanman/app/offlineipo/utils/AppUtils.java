@@ -24,6 +24,16 @@ public class AppUtils {
         return days;
     }
 
+    public static boolean isToday(String date) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String now = df.format(new Date());
+        if (now.equals(date)){
+            return true;
+        }
+        else
+            return false;
+    }
+
     public static Date parseDate(String date) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.parse(date);
@@ -56,7 +66,7 @@ public class AppUtils {
             status.setNext(Status.PAYMENT);
             status.setNextDate(item.getPaymentDate());
         }
-        else if((int)daysAfter(item.getPaymentDate()) == 0){
+        else if(isToday(item.getPaymentDate())){
             status.setNext(Status.LISTED);
         }
         else if(now.after(parseDate(item.getPaymentDate()))){
