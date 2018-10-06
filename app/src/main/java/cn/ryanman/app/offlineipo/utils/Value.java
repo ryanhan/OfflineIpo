@@ -45,6 +45,10 @@ public class Value {
     public static final int HAS_APPLY = 3;
     public static final int HAS_PAY = 4;
 
+    public static final int BY_MONTH = 0;
+    public static final int BY_QUARTER = 1;
+    public static final int BY_YEAR = 2;
+
     public static final String[] eventArray = {Status.NOTICE.toString(), Status.INQUIRY.toString(), Status.ROADSHOW.toString(), Status.ANNOUNCE.toString(), Status.OFFLINE.toString(), Status.ONLINE.toString(), Status.SUCCESS_RATE.toString(), Status.SUCCESS_RESULT.toString(), Status.PAYMENT.toString(), Status.LISTED.toString()};
     public static final int[] progressArray = {NONE, HAS_SUBMIT, HAS_INQUIRY, HAS_APPLY, HAS_PAY};
 

@@ -7,10 +7,10 @@
     android:background="@android:color/white"
     android:baselineAligned="false"
     android:orientation="vertical"
-    android:paddingBottom="35dp"
     android:paddingLeft="30dp"
-    android:paddingRight="30dp"
     android:paddingTop="35dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="35dp"
     tools:context="cn.ryanman.app.offlineipo.main.IpoDetailActivity">
 
     <LinearLayout
@@ -67,7 +67,7 @@
         android:id="@+id/ipo_detail_list_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_ipo_detail_margin_vertical"
+        android:layout_marginBottom="30dp"
         android:orientation="horizontal">
 
         <TextView
@@ -82,69 +82,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2017-01-12"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/ipo_progress_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text="@string/has_submit"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_split_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text=">>"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_inquiry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text="@string/has_inquiry"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_split_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text=">>"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_apply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text="@string/has_apply"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_split_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_ipo_detail_progress_margin"
-            android:text=">>"
-            android:textSize="@dimen/activity_ipo_detail_font" />
-
-        <TextView
-            android:id="@+id/ipo_progress_payment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/has_pay"
             android:textSize="@dimen/activity_ipo_detail_font" />
 
     </LinearLayout>
@@ -203,7 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:text="股"
+                    android:text="@string/stock"
                     android:textSize="@dimen/activity_ipo_detail_font" />
 
                 <TextView
@@ -216,14 +153,8 @@
                     android:id="@+id/ipo_detail_payment_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="@dimen/activity_ipo_detail_font" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="元"
+                    android:text="0.00"
                     android:textSize="@dimen/activity_ipo_detail_font" />
 
                 <TextView
@@ -276,33 +207,13 @@
                     android:inputType="numberDecimal"
                     android:textSize="@dimen/activity_ipo_detail_font" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="元"
-                    android:textSize="@dimen/activity_ipo_detail_font" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="x"
-                    android:textSize="@dimen/activity_ipo_detail_font" />
-
-                <TextView
-                    android:id="@+id/ipo_detail_person_number_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/activity_ipo_detail_font" />
-
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:orientation="vertical">
 
             <TextView
@@ -321,5 +232,7 @@
                 android:textSize="@dimen/activity_ipo_detail_font" />
 
         </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>

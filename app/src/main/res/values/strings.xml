@@ -21,15 +21,21 @@
     <string name="no_offline">不参与网下发行</string>
     <string name="have_listed">已上市</string>
     <string name="wait_listed">待上市</string>
+    <string name="no_work_today">今日无事</string>
     <string name="today_task">今日任务</string>
     <string name="next_step">下一步</string>
     <string name="issue_price">发行价</string>
+    <string name="stock_number">每人获配</string>
+    <string name="stock">股</string>
+    <string name="yuan">元</string>
+    <string name="none">&#160;&#160;&#160;&#160;-</string>
 
     <string name="add_user">添加投资者</string>
     <string name="my_profit">我的收益</string>
     <string name="user_management">用户管理</string>
     <string name="check_update">检查更新</string>
     <string name="about">关于</string>
+    <string name="settings">设置</string>
 
     <string name="user_name">投资者姓名</string>
     <string name="user_sh_code">上市股东代码</string>
@@ -43,15 +49,15 @@
     <string name="yes">确定</string>
     <string name="no">取消</string>
 
-    <string name="has_submit">已提交</string>
-    <string name="has_inquiry">已询价</string>
-    <string name="has_apply">已申购</string>
-    <string name="has_pay">已缴款</string>
+    <string name="has_submit">已参与</string>
 
     <string name="list_date">上市日期</string>
     <string name="ipo_info">配售信息</string>
-    <string name="benefit">收益</string>
-    <string name="sold_date">卖出日期</string>
+    <string name="benefit">总收益</string>
+    <string name="sold_date">售出日期</string>
+    <string name="benefit_list">收益详情</string>
+
+    <string name="no_sold_date">笔收益未登记售出日期</string>
 
     <string name="payment_notification">股票代码#CODE#, 缴款￥#MONEY#元</string>
 

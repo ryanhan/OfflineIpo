@@ -32,7 +32,7 @@
     <dimen name="adapter_user_list_font">18sp</dimen>
     <dimen name="fragment_my_ipo_title_font">16sp</dimen>
 
-    <dimen name="fragment_my_ipo_title_vertical_padding">20dp</dimen>
+    <dimen name="fragment_my_ipo_title_vertical_padding">10dp</dimen>
     <dimen name="create_user_vertical_margin_up">8dp</dimen>
     <dimen name="create_user_vertical_margin_down">25dp</dimen>
 

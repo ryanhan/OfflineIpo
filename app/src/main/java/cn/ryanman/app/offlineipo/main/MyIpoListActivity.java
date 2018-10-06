@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.adapter.IpoListAdapter;
+import cn.ryanman.app.offlineipo.adapter.MyIpoListAdapter;
 import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.MyIpo;
@@ -29,17 +32,18 @@ import cn.ryanman.app.offlineipo.utils.Value;
 public class MyIpoListActivity extends AppCompatActivity {
 
     private ListView ipoListView;
-    private IpoListAdapter ipoListAdapter;
-    private List<IpoItem> ipoList;
+    private MyIpoListAdapter ipoListAdapter;
+    private List<MyIpo> ipoList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_ipo_list);
+        setActionBar();
 
         ipoListView = (ListView) findViewById(R.id.my_ipo_list);
         ipoList = new ArrayList<>();
 
-        ipoListAdapter = new IpoListAdapter(this, ipoList);
+        ipoListAdapter = new MyIpoListAdapter(this, ipoList);
         ipoListView.setAdapter(ipoListAdapter);
 
         ipoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,7 +52,7 @@ public class MyIpoListActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(MyIpoListActivity.this,
                         IpoDetailActivity.class);
-                intent.putExtra(Value.IPO_CODE, ipoList.get(position).getCode());
+                intent.putExtra(Value.IPO_CODE, ipoList.get(position).getIpoItem().getCode());
                 startActivity(intent);
             }
         });
@@ -61,6 +65,29 @@ public class MyIpoListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setActionBar(){
+        ActionBar actionBar = this.getSupportActionBar();
+        actionBar.setTitle(R.string.my_ipo);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         GetSubscribeAsyncTask task = new GetSubscribeAsyncTask(this);
         task.execute();
     }
@@ -81,12 +108,8 @@ public class MyIpoListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<MyIpo> result) {
             if (result != null) {
-                List<IpoItem> ipoItems = new ArrayList<>();
-                for (MyIpo myIpo : result){
-                    ipoItems.add(myIpo.getIpoItem());
-                }
                 ipoList.clear();
-                ipoList.addAll(ipoItems);
+                ipoList.addAll(result);
                 ipoListAdapter.notifyDataSetChanged();
             }
 

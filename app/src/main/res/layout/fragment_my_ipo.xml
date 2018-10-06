@@ -3,140 +3,157 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/light_grey"
     tools:context="cn.ryanman.app.offlineipo.main.MyIpoFragment">
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:id="@+id/my_ipo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical">
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
 
-        <LinearLayout
-            android:id="@+id/my_ipo_layout"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
-            android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:text="@string/my_ipo"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/fragment_my_ipo_title_font"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/ic_user_24dp" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/ic_right_arrow_15dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/my_ipo"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fragment_my_ipo_title_font" />
+    </RelativeLayout>
 
-        </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:layout_marginBottom="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:text="@string/benefit_list"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/fragment_my_ipo_title_font"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/my_ipo_profit_layout"
-            android:layout_width="match_parent"
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/my_ipo_chart"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/my_ipo_chart_info_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+
+    <LinearLayout
+        android:id="@+id/my_ipo_settings_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_user_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
-            android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/ic_user_24dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/my_profit"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fragment_my_ipo_title_font" />
-
-        </LinearLayout>
+            android:layout_marginLeft="10dp"
+            android:text="@string/settings"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
     <LinearLayout
+        android:id="@+id/my_ipo_check_update_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
 
-        <LinearLayout
-            android:id="@+id/my_ipo_check_update_layout"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_user_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
-            android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/ic_user_24dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/check_update"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fragment_my_ipo_title_font" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:id="@+id/my_ipo_about_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding"
-            android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:src="@drawable/ic_user_24dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/about"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/fragment_my_ipo_title_font" />
-
-        </LinearLayout>
+            android:layout_marginLeft="10dp"
+            android:text="@string/check_update"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:id="@+id/my_ipo_about_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_user_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/about"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
+
+    </LinearLayout>
+
 </LinearLayout>

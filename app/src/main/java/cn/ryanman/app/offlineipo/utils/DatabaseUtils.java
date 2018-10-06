@@ -135,6 +135,7 @@ public class DatabaseUtils {
             myIpo.setPersonNumber(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.PERSON_NUMBER)));
             myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
             myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
             break;
         }
 
@@ -228,12 +229,12 @@ public class DatabaseUtils {
             myIpo.setPersonNumber(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.PERSON_NUMBER)));
             myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
             myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
+            myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
             myIpoList.add(myIpo);
         }
         dbHelper.close();
         return myIpoList;
     }
-
 
     private static ContentValues createIpoTodayValues(String event, String name) {
         ContentValues values = new ContentValues();

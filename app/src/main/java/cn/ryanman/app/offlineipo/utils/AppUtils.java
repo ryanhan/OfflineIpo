@@ -27,10 +27,9 @@ public class AppUtils {
     public static boolean isToday(String date) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String now = df.format(new Date());
-        if (now.equals(date)){
+        if (now.equals(date)) {
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -44,46 +43,66 @@ public class AppUtils {
         return df.parse(date);
     }
 
-    public static IpoStatus getIpoStatus(IpoItem item) throws ParseException{
+    public static boolean isListed(IpoItem item) {
+        Date now = new Date();
+        try {
+            if (now.before(parseDate(item.getListedDate()))) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        catch (Exception e){
+            return false;
+        }
+
+    }
+
+    public static IpoStatus getIpoStatus(IpoItem item) throws ParseException {
         Date now = new Date();
         IpoStatus status = new IpoStatus();
-        if (Value.ipoTodayMap.containsKey(item.getName())){
+        if (Value.ipoTodayMap.containsKey(item.getName())) {
             status.setCurrent(Value.ipoTodayMap.get(item.getName()));
         }
 
-        if (now.before(parseDate(item.getInquiryDate()))){
+        if (now.before(parseDate(item.getInquiryDate()))) {
             //status.setCurrent(Value.NOTICE);
             status.setNext(Status.INQUIRY);
             status.setNextDate(item.getInquiryDate());
-        }
-
-        else if(now.before(parseDate(item.getOfflineDate()))){
+        } else if (now.before(parseDate(item.getOfflineDate()))) {
             status.setNext(Status.OFFLINE);
             status.setNextDate(item.getOfflineDate());
-        }
-
-        else if(now.before(parseDate(item.getPaymentDate()))){
+        } else if (now.before(parseDate(item.getPaymentDate()))) {
             status.setNext(Status.PAYMENT);
             status.setNextDate(item.getPaymentDate());
-        }
-        else if(isToday(item.getPaymentDate())){
+        } else if (isToday(item.getPaymentDate())) {
             status.setNext(Status.LISTED);
-        }
-        else if(now.after(parseDate(item.getPaymentDate()))){
-            if (item.getListedDate() == null){
+        } else if (now.after(parseDate(item.getPaymentDate()))) {
+            if (item.getListedDate() == null) {
                 status.setNext(Status.LISTED);
-            }
-            else{
-                if (now.before(parseDate(item.getListedDate()))){
+            } else {
+                if (now.before(parseDate(item.getListedDate()))) {
                     status.setNext(Status.LISTED);
                     status.setNextDate(item.getListedDate());
-                }
-                else {
+                } else {
                     status.setCurrent(Status.LISTED);
                 }
             }
         }
         return status;
+    }
+
+    public static boolean isStatusImportant(cn.ryanman.app.offlineipo.model.Status status) {
+        if (status.equals(cn.ryanman.app.offlineipo.model.Status.NOTICE) ||
+                status.equals(cn.ryanman.app.offlineipo.model.Status.INQUIRY) ||
+                status.equals(cn.ryanman.app.offlineipo.model.Status.OFFLINE) ||
+                status.equals(cn.ryanman.app.offlineipo.model.Status.PAYMENT) ||
+                status.equals(cn.ryanman.app.offlineipo.model.Status.LISTED)
+                ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

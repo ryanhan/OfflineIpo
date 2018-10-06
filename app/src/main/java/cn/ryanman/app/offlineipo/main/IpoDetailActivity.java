@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,16 +57,8 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
     private TextView codeText;
     private TextView priceText;
     private TextView listedDateText;
-    private TextView submitText;
-    private TextView split_1;
-    private TextView inquiryText;
-    private TextView split_2;
-    private TextView applyText;
-    private TextView split_3;
-    private TextView paymentText;
     private TextView personNumberText;
-    private TextView personNumberText2;
-    private ImageButton paymentNotifyButton;
+    private ImageButton weixinButton;
     private LinearLayout subscriptionLayout;
     private TextView soldDateText;
     private DatePickerDialog datePickerDialog;
@@ -74,25 +67,17 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ipo_detail);
-
         getBundle();
+        setActionBar();
 
         nameText = (TextView) findViewById(R.id.ipo_detail_name);
         codeText = (TextView) findViewById(R.id.ipo_detail_code);
         priceText = (TextView) findViewById(R.id.ipo_detail_price);
         listedDateText = (TextView) findViewById(R.id.ipo_detail_listed_date);
 
-        submitText = (TextView) findViewById(R.id.ipo_progress_submit);
-        split_1 = (TextView) findViewById(R.id.ipo_progress_split_1);
-        inquiryText = (TextView) findViewById(R.id.ipo_progress_inquiry);
-        split_2 = (TextView) findViewById(R.id.ipo_progress_split_2);
-        applyText = (TextView) findViewById(R.id.ipo_progress_apply);
-        split_3 = (TextView) findViewById(R.id.ipo_progress_split_3);
-        paymentText = (TextView) findViewById(R.id.ipo_progress_payment);
-        paymentNotifyButton = (ImageButton) findViewById(R.id.ipo_detail_weixin_button);
+        weixinButton = (ImageButton) findViewById(R.id.ipo_detail_weixin_button);
         subscriptionLayout = (LinearLayout) findViewById(R.id.ipo_detail_subscription_layout);
         personNumberText = (TextView) findViewById(R.id.ipo_detail_person_number);
-        personNumberText2 = (TextView) findViewById(R.id.ipo_detail_person_number_2);
         soldDateText = (TextView) findViewById(R.id.ipo_detail_sold_date);
 
         final Calendar calendar = Calendar.getInstance();
@@ -104,15 +89,44 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(year).append("-").append(month + 1).append("-").append(day);
-        DatabaseUtils.updateSoldDate(IpoDetailActivity.this, ipoCode, sb.toString());
-        soldDateText.setText(sb.toString());
+        String date = String.valueOf(year) + "-";
+        if (month < 9) {
+            date += "0" + (month + 1);
+        } else {
+            date += (month + 1);
+        }
+
+        if (day < 10) {
+            date += "-0" + day;
+        } else {
+            date += "-" + day;
+        }
+
+        DatabaseUtils.updateSoldDate(IpoDetailActivity.this, ipoCode, date);
+        soldDateText.setText(date);
     }
 
     private void getBundle() {
         Bundle bundle = getIntent().getExtras();
         ipoCode = bundle.getString(Value.IPO_CODE);
+    }
+
+    private void setActionBar() {
+        ActionBar actionBar = this.getSupportActionBar();
+        actionBar.setTitle("");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class GetIpoDetailAsyncTask extends AsyncTask<String, Integer, MyIpo> {
@@ -134,68 +148,15 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
             codeText.setText(result.getIpoItem().getCode());
 
             if (result.getIpoItem().getIssuePrice() == 0) {
-                priceText.setText("-");
+                priceText.setText(R.string.none);
             } else {
                 priceText.setText("￥" + String.valueOf(result.getIpoItem().getIssuePrice()));
             }
 
             if (result.getIpoItem().getListedDate() == null) {
-                listedDateText.setText("-");
+                listedDateText.setText(R.string.none);
             } else {
                 listedDateText.setText(result.getIpoItem().getListedDate());
-            }
-
-            try {
-                if (result.getIpoItem().isApplied()) {
-                    IpoStatus ipoStatus = AppUtils.getIpoStatus(result.getIpoItem());
-                    cn.ryanman.app.offlineipo.model.Status current = ipoStatus.getCurrent();
-                    cn.ryanman.app.offlineipo.model.Status next = ipoStatus.getNext();
-
-                    if (next != null) {
-                        switch (next) {
-                            case LISTED:
-                                paymentText.setTextColor(getColor(R.color.green));
-                                split_3.setTextColor(getColor(R.color.green));
-                                paymentText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                                split_3.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                            case PAYMENT:
-                                applyText.setTextColor(getColor(R.color.green));
-                                split_2.setTextColor(getColor(R.color.green));
-                                applyText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                                split_2.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                            case OFFLINE:
-                                inquiryText.setTextColor(getColor(R.color.green));
-                                split_1.setTextColor(getColor(R.color.green));
-                                inquiryText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                                split_1.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                            case INQUIRY:
-                                submitText.setTextColor(getColor(R.color.green));
-                                submitText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (current != null) {
-                        switch (current) {
-                            case PAYMENT:
-                                paymentText.setTextColor(getColor(R.color.red));
-                                break;
-                            case OFFLINE:
-                                applyText.setTextColor(getColor(R.color.red));
-                                break;
-                            case INQUIRY:
-                                inquiryText.setTextColor(getColor(R.color.red));
-                                break;
-                            case NOTICE:
-                                submitText.setTextColor(getColor(R.color.red));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-            } catch (ParseException e) {
             }
 
             if (!result.getIpoItem().isApplied()) {
@@ -245,7 +206,7 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                     }
                 });
 
-                paymentNotifyButton.setOnClickListener(new View.OnClickListener() {
+                weixinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (result.getStockShare() != 0 && result.getIpoItem().getIssuePrice() != 0) {
@@ -293,8 +254,11 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                     }
                 });
 
+                for (int i = 0; i < result.getPersonNumber(); i++) {
+
+                }
+
                 personNumberText.setText(result.getPersonNumber() + "人");
-                personNumberText2.setText(result.getPersonNumber() + "人");
 
                 Date now = new Date();
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

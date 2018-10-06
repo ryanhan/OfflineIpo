@@ -54,10 +54,7 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         public LinearLayout layout;
         public LinearLayout priceLayout;
         public TextView issuePrice;
-        public LinearLayout ipoNextLayout;
-        public TextView ipoNextDate;
-        public TextView ipoNextDot;
-        public TextView ipoNext;
+        public LinearLayout ipoCurrentLayout;
         public LinearLayout actionLayout;
         public ImageView actionImage;
         public TextView actionText;
@@ -151,13 +148,10 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
             holder.layout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_child_layout);
             holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
-            holder.ipoNextLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_next_layout);
-            holder.ipoNext = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
-            holder.ipoNextDot = (TextView) convertView.findViewById(R.id.adapter_ipo_dot);
-            holder.ipoNextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
+            holder.ipoCurrentLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_current_layout);
             holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
-            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adpater_action_layout);
-            holder.actionImage = (ImageView) convertView.findViewById(R.id.adpater_action_image);
+            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adapter_action_layout);
+            holder.actionImage = (ImageView) convertView.findViewById(R.id.adapter_action_image);
             holder.actionText = (TextView) convertView.findViewById(R.id.adapter_action_text);
             convertView.setTag(holder);
         } else {
@@ -167,43 +161,21 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
         holder.ipoName.setText(ipoItem.getName());
         holder.ipoCode.setText(ipoItem.getCode());
-        if (ipoItem.getIssuePrice() != 0) {
-            holder.priceLayout.setVisibility(View.VISIBLE);
-            DecimalFormat df = new DecimalFormat("#.00");
-            holder.issuePrice.setText(df.format(ipoItem.getIssuePrice()));
-        } else {
-            holder.priceLayout.setVisibility(View.GONE);
-        }
 
         if (ipoItem.getOfflineDate() == null) {
-            holder.ipoNextLayout.setVisibility(View.VISIBLE);
-            holder.ipoNextDate.setText(R.string.no_offline);
-            holder.ipoNextDot.setVisibility(View.GONE);
-            holder.ipoNext.setVisibility(View.GONE);
+            holder.ipoCurrentLayout.setVisibility(View.VISIBLE);
+            holder.priceLayout.setVisibility(View.GONE);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
-            IpoStatus ipoStatus = null;
-            try {
-                ipoStatus = AppUtils.getIpoStatus(ipoItem);
-                if (ipoStatus.getNext() == null) {
-                    holder.ipoNextLayout.setVisibility(View.GONE);
-                } else {
-                    holder.ipoNextLayout.setVisibility(View.VISIBLE);
-                    holder.ipoNextDot.setVisibility(View.VISIBLE);
-                    holder.ipoNext.setVisibility(View.VISIBLE);
-                    int resId = context.getResources().getIdentifier(ipoStatus.getNext().toString(), "string", Value.PACKAGENAME);
-                    holder.ipoNext.setText(context.getString(resId));
-                    if (ipoStatus.getNextDate() != null) {
-                        holder.ipoNextDate.setText(ipoStatus.getNextDate());
-                    } else {
-                        holder.ipoNextDate.setText(context.getResources().getString(R.string.next_step));
-                    }
-                }
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (ipoItem.getIssuePrice() != 0) {
+                DecimalFormat df = new DecimalFormat("#.00");
+                holder.issuePrice.setText("￥" + df.format(ipoItem.getIssuePrice()));
+            } else {
+                holder.issuePrice.setText(R.string.none);
             }
 
+            holder.ipoCurrentLayout.setVisibility(View.GONE);
             holder.actionLayout.setVisibility(View.VISIBLE);
             if (!ipoItem.isApplied()) {
                 holder.actionImage.setImageResource(R.drawable.ic_add);

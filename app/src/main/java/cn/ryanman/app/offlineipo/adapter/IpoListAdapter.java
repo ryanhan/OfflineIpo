@@ -48,12 +48,8 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
         public TextView ipoCode;
         public LinearLayout priceLayout;
         public LinearLayout currentLayout;
-        public LinearLayout nextLayout;
         public TextView issuePrice;
-        public TextView currentTitle;
         public TextView current;
-        public TextView next;
-        public TextView nextDate;
         public LinearLayout actionLayout;
         public ImageView actionImage;
         public TextView actionText;
@@ -78,14 +74,10 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
             holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
             holder.currentLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_current_layout);
-            holder.nextLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_next_layout);
             holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
-            holder.currentTitle = (TextView) convertView.findViewById(R.id.adapter_ipo_current_title);
             holder.current = (TextView) convertView.findViewById(R.id.adapter_ipo_current);
-            holder.next = (TextView) convertView.findViewById(R.id.adapter_ipo_next);
-            holder.nextDate = (TextView) convertView.findViewById(R.id.adapter_ipo_next_date);
-            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adpater_action_layout);
-            holder.actionImage = (ImageView) convertView.findViewById(R.id.adpater_action_image);
+            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adapter_action_layout);
+            holder.actionImage = (ImageView) convertView.findViewById(R.id.adapter_action_image);
             holder.actionText = (TextView) convertView.findViewById(R.id.adapter_action_text);
             convertView.setTag(holder);
         } else {
@@ -95,61 +87,27 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
         holder.ipoName.setText(getItem(position).getName());
         holder.ipoCode.setText(getItem(position).getCode());
 
+        //显示发行价
         if (getItem(position).getIssuePrice() != 0) {
-            holder.priceLayout.setVisibility(View.VISIBLE);
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.issuePrice.setText(df.format(getItem(position).getIssuePrice()));
+            holder.issuePrice.setText("￥" + df.format(getItem(position).getIssuePrice()));
         } else {
-            holder.priceLayout.setVisibility(View.GONE);
+            holder.issuePrice.setText(R.string.none);
         }
 
+
         if (getItem(position).getOfflineDate() == null) {
-            holder.currentLayout.setVisibility(View.VISIBLE);
-            holder.nextLayout.setVisibility(View.GONE);
-            holder.currentTitle.setText(R.string.no_offline);
-            holder.current.setVisibility(View.GONE);
+            holder.current.setText(R.string.no_offline);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
-            IpoStatus ipoStatus = null;
             holder.actionLayout.setVisibility(View.VISIBLE);
-            try {
-                ipoStatus = AppUtils.getIpoStatus(getItem(position));
-                if (ipoStatus.getCurrent() == null) {
-                    holder.currentLayout.setVisibility(View.GONE);
-                } else if (ipoStatus.getCurrent().equals(Status.LISTED)) {
-                    holder.currentLayout.setVisibility(View.VISIBLE);
-                    holder.currentTitle.setText(R.string.have_listed);
-                    holder.current.setVisibility(View.GONE);
-                } else {
-                    holder.currentLayout.setVisibility(View.VISIBLE);
-                    holder.currentTitle.setText(R.string.today_task);
-                    int resId = context.getResources().getIdentifier(ipoStatus.getCurrent().toString(), "string", Value.PACKAGENAME);
-                    holder.current.setText(resId);
-                    holder.current.setVisibility(View.VISIBLE);
-                }
-                if (ipoStatus.getNext() == null) {
-                    holder.nextLayout.setVisibility(View.GONE);
-                } else {
-                    holder.nextLayout.setVisibility(View.VISIBLE);
-                    if (ipoStatus.getNext().equals(Status.LISTED)) {
-                        holder.next.setText(R.string.wait_listed);
-                        if (ipoStatus.getCurrent() == null) {
-                            holder.actionLayout.setVisibility(View.INVISIBLE);
-                        }
-                    } else {
-                        int resId = context.getResources().getIdentifier(ipoStatus.getNext().toString(), "string", Value.PACKAGENAME);
-                        holder.next.setText(resId);
-                    }
-                    if (ipoStatus.getNextDate() != null) {
-                        holder.nextDate.setText(ipoStatus.getNextDate());
-                        holder.nextDate.setVisibility(View.VISIBLE);
-                    } else {
-                        holder.nextDate.setVisibility(View.GONE);
-                    }
-                }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (AppUtils.isListed(getItem(position))) {
+                holder.current.setText(R.string.have_listed);
+            } else if (Value.ipoTodayMap.containsKey(getItem(position).getName())) {
+                int resId = context.getResources().getIdentifier(Value.ipoTodayMap.get(getItem(position).getName()).toString(), "string", Value.PACKAGENAME);
+                holder.current.setText(resId);
+            } else {
+                holder.current.setText(R.string.no_work_today);
             }
 
             if (!getItem(position).isApplied()) {
