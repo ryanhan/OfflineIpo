@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="10dp"
+    android:layout_width="10dp"
+    android:background="@color/white"
+    android:id="@+id/ipo_detail_weixin_button"
+    android:layout_marginLeft="5dp"
+    android:src="@drawable/ic_weixin"/>

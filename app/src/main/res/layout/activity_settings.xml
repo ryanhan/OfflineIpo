@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    tools:context="cn.ryanman.app.offlineipo.main.SettingsActivity">
+
+    <LinearLayout
+        android:id="@+id/settings_export_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
+
+        <ImageView
+            android:layout_width="@dimen/settings_icon_size"
+            android:layout_height="@dimen/settings_icon_size"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_export" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/export_database"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:id="@+id/settings_import_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
+
+        <ImageView
+            android:layout_width="@dimen/settings_icon_size"
+            android:layout_height="@dimen/settings_icon_size"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_import" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/import_database"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:id="@+id/settings_check_update_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/fragment_my_ipo_title_vertical_padding"
+        android:paddingBottom="@dimen/fragment_my_ipo_title_vertical_padding">
+
+        <ImageView
+            android:layout_width="@dimen/settings_icon_size"
+            android:layout_height="@dimen/settings_icon_size"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_update" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/check_update"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fragment_my_ipo_title_font" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
