@@ -1,8 +1,5 @@
 package cn.ryanman.app.offlineipo.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by ryan on 2016/11/26.
  */

@@ -6,6 +6,8 @@
     android:background="@android:color/white"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
+    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
     android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 

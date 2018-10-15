@@ -1,7 +1,5 @@
 package cn.ryanman.app.offlineipo.model;
 
-import java.util.List;
-
 /**
  * Created by ryanh on 2016/12/27.
  */
@@ -13,6 +11,7 @@ public class MyIpo {
     private int stockShare;
     private double earnAmount;
     private String soldDate;
+    private String soldPrice;
 
     public IpoItem getIpoItem() {
         return ipoItem;
@@ -52,5 +51,13 @@ public class MyIpo {
 
     public void setSoldDate(String soldDate) {
         this.soldDate = soldDate;
+    }
+
+    public String getSoldPrice() {
+        return soldPrice;
+    }
+
+    public void setSoldPrice(String soldPrice) {
+        this.soldPrice = soldPrice;
     }
 }

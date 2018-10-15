@@ -3,27 +3,22 @@ package cn.ryanman.app.offlineipo.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
 import cn.ryanman.app.offlineipo.listener.OnViewReloadListener;
 import cn.ryanman.app.offlineipo.model.IpoItem;
-import cn.ryanman.app.offlineipo.model.IpoStatus;
-import cn.ryanman.app.offlineipo.model.Status;
 import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
@@ -113,9 +108,9 @@ public class IpoListAdapter extends ArrayAdapter<IpoItem> {
             if (!getItem(position).isApplied()) {
 
                 holder.actionImage.setImageResource(R.drawable.ic_add);
-                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+                holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
                 holder.actionText.setText(R.string.has_submit);
-                holder.actionText.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.actionText.setTextColor(context.getColor(R.color.colorAccent));
                 holder.actionLayout.setOnClickListener(new View.OnClickListener() {
 
                     @Override

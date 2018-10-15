@@ -11,11 +11,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 
+import cn.ryanman.app.offlineipo.model.AppInfo;
 import cn.ryanman.app.offlineipo.model.IpoItem;
 import cn.ryanman.app.offlineipo.model.IpoToday;
+import cn.ryanman.app.offlineipo.model.Notice;
+import cn.ryanman.app.offlineipo.model.RequestProperty;
 import cn.ryanman.app.offlineipo.model.Status;
+
+import static cn.ryanman.app.offlineipo.utils.Value.APPID;
+import static cn.ryanman.app.offlineipo.utils.Value.REFERER;
+import static cn.ryanman.app.offlineipo.utils.Value.TOKEN;
 
 /**
  * Created by ryan on 2016/11/25.
@@ -23,7 +29,7 @@ import cn.ryanman.app.offlineipo.model.Status;
 
 public class WebUtils {
 
-    public static List<IpoToday> getIpoToday(String date) throws Exception{
+    public static List<IpoToday> getIpoToday(String date) throws Exception {
         List<IpoToday> ipoTodayList = new ArrayList<>();
         String result = GetJson(Value.IpoToday + date);
         JSONObject json = new JSONObject(result);
@@ -125,26 +131,27 @@ public class WebUtils {
             try {
                 ipoItem.setName(ipoJson.getString("SECURITY_NAME"));
                 ipoItem.setCode(ipoJson.getString("SECURITY_CODE"));
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 continue;
             }
 
             String listedDate = ipoJson.getString("LISTED_DATE");
-            if (!listedDate.equals("-") && AppUtils.daysAfter(listedDate) > 60){
-                continue;
+
+            if (!listedDate.equals("-")) {
+                ipoItem.setListedDate(listedDate);
+            } else {
+                ipoItem.setOfflineDate(null);
             }
 
             try {
                 ipoItem.setIssuePrice(ipoJson.getDouble("ISSUE_PRICE"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 ipoItem.setIssuePrice(0);
             }
 
             if (!ipoJson.getString("OFFLINE_ISSUANCE_END_DATE").equals("-")) {
                 ipoItem.setOfflineDate(ipoJson.getString("OFFLINE_ISSUANCE_END_DATE"));
-            }
-            else{
+            } else {
                 ipoItem.setOfflineDate(null);
             }
 
@@ -154,59 +161,37 @@ public class WebUtils {
         return ipoItems;
     }
 
-    public static List<IpoItem> getIpoSchedule() throws Exception{
-        List<IpoItem> ipoItems = new ArrayList<IpoItem>();
-        String result = GetJson(Value.IpoSchedule);
+    public static List<Notice> getNoticeList(String code) throws Exception {
+        List<Notice> noticeList = new ArrayList<>();
+        List<RequestProperty> properties = new ArrayList<>();
+        RequestProperty property = new RequestProperty("referer", REFERER + code);
+        properties.add(property);
+
+        String result = GetJson(Value.NoticeList + code, properties);
         JSONObject json = new JSONObject(result);
         JSONArray resultArray = json.getJSONArray("result");
         for (int i = 0; i < resultArray.length(); i++) {
-            JSONObject ipoJson = resultArray.getJSONObject(i);
-            IpoItem ipoItem = new IpoItem();
-
-            try {
-                ipoItem.setCode(ipoJson.getString("SECURITY_CODE"));
-            } catch (Exception e) {
-                continue;
-            }
-
-            String listedDate = ipoJson.getString("LISTED_DATE");
-            if (!listedDate.equals("-") && AppUtils.daysAfter(listedDate) > 60){
-                continue;
-            }
-            if (!ipoJson.getString("LISTED_DATE").equals("-")){
-                ipoItem.setListedDate(ipoJson.getString("LISTED_DATE")); //上市日
-            }
-            if (!ipoJson.isNull("IPO_NOTICE_DATE") || !ipoJson.getString("IPO_NOTICE_DATE").equals("-")) {
-                ipoItem.setNoticeDate(ipoJson.getString("IPO_NOTICE_DATE")); //招股公告
-            }
-            if (!ipoJson.isNull("INQUIRY_DATE") || !ipoJson.getString("INQUIRY_DATE").equals("-")) {
-                ipoItem.setInquiryDate(ipoJson.getString("INQUIRY_DATE")); //询价开始
-            }
-            if (!ipoJson.isNull("INQUIRY_DATE_END") || !ipoJson.getString("INQUIRY_DATE_END").equals("-")) {
-                ipoItem.setInquiryEndDate(ipoJson.getString("INQUIRY_DATE_END")); //询价结束
-            }
-            if (!ipoJson.isNull("ISSUANCE_ANNOUNCEMENT_DATE") || !ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE").equals("-")) {
-                ipoItem.setAnnounceDate(ipoJson.getString("ISSUANCE_ANNOUNCEMENT_DATE")); //发行公告
-            }
-            if (!ipoJson.isNull("ANNOUNCE_SUCCESS_RATE_RESULT_DATE") || !ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE").equals("-")) {
-                ipoItem.setSuccessResultDate(ipoJson.getString("ANNOUNCE_SUCCESS_RATE_RESULT_DATE")); //中签结果
-            }
-            if (!ipoJson.isNull("PAYMENT_END_DATE") || !ipoJson.getString("PAYMENT_END_DATE").equals("-")) {
-                ipoItem.setPaymentDate(ipoJson.getString("PAYMENT_END_DATE")); //缴款日
-            }
-            ipoItems.add(ipoItem);
+            JSONObject noticeJson = resultArray.getJSONObject(i);
+            String title = noticeJson.getString("TITLE");
+            String url = noticeJson.getString("URL");
+            String date = noticeJson.getString("SSEDATE");
+            Notice notice = new Notice(title, url, date);
+            noticeList.add(notice);
         }
-
-        return ipoItems;
+        return noticeList;
     }
 
-
-    public static String GetJson(String url) throws IOException {
+    public static String GetJson(String url, List<RequestProperty> properties) throws IOException {
 
         HttpURLConnection urlConn = null;
         try {
             urlConn = (HttpURLConnection) new URL(url).openConnection();
             urlConn.addRequestProperty("accept", "application/json");
+            if (properties != null && properties.size() > 0) {
+                for (RequestProperty property : properties) {
+                    urlConn.addRequestProperty(property.getKey(), property.getValue());
+                }
+            }
             urlConn.setConnectTimeout(Value.CONNECT_TIMEOUT);
             urlConn.setReadTimeout(Value.READ_TIMEOUT);
             int responseCode = urlConn.getResponseCode();
@@ -224,6 +209,10 @@ public class WebUtils {
         }
     }
 
+    public static String GetJson(String url) throws IOException {
+        return GetJson(url, null);
+    }
+
     private static String readInputStream(HttpURLConnection urlConn)
             throws IOException {
         Charset charset = Charset.forName("UTF-8");
@@ -238,4 +227,18 @@ public class WebUtils {
         return responseBuffer.toString();
     }
 
+    public static AppInfo getAppInfo() throws Exception {
+
+        AppInfo appInfo = new AppInfo();
+        String url = "http://api.fir.im/apps/latest/"+ APPID + "?api_token=" + TOKEN;
+
+        String result = GetJson(url);
+
+        JSONObject json = new JSONObject(result);
+        appInfo.setVersion(json.getString("version"));
+        appInfo.setVersionShort(json.getString("versionShort"));
+        appInfo.setUrl(json.getString("installUrl"));
+
+        return appInfo;
+    }
 }

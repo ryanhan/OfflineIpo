@@ -35,7 +35,7 @@ public class IpoListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ipo_list, container, false);
-        ipoListView = (ListView) view.findViewById(R.id.all_ipo_list);
+        ipoListView = view.findViewById(R.id.all_ipo_list);
         ipoList = new ArrayList<>();
 
         ipoListAdapter = new IpoListAdapter(this.getActivity(), ipoList);
@@ -47,6 +47,7 @@ public class IpoListFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(IpoListFragment.this.getActivity(),
                         IpoDetailActivity.class);
+                intent.putExtra(Value.IPO_NAME, ipoList.get(position).getName());
                 intent.putExtra(Value.IPO_CODE, ipoList.get(position).getCode());
                 startActivity(intent);
             }

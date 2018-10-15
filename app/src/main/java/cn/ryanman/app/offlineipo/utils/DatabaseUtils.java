@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
@@ -15,7 +14,6 @@ import cn.ryanman.app.offlineipo.model.IpoToday;
 import cn.ryanman.app.offlineipo.model.IpoTodayFull;
 import cn.ryanman.app.offlineipo.model.MyIpo;
 import cn.ryanman.app.offlineipo.model.Status;
-import cn.ryanman.app.offlineipo.model.User;
 
 
 public class DatabaseUtils {
@@ -65,20 +63,6 @@ public class DatabaseUtils {
         for (int i = 0; i < ipoList.size(); i++) {
             ContentValues values = createIpoItemValues(ipoList.get(i));
             sqliteDatabase.insert(DatabaseHelper.IPO, null, values);
-        }
-        dbHelper.close();
-    }
-
-    public static void updateIpoSchedule(Context context, List<IpoItem> ipoList) {
-        DatabaseHelper dbHelper = new DatabaseHelper(context,
-                DatabaseHelper.DATABASENAME);
-        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
-
-        for (int i = 0; i < ipoList.size(); i++) {
-            ContentValues values = createIpoScheduleValues(ipoList.get(i));
-            sqliteDatabase.update(DatabaseHelper.IPO, values,
-                    DatabaseHelper.STOCK_CODE + "=?",
-                    new String[]{ipoList.get(i).getCode()});
         }
         dbHelper.close();
     }
@@ -136,6 +120,7 @@ public class DatabaseUtils {
             myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
             myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
             myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
+            myIpo.setSoldPrice(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_PRICE)));
             break;
         }
 
@@ -145,7 +130,7 @@ public class DatabaseUtils {
 
 
     public static void subscribe(Context context, String ipoCode, int personNumber) {
-        if (isSubscribed(context, ipoCode)){
+        if (isSubscribed(context, ipoCode)) {
             return;
         }
         DatabaseHelper dbHelper = new DatabaseHelper(context,
@@ -216,6 +201,17 @@ public class DatabaseUtils {
         dbHelper.close();
     }
 
+    public static void updateSoldPrice(Context context, String ipoCode, String soldPrice) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.SOLD_PRICE, soldPrice);
+        sqliteDatabase.update(DatabaseHelper.MY_IPO, values,
+                DatabaseHelper.M_STOCK_CODE + "=?", new String[]{ipoCode});
+        dbHelper.close();
+    }
+
     public static List<MyIpo> getAllSubscription(Context context) {
         List<MyIpo> myIpoList = new ArrayList<>();
         DatabaseHelper dbHelper = new DatabaseHelper(context,
@@ -230,10 +226,65 @@ public class DatabaseUtils {
             myIpo.setEarnAmount(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT)));
             myIpo.setStockShare(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE)));
             myIpo.setSoldDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE)));
+            myIpo.setSoldPrice(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_PRICE)));
             myIpoList.add(myIpo);
         }
         dbHelper.close();
         return myIpoList;
+    }
+
+    public static boolean exportMyIpo(Context context) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(DatabaseHelper.MY_IPO, null,
+                null, null, null, null, null);
+        StringBuilder sb = new StringBuilder();
+        while (cursor.moveToNext()) {
+            String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.M_STOCK_CODE));
+            int person = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.PERSON_NUMBER));
+            double amount = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.EARN_AMOUNT));
+            int share = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.STOCK_SHARE));
+            String date = cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_DATE));
+            String price = cursor.getString(cursor.getColumnIndex(DatabaseHelper.SOLD_PRICE));
+            sb.append(code).append(Value.DATABASE_SPLIT).append(person).append(Value.DATABASE_SPLIT).append(amount).append(Value.DATABASE_SPLIT).append(share).append(Value.DATABASE_SPLIT).append(date).append(Value.DATABASE_SPLIT).append(price).append("\n");
+        }
+        if (AppUtils.writeToFile(sb.toString(), Value.DATABASE_FILE_NAME)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean importMyIpo(Context context) {
+        String content = AppUtils.readFromFile(Value.DATABASE_FILE_NAME);
+        if (content == null) {
+            return false;
+        }
+        DatabaseHelper dbHelper = new DatabaseHelper(context,
+                DatabaseHelper.DATABASENAME);
+        SQLiteDatabase sqliteDatabase = dbHelper.getWritableDatabase();
+        sqliteDatabase.delete(DatabaseHelper.MY_IPO, null, null);
+        String[] lines = content.trim().split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i] != null && !lines[i].equals("")) {
+                ContentValues values = new ContentValues();
+                String[] unit = lines[i].trim().split(Value.DATABASE_SPLIT);
+                values.put(DatabaseHelper.M_STOCK_CODE, unit[0]);
+                values.put(DatabaseHelper.PERSON_NUMBER, Integer.parseInt(unit[1]));
+                values.put(DatabaseHelper.EARN_AMOUNT, Double.parseDouble(unit[2]));
+                values.put(DatabaseHelper.STOCK_SHARE, Integer.parseInt(unit[3]));
+                if (!unit[4].equals("null")) {
+                    values.put(DatabaseHelper.SOLD_DATE, unit[4]);
+                }
+                if (!unit[5].equals("null")) {
+                    values.put(DatabaseHelper.SOLD_PRICE, unit[5]);
+                }
+                sqliteDatabase.insert(DatabaseHelper.MY_IPO, null, values);
+            }
+        }
+        dbHelper.close();
+        return true;
     }
 
     private static ContentValues createIpoTodayValues(String event, String name) {
@@ -252,30 +303,12 @@ public class DatabaseUtils {
         if (ipoItem.getOfflineDate() != null) {
             values.put(DatabaseHelper.OFFLINE_DATE, ipoItem.getOfflineDate());
         }
+        if (ipoItem.getListedDate() != null) {
+            values.put(DatabaseHelper.LISTED_DATE, ipoItem.getListedDate());
+        }
         values.put(DatabaseHelper.ISSUE_PRICE, ipoItem.getIssuePrice());
         if (ipoItem.getUrl() != null)
             values.put(DatabaseHelper.IPO_URL, ipoItem.getUrl());
-        return values;
-    }
-
-    private static ContentValues createIpoScheduleValues(IpoItem ipoItem) {
-        ContentValues values = new ContentValues();
-        if (ipoItem.getCode() != null)
-            values.put(DatabaseHelper.STOCK_CODE, ipoItem.getCode());
-        if (ipoItem.getNoticeDate() != null)
-            values.put(DatabaseHelper.NOTICE_DATE, ipoItem.getNoticeDate());
-        if (ipoItem.getInquiryDate() != null)
-            values.put(DatabaseHelper.INQUIRY_DATE, ipoItem.getInquiryDate());
-        if (ipoItem.getInquiryEndDate() != null)
-            values.put(DatabaseHelper.INQUIRY_END_DATE, ipoItem.getInquiryEndDate());
-        if (ipoItem.getAnnounceDate() != null)
-            values.put(DatabaseHelper.ANNOUNCE_DATE, ipoItem.getAnnounceDate());
-        if (ipoItem.getSuccessResultDate() != null)
-            values.put(DatabaseHelper.SUCCESS_RESULT_DATE, ipoItem.getSuccessResultDate());
-        if (ipoItem.getPaymentDate() != null)
-            values.put(DatabaseHelper.PAYMENT_DATE, ipoItem.getPaymentDate());
-        if (ipoItem.getListedDate() != null)
-            values.put(DatabaseHelper.LISTED_DATE, ipoItem.getListedDate());
         return values;
     }
 
@@ -283,24 +316,11 @@ public class DatabaseUtils {
         IpoItem ipoItem = new IpoItem();
         ipoItem.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
         ipoItem.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_CODE)));
-        ipoItem.setNoticeDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NOTICE_DATE)));
-        ipoItem.setInquiryDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.INQUIRY_DATE)));
-        ipoItem.setInquiryEndDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.INQUIRY_END_DATE)));
-        ipoItem.setAnnounceDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNOUNCE_DATE)));
         ipoItem.setOfflineDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.OFFLINE_DATE)));
-        ipoItem.setPaymentDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.PAYMENT_DATE)));
-        ipoItem.setSuccessResultDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.SUCCESS_RESULT_DATE)));
         ipoItem.setListedDate(cursor.getString(cursor.getColumnIndex(DatabaseHelper.LISTED_DATE)));
         ipoItem.setUrl(cursor.getString(cursor.getColumnIndex(DatabaseHelper.IPO_URL)));
         ipoItem.setIssuePrice(cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.ISSUE_PRICE)));
         return ipoItem;
-    }
-
-    private static IpoToday parseEventCursor(Cursor cursor) {
-        IpoToday ipoToday = new IpoToday();
-        ipoToday.setEvent(Status.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME))));
-        ipoToday.setIpoName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.STOCK_NAME)));
-        return ipoToday;
     }
 
     private static IpoTodayFull parseIpoTodayCursor(Cursor cursor) {

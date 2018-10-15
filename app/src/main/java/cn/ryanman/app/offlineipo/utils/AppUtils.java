@@ -1,15 +1,21 @@
 package cn.ryanman.app.offlineipo.utils;
 
-import android.content.Context;
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cn.ryanman.app.offlineipo.model.IpoItem;
-import cn.ryanman.app.offlineipo.model.IpoStatus;
-import cn.ryanman.app.offlineipo.model.Status;
 
 /**
  * Created by ryan on 2016/11/29.
@@ -51,45 +57,10 @@ public class AppUtils {
             } else {
                 return true;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
 
-    }
-
-    public static IpoStatus getIpoStatus(IpoItem item) throws ParseException {
-        Date now = new Date();
-        IpoStatus status = new IpoStatus();
-        if (Value.ipoTodayMap.containsKey(item.getName())) {
-            status.setCurrent(Value.ipoTodayMap.get(item.getName()));
-        }
-
-        if (now.before(parseDate(item.getInquiryDate()))) {
-            //status.setCurrent(Value.NOTICE);
-            status.setNext(Status.INQUIRY);
-            status.setNextDate(item.getInquiryDate());
-        } else if (now.before(parseDate(item.getOfflineDate()))) {
-            status.setNext(Status.OFFLINE);
-            status.setNextDate(item.getOfflineDate());
-        } else if (now.before(parseDate(item.getPaymentDate()))) {
-            status.setNext(Status.PAYMENT);
-            status.setNextDate(item.getPaymentDate());
-        } else if (isToday(item.getPaymentDate())) {
-            status.setNext(Status.LISTED);
-        } else if (now.after(parseDate(item.getPaymentDate()))) {
-            if (item.getListedDate() == null) {
-                status.setNext(Status.LISTED);
-            } else {
-                if (now.before(parseDate(item.getListedDate()))) {
-                    status.setNext(Status.LISTED);
-                    status.setNextDate(item.getListedDate());
-                } else {
-                    status.setCurrent(Status.LISTED);
-                }
-            }
-        }
-        return status;
     }
 
     public static boolean isStatusImportant(cn.ryanman.app.offlineipo.model.Status status) {
@@ -105,4 +76,50 @@ public class AppUtils {
         }
     }
 
+    public static boolean writeToFile(String content, String fileName) {
+        File directory = new File(Environment.getExternalStorageDirectory(), "OfflineIpo");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        File file = new File(directory, fileName);
+        try {
+            if (file.exists()) {
+                file.delete();
+            }
+            FileWriter fw = new FileWriter(file);
+            fw.write(content);
+            fw.flush();
+            fw.close();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static String readFromFile(String fileName) {
+        File directory = new File(Environment.getExternalStorageDirectory(), "OfflineIpo");
+        File file = new File(directory, fileName);
+        if (!file.exists()) {
+            return null;
+        }
+        try {
+            FileReader fd = new FileReader(file);
+            char[] chs = new char[1024];
+            StringBuilder sb = new StringBuilder();
+            while (fd.read(chs) != -1) {
+                sb.append(chs);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void getPermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
 }

@@ -5,6 +5,7 @@
 
     <dimen name="actionbar_title_margin">20dp</dimen>
     <dimen name="actionbar_icon_size">25dp</dimen>
+    <dimen name="settings_icon_size">25dp</dimen>
 
     <dimen name="ipo_today_event_font_size">16sp</dimen>
     <dimen name="ipo_today_event_vertical_padding">12dp</dimen>
@@ -27,12 +28,16 @@
     <dimen name="activity_ipo_detail_progress_margin">5dp</dimen>
     <dimen name="activity_ipo_detail_title_font">18sp</dimen>
     <dimen name="activity_ipo_detail_font">16sp</dimen>
-
+    <dimen name="activity_ipo_detail_edit_length">100dp</dimen>
 
     <dimen name="adapter_user_list_font">18sp</dimen>
     <dimen name="fragment_my_ipo_title_font">16sp</dimen>
 
-    <dimen name="fragment_my_ipo_title_vertical_padding">10dp</dimen>
+    <dimen name="fragment_my_ipo_block_margin">15dp</dimen>
+
+    <dimen name="line_height">0.5dp</dimen>
+
+    <dimen name="fragment_my_ipo_title_vertical_padding">15dp</dimen>
     <dimen name="create_user_vertical_margin_up">8dp</dimen>
     <dimen name="create_user_vertical_margin_down">25dp</dimen>
 

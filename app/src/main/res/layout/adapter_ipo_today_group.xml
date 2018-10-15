@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ipo_group_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@drawable/ipo_today_group_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
-    android:paddingRight="@dimen/ipo_today_event_horizontal_padding">
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
+    android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
+    android:paddingTop="@dimen/ipo_today_event_vertical_padding">
 
-    <LinearLayout
-        android:id="@+id/ipo_group_layout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/adapter_event_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/ipo_today_group_bg"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/ipo_today_event_vertical_padding"
-        android:paddingTop="@dimen/ipo_today_event_vertical_padding">
+        android:layout_marginRight="20dp"
+        android:layout_weight="1"
+        android:text="招股公告"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/ipo_today_event_font_size"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/adapter_event_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_weight="1"
-            android:text="招股公告"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/ipo_today_event_font_size"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/adapter_arrow"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:scaleType="centerCrop" />
-    </LinearLayout>
-
+    <ImageView
+        android:id="@+id/adapter_arrow"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:scaleType="centerCrop" />
 </LinearLayout>
+

@@ -10,8 +10,6 @@
         android:id="@+id/all_ipo_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
-        android:paddingRight="@dimen/ipo_today_event_horizontal_padding" />
+       />
 
 </LinearLayout>

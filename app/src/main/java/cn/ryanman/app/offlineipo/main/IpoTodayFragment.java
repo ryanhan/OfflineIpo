@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -78,6 +77,7 @@ public class IpoTodayFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(IpoTodayFragment.this.getActivity(),
                         IpoDetailActivity.class);
+                intent.putExtra(Value.IPO_NAME, ipoNameList.get(groupPosition).get(childPosition).getName());
                 intent.putExtra(Value.IPO_CODE, ipoNameList.get(groupPosition).get(childPosition).getCode());
                 startActivity(intent);
                 return false;

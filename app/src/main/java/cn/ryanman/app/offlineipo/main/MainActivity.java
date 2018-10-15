@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         date = df.format(new Date());
 
-        bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
+
+        bottomNavigationBar.setActiveColor(R.color.colorPrimary)
+                .setInActiveColor("#979797");
 
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.drawable.ic_today_24dp, getString(R.string.ipo_today)))
@@ -147,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
         customizeActionBar();
     }
 
-    private class DateChangeListener implements View.OnClickListener{
+    private class DateChangeListener implements View.OnClickListener {
 
         private int amount;
 
-        public DateChangeListener(int amount){
+        public DateChangeListener(int amount) {
             this.amount = amount;
         }
 

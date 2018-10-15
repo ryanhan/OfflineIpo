@@ -1,39 +1,32 @@
 package cn.ryanman.app.offlineipo.main;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
@@ -48,29 +41,76 @@ import cn.ryanman.app.offlineipo.utils.Value;
 public class MyIpoFragment extends Fragment {
 
     private RelativeLayout myIpoLayout;
+    private RelativeLayout myBenefitLayout;
     private BarChart mChart;
     private TextView chartInfoText;
-    private HashMap<String, Double> benefitMap;
+    private HashMap<String, Double> benefitMonthMap;
+    private HashMap<String, Double> benefitYearMap;
     private ArrayList<String> dateValueList;
+    private int time;
+    private double totalBenefit;
     private LinearLayout settingsLayout;
-    private LinearLayout checkUpdateLayout;
-    private LinearLayout aboutLayout;
+    private TextView myIpoNumber;
+    private TextView myBenefitNumber;
+    private TextView segMonth;
+    private TextView segYear;
+    private SharedPreferences pref;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_ipo, container, false);
         myIpoLayout = view.findViewById(R.id.my_ipo_layout);
+        myBenefitLayout = view.findViewById(R.id.my_ipo_benefit_layout);
+        settingsLayout = view.findViewById(R.id.my_ipo_settings_layout);
         mChart = view.findViewById(R.id.my_ipo_chart);
         chartInfoText = view.findViewById(R.id.my_ipo_chart_info_text);
-        initBenefitData(Value.BY_MONTH);
-        initChart();
+        myIpoNumber = view.findViewById(R.id.my_ipo_number);
+        myBenefitNumber = view.findViewById(R.id.my_ipo_benefit_number);
+        segMonth = view.findViewById(R.id.segment_month);
+        segYear = view.findViewById(R.id.segment_year);
+        pref = this.getActivity().getSharedPreferences(Value.APPINFO, Context.MODE_PRIVATE);
 
-        settingsLayout = view.findViewById(R.id.my_ipo_settings_layout);
-        checkUpdateLayout = view.findViewById(R.id.my_ipo_check_update_layout);
-        aboutLayout = view.findViewById(R.id.my_ipo_about_layout);
+        time = pref.getInt(Value.TIME, Value.BY_MONTH);
+        setMonthActive(time == Value.BY_MONTH);
 
-        myIpoLayout.setOnClickListener(new View.OnClickListener() {
+        segMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (time == Value.BY_YEAR) {
+                    setMonthActive(true);
+                    initBenefitData();
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putInt(Value.TIME, Value.BY_MONTH);
+                    editor.commit();
+                }
+            }
+        });
+
+        segYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (time == Value.BY_MONTH) {
+                    setMonthActive(false);
+                    initBenefitData();
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putInt(Value.TIME, Value.BY_YEAR);
+                    editor.commit();
+                }
+            }
+        });
+
+        ImageView stockImage = view.findViewById(R.id.my_ipo_stock_image);
+        stockImage.setColorFilter(ContextCompat.getColor(MyIpoFragment.this.getActivity(), R.color.colorPrimary));
+
+        benefitMonthMap = new HashMap<>();
+        benefitYearMap = new HashMap<>();
+        dateValueList = new ArrayList<>();
+
+        myIpoLayout.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -80,43 +120,85 @@ public class MyIpoFragment extends Fragment {
             }
         });
 
-//        settingsLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(MyIpoFragment.this.getActivity(),
-//                        SettingsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        myBenefitLayout.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MyIpoFragment.this.getActivity(),
+                        BenefitListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settingsLayout.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MyIpoFragment.this.getActivity(),
+                        SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
 
-    private void initBenefitData(int interval) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        initBenefitData();
+    }
+
+    private void setMonthActive(boolean b) {
+        if (b) {
+            time = Value.BY_MONTH;
+            segMonth.setTextColor(getResources().getColor(R.color.white));
+            segMonth.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            segYear.setTextColor(getResources().getColor(R.color.colorAccent));
+            segYear.setBackgroundColor(getResources().getColor(R.color.white));
+        } else {
+            time = Value.BY_YEAR;
+            segMonth.setTextColor(getResources().getColor(R.color.colorAccent));
+            segMonth.setBackgroundColor(getResources().getColor(R.color.white));
+            segYear.setTextColor(getResources().getColor(R.color.white));
+            segYear.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        }
+    }
+
+    private void initBenefitData() {
         List<MyIpo> myIpoList = DatabaseUtils.getAllSubscription(this.getContext());
-        benefitMap = new HashMap<>();
-        dateValueList = new ArrayList<>();
+        benefitMonthMap.clear();
+        benefitYearMap.clear();
+        dateValueList.clear();
         int noDateCount = 0;
         int minDate = 0;
         int maxDate = 0;
+        totalBenefit = 0;
         for (MyIpo myIpo : myIpoList) {
             String date = myIpo.getSoldDate();
             double benefit = myIpo.getEarnAmount();
+            totalBenefit += benefit;
             if (benefit > 0) {
                 if (date != null && !date.equals("")) {
                     String yyyymm = date.substring(0, 4).concat(date.substring(5, 7));
-                    if (benefitMap.containsKey(yyyymm)) {
-                        benefitMap.put(yyyymm, benefitMap.get(yyyymm) + benefit);
+                    int ym = Integer.parseInt(yyyymm);
+                    int year = ym / 100;
+                    if (benefitMonthMap.containsKey(yyyymm)) {
+                        benefitMonthMap.put(yyyymm, benefitMonthMap.get(yyyymm) + benefit);
+                        benefitYearMap.put(String.valueOf(year), benefitYearMap.get(String.valueOf(year)) + benefit);
                     } else {
-                        int ym = Integer.parseInt(yyyymm);
                         if (minDate == 0 || ym < minDate) {
                             minDate = ym;
                         }
                         if (maxDate == 0 || ym > maxDate) {
                             maxDate = ym;
                         }
-                        benefitMap.put(yyyymm, benefit);
+                        benefitMonthMap.put(yyyymm, benefit);
+                        benefitYearMap.put(String.valueOf(year), benefit);
                     }
                 } else {
                     noDateCount++;
@@ -124,30 +206,40 @@ public class MyIpoFragment extends Fragment {
             }
         }
 
-        if (noDateCount == 0){
-            chartInfoText.setVisibility(View.INVISIBLE);
+        DecimalFormat df = new DecimalFormat("#,###.00");
+
+        myIpoNumber.setText(String.valueOf(myIpoList.size()));
+        if (totalBenefit == 0) {
+            myBenefitNumber.setText(R.string.no_benefit);
+        } else {
+            myBenefitNumber.setText("￥" + df.format(totalBenefit));
         }
-        else {
+        if (noDateCount == 0) {
+            chartInfoText.setVisibility(View.INVISIBLE);
+        } else {
             chartInfoText.setVisibility(View.VISIBLE);
             chartInfoText.setText(noDateCount + getResources().getString(R.string.no_sold_date));
         }
-        if (interval == Value.BY_MONTH) {
-            int curDate = minDate;
-            while (curDate <= maxDate) {
-                dateValueList.add(String.valueOf(curDate));
-                curDate++;
-                if (curDate % 100 > 12) {
-                    curDate = curDate + 88;
+
+        if (benefitMonthMap.size() > 0) {
+            if (time == Value.BY_MONTH) {
+                int curDate = minDate;
+                while (curDate <= maxDate) {
+                    dateValueList.add(String.valueOf(curDate));
+                    curDate++;
+                    if (curDate % 100 > 12) {
+                        curDate = curDate + 88;
+                    }
+                }
+            } else if (time == Value.BY_YEAR) {
+                int maxYear = maxDate / 100;
+                int minYear = minDate / 100;
+                for (int curYear = minYear; curYear <= maxYear; curYear++) {
+                    dateValueList.add(String.valueOf(curYear));
                 }
             }
-
-        } else if (interval == Value.BY_QUARTER) {
-
-        } else if (interval == Value.BY_YEAR) {
-
+            initChart();
         }
-
-
     }
 
     private void initChart() {
@@ -176,20 +268,23 @@ public class MyIpoFragment extends Fragment {
         rightAxis.setEnabled(false);
 
         // add a nice and smooth animation
-        mChart.animateY(2500);
+        mChart.animateY(1500);
 
         mChart.getLegend().setEnabled(false);
-
-        setData();
 
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                String yyyymm = dateValueList.get((int) value);
-                return yyyymm.substring(0, 4).concat("-").concat(yyyymm.substring(4, 6));
+                if (time == Value.BY_MONTH) {
+                    String yyyymm = dateValueList.get((int) value);
+                    return yyyymm.substring(0, 4).concat("-").concat(yyyymm.substring(4, 6));
+                } else {
+                    return dateValueList.get((int) value);
+                }
             }
         });
 
+        setData();
     }
 
     private void setData() {
@@ -197,11 +292,20 @@ public class MyIpoFragment extends Fragment {
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
         for (int i = 0; i < dateValueList.size(); i++) {
-            if (benefitMap.containsKey(dateValueList.get(i))) {
-                float val = (float) benefitMap.get(dateValueList.get(i)).doubleValue();
-                yVals1.add(new BarEntry(i, val));
-            } else {
-                yVals1.add(new BarEntry(i, 0));
+            if (time == Value.BY_MONTH) {
+                if (benefitMonthMap.containsKey(dateValueList.get(i))) {
+                    float val = (float) benefitMonthMap.get(dateValueList.get(i)).doubleValue();
+                    yVals1.add(new BarEntry(i, val));
+                } else {
+                    yVals1.add(new BarEntry(i, 0));
+                }
+            } else if (time == Value.BY_YEAR) {
+                if (benefitYearMap.containsKey(dateValueList.get(i))) {
+                    float val = (float) benefitYearMap.get(dateValueList.get(i)).doubleValue();
+                    yVals1.add(new BarEntry(i, val));
+                } else {
+                    yVals1.add(new BarEntry(i, 0));
+                }
             }
         }
 

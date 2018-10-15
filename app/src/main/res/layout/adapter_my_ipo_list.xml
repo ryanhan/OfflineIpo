@@ -6,7 +6,9 @@
     android:background="@android:color/white"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
+    android:paddingLeft="@dimen/ipo_today_event_horizontal_padding"
     android:paddingTop="@dimen/ipo_today_event_vertical_padding"
+    android:paddingRight="@dimen/ipo_today_event_horizontal_padding"
     android:paddingBottom="@dimen/ipo_today_event_vertical_padding">
 
     <LinearLayout
@@ -80,27 +82,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/ipo_today_ipo_small_font_size" />
-
-            <TextView
-                android:id="@+id/adapter_ipo_stock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/stock"
-                android:textSize="@dimen/ipo_today_ipo_small_font_size" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="x"
-                android:textSize="@dimen/activity_ipo_detail_font" />
-
-            <TextView
-                android:id="@+id/adapter_ipo_person_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/activity_ipo_detail_font" />
 
         </LinearLayout>
 
