@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -44,7 +45,6 @@ public class CheckUpdateAsyncTask extends AsyncTask<Void, Integer, AppInfo> {
 
     @Override
     protected void onPreExecute() {
-        //Toast.makeText(context, context.getString(R.string.start_checking_update), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -71,11 +71,11 @@ public class CheckUpdateAsyncTask extends AsyncTask<Void, Integer, AppInfo> {
                 int currentVersion = packInfo.versionCode;
                 int latestVersion = Integer.parseInt(result.getVersion());
 
-                System.out.println("Current Version: " + currentVersion);
-                System.out.println("Latest Version: " + latestVersion);
+                Log.d("currentVersion", currentVersion+"");
+                Log.d("latestVersion", latestVersion+"");
 
                 if (currentVersion < latestVersion) {
-                    confirmDownload(result.getUrl(), result.getVersionShort());
+                    confirmDownload(result);
                 } else {
                     Toast.makeText(context, context.getString(R.string.already_latest_version), Toast.LENGTH_SHORT)
                             .show();
@@ -90,15 +90,15 @@ public class CheckUpdateAsyncTask extends AsyncTask<Void, Integer, AppInfo> {
         }
     }
 
-    private void confirmDownload(final String url, String version) {
+    private void confirmDownload(final AppInfo info) {
         Dialog alertDialog = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.download_new_version)).setMessage(context.getString(R.string.version_number) + " " + version)
+                .setTitle(context.getString(R.string.download_new_version) + " v" + info.getVersionShort()).setMessage(info.getChangelog())
                 .setNegativeButton(context.getString(R.string.cancel), null)
-                .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(context.getString(R.string.update), new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startDownload(url);
+                        startDownload(info.getUrl());
                         Toast.makeText(context, context.getString(R.string.start_download), Toast.LENGTH_SHORT)
                                 .show();
                     }

@@ -198,7 +198,11 @@ public class MyIpoFragment extends Fragment {
                             maxDate = ym;
                         }
                         benefitMonthMap.put(yyyymm, benefit);
-                        benefitYearMap.put(String.valueOf(year), benefit);
+                        if (benefitYearMap.containsKey(String.valueOf(year))){
+                            benefitYearMap.put(String.valueOf(year), benefitYearMap.get(String.valueOf(year)) + benefit);
+                        }else{
+                            benefitYearMap.put(String.valueOf(year), benefit);
+                        }
                     }
                 } else {
                     noDateCount++;
@@ -243,7 +247,6 @@ public class MyIpoFragment extends Fragment {
     }
 
     private void initChart() {
-
         mChart.getDescription().setEnabled(false);
 
         // if more than 60 entries are displayed in the chart, no values will be
@@ -279,6 +282,9 @@ public class MyIpoFragment extends Fragment {
                     String yyyymm = dateValueList.get((int) value);
                     return yyyymm.substring(0, 4).concat("-").concat(yyyymm.substring(4, 6));
                 } else {
+                    if (value > dateValueList.size() - 1){
+                        return "";
+                    }
                     return dateValueList.get((int) value);
                 }
             }

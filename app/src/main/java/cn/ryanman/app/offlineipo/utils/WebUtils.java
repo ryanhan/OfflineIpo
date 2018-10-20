@@ -238,6 +238,7 @@ public class WebUtils {
         appInfo.setVersion(json.getString("version"));
         appInfo.setVersionShort(json.getString("versionShort"));
         appInfo.setUrl(json.getString("installUrl"));
+        appInfo.setChangelog(json.getString("changelog"));
 
         return appInfo;
     }

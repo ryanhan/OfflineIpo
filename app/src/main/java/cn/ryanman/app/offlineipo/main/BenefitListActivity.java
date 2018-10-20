@@ -3,9 +3,11 @@ package cn.ryanman.app.offlineipo.main;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.ryanman.app.offlineipo.R;
@@ -27,12 +29,12 @@ public class BenefitListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_benefit_list);
         setActionBar();
+        myIpoList = new ArrayList<>();
+        List<MyIpo> result = DatabaseUtils.getAllSubscription(this);
 
-        myIpoList = DatabaseUtils.getAllSubscription(this);
-
-        for (int i = 0; i < myIpoList.size(); i++){
-            if (myIpoList.get(i).getEarnAmount() == 0){
-                myIpoList.remove(i);
+        for (MyIpo myIpo: result){
+            if (myIpo.getEarnAmount() > 0){
+                myIpoList.add(myIpo);
             }
         }
 

@@ -39,6 +39,8 @@
 
     <string name="export_database">导出至手机</string>
     <string name="import_database">从手机导入</string>
+    <string name="export_warning">导出文件将覆盖本地保存文件！</string>
+    <string name="import_warning">从文件导入后，APP内数据将会被全部覆盖！</string>
 
     <string name="save">保存</string>
 
@@ -77,10 +79,11 @@
     <string name="start_checking_update">开始检查更新</string>
     <string name="error_retry">更新遇到错误，请重试！</string>
     <string name="already_latest_version">当前已是最新版本</string>
-    <string name="download_new_version">是否下载新版本？</string>
+    <string name="download_new_version">新版发布</string>
     <string name="version_number">版本号：</string>
     <string name="cancel">取消</string>
     <string name="ok">确定</string>
+    <string name="update">更新</string>
     <string name="start_download">开始下载</string>
     <string name="downloading">下载中</string>
     <string name="download_fail">下载失败</string>
