@@ -78,7 +78,7 @@ public class DatabaseUtils {
 
         while (cursor.moveToNext()) {
             IpoItem ipoItem = parseIpoCursor(cursor);
-            if (ipoItem != null) {
+            if (ipoItem != null && ipoItem.getOfflineDate() != null) {
                 if (cursor.isNull(cursor.getColumnIndex(DatabaseHelper.M_STOCK_CODE))) {
                     ipoItem.setApplied(false);
                 } else {

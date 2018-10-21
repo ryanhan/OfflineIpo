@@ -58,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
-            android:text="aaaaa"
             android:textSize="12sp" />
 
         <View
@@ -105,15 +104,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/my_ipo"
-                        android:textColor="@color/dark_grey"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/my_ipo_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/numbers_text_color"
+                        android:textColor="@color/sub_title_grey"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -151,16 +149,15 @@
                         android:id="@+id/my_ipo_benefit_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/benefit"
-                        android:textColor="@color/dark_grey"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="@string/my_benefit"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/my_ipo_benefit_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/numbers_text_color"
+                        android:textColor="@color/sub_title_grey"
                         android:textSize="14sp" />
 
                 </LinearLayout>

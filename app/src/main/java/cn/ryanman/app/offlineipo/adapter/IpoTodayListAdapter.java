@@ -140,15 +140,15 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder = new IpoViewHolder();
             convertView = mInflater.inflate(
                     R.layout.adapter_ipo_today_child, null);
-            holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
-            holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
-            holder.layout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_child_layout);
-            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
-            holder.ipoCurrentLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_current_layout);
-            holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
-            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adapter_action_layout);
-            holder.actionImage = (ImageView) convertView.findViewById(R.id.adapter_action_image);
-            holder.actionText = (TextView) convertView.findViewById(R.id.adapter_action_text);
+            holder.ipoName = convertView.findViewById(R.id.adapter_ipo_name);
+            holder.ipoCode = convertView.findViewById(R.id.adapter_ipo_code);
+            holder.layout = convertView.findViewById(R.id.adapter_ipo_child_layout);
+            holder.priceLayout = convertView.findViewById(R.id.adapter_ipo_price_layout);
+            holder.ipoCurrentLayout = convertView.findViewById(R.id.adapter_ipo_current_layout);
+            holder.issuePrice = convertView.findViewById(R.id.adapter_ipo_price);
+            holder.actionLayout = convertView.findViewById(R.id.adapter_action_layout);
+            holder.actionImage = convertView.findViewById(R.id.adapter_action_image);
+            holder.actionText = convertView.findViewById(R.id.adapter_action_text);
             convertView.setTag(holder);
         } else {
             holder = (IpoViewHolder) convertView.getTag();
@@ -166,9 +166,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
             if (ipoItem.getIssuePrice() != 0) {
                 DecimalFormat df = new DecimalFormat("#.00");
-                holder.issuePrice.setText("￥" + df.format(ipoItem.getIssuePrice()));
+                holder.issuePrice.setText(context.getString(R.string.issue_price) + context.getString(R.string.space)+ "￥" + df.format(ipoItem.getIssuePrice()));
             } else {
-                holder.issuePrice.setText(R.string.none);
+                holder.issuePrice.setText(context.getString(R.string.issue_price) + R.string.none);
             }
 
             holder.ipoCurrentLayout.setVisibility(View.GONE);

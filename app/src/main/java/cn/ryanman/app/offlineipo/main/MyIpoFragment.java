@@ -156,15 +156,15 @@ public class MyIpoFragment extends Fragment {
     private void setMonthActive(boolean b) {
         if (b) {
             time = Value.BY_MONTH;
-            segMonth.setTextColor(getResources().getColor(R.color.white));
+            segMonth.setTextColor(getResources().getColor(android.R.color.white));
             segMonth.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             segYear.setTextColor(getResources().getColor(R.color.colorAccent));
-            segYear.setBackgroundColor(getResources().getColor(R.color.white));
+            segYear.setBackgroundColor(getResources().getColor(android.R.color.white));
         } else {
             time = Value.BY_YEAR;
             segMonth.setTextColor(getResources().getColor(R.color.colorAccent));
-            segMonth.setBackgroundColor(getResources().getColor(R.color.white));
-            segYear.setTextColor(getResources().getColor(R.color.white));
+            segMonth.setBackgroundColor(getResources().getColor(android.R.color.white));
+            segYear.setTextColor(getResources().getColor(android.R.color.white));
             segYear.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         }
     }
@@ -198,9 +198,9 @@ public class MyIpoFragment extends Fragment {
                             maxDate = ym;
                         }
                         benefitMonthMap.put(yyyymm, benefit);
-                        if (benefitYearMap.containsKey(String.valueOf(year))){
+                        if (benefitYearMap.containsKey(String.valueOf(year))) {
                             benefitYearMap.put(String.valueOf(year), benefitYearMap.get(String.valueOf(year)) + benefit);
-                        }else{
+                        } else {
                             benefitYearMap.put(String.valueOf(year), benefit);
                         }
                     }
@@ -271,25 +271,26 @@ public class MyIpoFragment extends Fragment {
         rightAxis.setEnabled(false);
 
         // add a nice and smooth animation
-        mChart.animateY(1500);
+        mChart.animateY(1000);
 
         mChart.getLegend().setEnabled(false);
 
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                if (time == Value.BY_MONTH) {
-                    String yyyymm = dateValueList.get((int) value);
-                    return yyyymm.substring(0, 4).concat("-").concat(yyyymm.substring(4, 6));
+                if (value > dateValueList.size() - 1) {
+                    return "";
                 } else {
-                    if (value > dateValueList.size() - 1){
-                        return "";
+                    if (time == Value.BY_MONTH) {
+                        String yyyymm = dateValueList.get((int) value);
+                        return yyyymm.substring(0, 4).concat("-").concat(yyyymm.substring(4, 6));
+                    } else {
+
+                        return dateValueList.get((int) value);
                     }
-                    return dateValueList.get((int) value);
                 }
             }
         });
-
         setData();
     }
 
@@ -325,7 +326,7 @@ public class MyIpoFragment extends Fragment {
             mChart.notifyDataSetChanged();
         } else {
             set1 = new BarDataSet(yVals1, "Benefit Chart");
-            set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            set1.setColors(ColorTemplate.MATERIAL_COLORS);
             set1.setDrawValues(true);
             set1.setValueTextSize(12f);
 

@@ -8,25 +8,23 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.style.URLSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.fourmob.datetimepicker.date.DatePickerDialog;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -44,12 +42,11 @@ import cn.ryanman.app.offlineipo.utils.WebUtils;
  * Created by hanyan on 12/26/2016.
  */
 
-public class IpoDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class IpoDetailActivity extends AppCompatActivity {
 
     private String ipoCode;
     private String ipoName;
     private MyIpo myIpo;
-    private DatePickerDialog datePickerDialog;
     private TextView soldDateText;
     private LinearLayout noticeLayout;
 
@@ -73,18 +70,12 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void setActionBar() {
-        ActionBar actionBar = this.getSupportActionBar();
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-        View view = LayoutInflater.from(this).inflate(
-                R.layout.actionbar_ipo_detail, null);
-        actionBar.setCustomView(view, lp);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        TextView ipoNameText = view.findViewById(R.id.actionbar_ipo_name);
-        TextView ipoCodeText = view.findViewById(R.id.actionbar_ipo_code);
-        ImageView backButton = view.findViewById(R.id.actionbar_left);
+        Toolbar toolbar = findViewById(R.id.ipo_detail_toolbar);
+        setSupportActionBar(toolbar);
+
+        TextView ipoNameText = findViewById(R.id.actionbar_ipo_name);
+        TextView ipoCodeText = findViewById(R.id.actionbar_ipo_code);
+        ImageView backButton = findViewById(R.id.actionbar_left);
         ipoNameText.setText(ipoName);
         ipoCodeText.setText(ipoCode);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,25 +84,6 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                 finish();
             }
         });
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        String date = String.valueOf(year) + "-";
-        if (month < 9) {
-            date += "0" + (month + 1);
-        } else {
-            date += (month + 1);
-        }
-
-        if (day < 10) {
-            date += "-0" + day;
-        } else {
-            date += "-" + day;
-        }
-
-        DatabaseUtils.updateSoldDate(IpoDetailActivity.this, ipoCode, date);
-        soldDateText.setText(date);
     }
 
     @Override
@@ -261,10 +233,6 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                 }
             });
 
-            //日期时间选择器
-            final Calendar calendar = Calendar.getInstance();
-            datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
-
             if (myIpo.getSoldDate() == null) {
                 soldDateText.setText(R.string.please_select);
                 soldDateText.setTextColor(getColor(R.color.colorAccent));
@@ -273,13 +241,32 @@ public class IpoDetailActivity extends AppCompatActivity implements DatePickerDi
                 soldDateText.setText(myIpo.getSoldDate());
                 soldDateText.setTextColor(getColor(R.color.colorAccent));
             }
+
+            final Calendar calendar = Calendar.getInstance();
+
             soldDateText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    datePickerDialog.setVibrate(false);
-                    datePickerDialog.setYearRange(1985, 2028);
-                    datePickerDialog.setCloseOnSingleTapDay(false);
-                    datePickerDialog.show(getSupportFragmentManager(), "datepicker");
+                    new android.app.DatePickerDialog(IpoDetailActivity.this, android.R.style.Theme_Material_Light_Dialog, new android.app.DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                            String date = String.valueOf(year) + "-";
+                            if (monthOfYear < 9) {
+                                date += "0" + (monthOfYear + 1);
+                            } else {
+                                date += (monthOfYear + 1);
+                            }
+                            if (dayOfMonth < 10) {
+                                date += "-0" + dayOfMonth;
+                            } else {
+                                date += "-" + dayOfMonth;
+                            }
+                            DatabaseUtils.updateSoldDate(IpoDetailActivity.this, ipoCode, date);
+                            soldDateText.setText(date);
+                            soldDateText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                        }
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+
                 }
             });
 

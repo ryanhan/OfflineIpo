@@ -3,6 +3,7 @@ package cn.ryanman.app.offlineipo.main;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -45,7 +46,9 @@ public class BenefitListActivity extends AppCompatActivity {
     }
 
     private void setActionBar() {
-        ActionBar actionBar = this.getSupportActionBar();
+        Toolbar toolbar = findViewById(R.id.my_benefit_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.my_benefit);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);

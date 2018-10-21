@@ -1,7 +1,5 @@
 package cn.ryanman.app.offlineipo.utils;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -91,7 +90,7 @@ public class CheckUpdateAsyncTask extends AsyncTask<Void, Integer, AppInfo> {
     }
 
     private void confirmDownload(final AppInfo info) {
-        Dialog alertDialog = new AlertDialog.Builder(context)
+        AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.download_new_version) + " v" + info.getVersionShort()).setMessage(info.getChangelog())
                 .setNegativeButton(context.getString(R.string.cancel), null)
                 .setPositiveButton(context.getString(R.string.update), new DialogInterface.OnClickListener() {

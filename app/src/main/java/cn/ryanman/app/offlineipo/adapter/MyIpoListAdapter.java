@@ -57,17 +57,17 @@ public class MyIpoListAdapter extends ArrayAdapter<MyIpo> {
             holder = new ViewHolder();
             convertView = mInflater.inflate(
                     R.layout.adapter_my_ipo_list, null);
-            holder.ipoName = (TextView) convertView.findViewById(R.id.adapter_ipo_name);
-            holder.ipoCode = (TextView) convertView.findViewById(R.id.adapter_ipo_code);
-            holder.priceLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_price_layout);
-            holder.currentLayout = (LinearLayout) convertView.findViewById(R.id.adapter_ipo_current_layout);
-            holder.issuePrice = (TextView) convertView.findViewById(R.id.adapter_ipo_price);
-            holder.stockNumber = (TextView) convertView.findViewById(R.id.adapter_ipo_stock_text);
-            holder.benefit = (TextView) convertView.findViewById(R.id.adapter_ipo_benefit);
-            holder.current = (TextView) convertView.findViewById(R.id.adapter_ipo_current);
-            holder.actionLayout = (LinearLayout) convertView.findViewById(R.id.adapter_action_layout);
-            holder.actionImage = (ImageView) convertView.findViewById(R.id.adapter_action_image);
-            holder.actionText = (TextView) convertView.findViewById(R.id.adapter_action_text);
+            holder.ipoName = convertView.findViewById(R.id.adapter_ipo_name);
+            holder.ipoCode = convertView.findViewById(R.id.adapter_ipo_code);
+            holder.priceLayout = convertView.findViewById(R.id.adapter_ipo_price_layout);
+            holder.currentLayout = convertView.findViewById(R.id.adapter_ipo_current_layout);
+            holder.issuePrice = convertView.findViewById(R.id.adapter_ipo_price);
+            holder.stockNumber = convertView.findViewById(R.id.adapter_ipo_stock_text);
+            holder.benefit = convertView.findViewById(R.id.adapter_ipo_benefit);
+            holder.current = convertView.findViewById(R.id.adapter_ipo_current);
+            holder.actionLayout = convertView.findViewById(R.id.adapter_action_layout);
+            holder.actionImage = convertView.findViewById(R.id.adapter_action_image);
+            holder.actionText = convertView.findViewById(R.id.adapter_action_text);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -78,22 +78,22 @@ public class MyIpoListAdapter extends ArrayAdapter<MyIpo> {
 
         if (getItem(position).getIpoItem().getIssuePrice() != 0) {
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.issuePrice.setText("￥" + df.format(getItem(position).getIpoItem().getIssuePrice()));
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + context.getString(R.string.space) + "￥" + df.format(getItem(position).getIpoItem().getIssuePrice()));
         } else {
-            holder.issuePrice.setText(R.string.none);
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + R.string.none);
         }
 
         if (getItem(position).getStockShare() != 0) {
-            holder.stockNumber.setText(String.valueOf(getItem(position).getStockShare()) + " "+ context.getString(R.string.stock) + " × " + getItem(position).getPersonNumber() + "人");
+            holder.stockNumber.setText(context.getString(R.string.stock_number) + context.getString(R.string.space) + String.valueOf(getItem(position).getStockShare()) + context.getString(R.string.stock) + " × " + getItem(position).getPersonNumber() + "人");
         } else {
-            holder.stockNumber.setText(R.string.none);
+            holder.stockNumber.setText(context.getString(R.string.stock_number) + context.getString(R.string.none));
         }
 
         if (getItem(position).getEarnAmount() != 0) {
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.benefit.setText("￥" + df.format(getItem(position).getEarnAmount()));
+            holder.benefit.setText(context.getString(R.string.benefit) + context.getString(R.string.space) + "￥" + df.format(getItem(position).getEarnAmount()));
         } else {
-            holder.benefit.setText(R.string.none);
+            holder.benefit.setText(context.getString(R.string.benefit) + context.getString(R.string.none));
         }
 
         if (!getItem(position).getIpoItem().isApplied()) {

@@ -2,7 +2,7 @@
 <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="10dp"
     android:layout_width="10dp"
-    android:background="@color/white"
+    android:background="@android:color/white"
     android:id="@+id/ipo_detail_weixin_button"
     android:layout_marginLeft="5dp"
     android:src="@drawable/ic_weixin"/>

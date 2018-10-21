@@ -29,6 +29,8 @@
     <string name="stock">股</string>
     <string name="yuan">元</string>
     <string name="none">&#160;&#160;&#160;&#160;-</string>
+    <string name="space">&#160;&#160;</string>
+
 
     <string name="add_user">添加投资者</string>
     <string name="my_profit">我的收益</string>
@@ -55,7 +57,7 @@
     <string name="list_date">上市日期</string>
     <string name="ipo_info">配售信息</string>
     <string name="stock_amount">配售股数</string>
-    <string name="benefit">总收益</string>
+    <string name="benefit">收益</string>
     <string name="my_benefit">我的收益</string>
     <string name="sold_price">卖出价格</string>
     <string name="sold_date">卖出日期</string>
@@ -93,5 +95,8 @@
 
     <string name="by_month">按月</string>
     <string name="by_year">按年</string>
+
+    <string name="menu_search">搜索</string>
+    <string name="search_hint">输入股票名称或代码</string>
 
 </resources>

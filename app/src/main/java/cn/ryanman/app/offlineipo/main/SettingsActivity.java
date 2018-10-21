@@ -1,9 +1,6 @@
 package cn.ryanman.app.offlineipo.main;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,14 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import cn.ryanman.app.offlineipo.R;
-import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.CheckUpdateAsyncTask;
 import cn.ryanman.app.offlineipo.utils.DatabaseUtils;
 
@@ -70,7 +68,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setActionBar() {
-        ActionBar actionBar = this.getSupportActionBar();
+        Toolbar toolbar = findViewById(R.id.settings_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.settings);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
@@ -113,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void exportAndImport(boolean isExport) {
         if (isExport) {
-            Dialog alertDialog = new AlertDialog.Builder(this)
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.export_database)).setMessage(getString(R.string.export_warning))
                     .setNegativeButton(getString(R.string.cancel), null)
                     .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -129,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }).create();
             alertDialog.show();
         } else {
-            Dialog alertDialog = new AlertDialog.Builder(this)
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.import_database)).setMessage(getString(R.string.import_warning))
                     .setNegativeButton(getString(R.string.cancel), null)
                     .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {

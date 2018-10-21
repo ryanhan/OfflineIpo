@@ -6,8 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cn.ryanman.app.offlineipo.R;
-import cn.ryanman.app.offlineipo.listener.OnDateChangeListener;
 import cn.ryanman.app.offlineipo.utils.AppUtils;
 import cn.ryanman.app.offlineipo.utils.Value;
 
@@ -30,14 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationBar bottomNavigationBar;
     private Fragment[] fragments;
+    private Toolbar customToolbar;
+    private Toolbar simpleToolbar;
     private ActionBar actionBar;
     private String date;
     private TextView todayText;
-    private OnDateChangeListener onDateChangeListener;
-
-    public void setOnDateChangeListener(OnDateChangeListener onDateChangeListener) {
-        this.onDateChangeListener = onDateChangeListener;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setViews();
         setDefaultFragment();
-
     }
 
     private void setViews() {
 
-        actionBar = getSupportActionBar();
+        customToolbar = findViewById(R.id.main_custom_toolbar);
+        simpleToolbar = findViewById(R.id.main_simple_toolbar);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         date = df.format(new Date());
@@ -75,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
                 switch (position) {
                     case 0:
-                        customizeActionBar();
+                        customToolBar();
                         break;
                     default:
-                        normalActionBar();
+                        simpleToolbar();
                         break;
                 }
             }
@@ -93,21 +88,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void customizeActionBar() {
+    private void customToolBar() {
 
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-        View view = LayoutInflater.from(this).inflate(
-                R.layout.actionbar_ipo_today, null);
-        actionBar.setCustomView(view, lp);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
+        customToolbar.setVisibility(View.VISIBLE);
+        simpleToolbar.setVisibility(View.GONE);
 
-        todayText = (TextView) view.findViewById(R.id.actionbar_today);
-        ImageView left = (ImageView) view.findViewById(R.id.actionbar_left);
-        ImageView right = (ImageView) view.findViewById(R.id.actionbar_right);
-        TextView back = (TextView) view.findViewById(R.id.actionbar_back);
+        setSupportActionBar(simpleToolbar);
+        actionBar = getSupportActionBar();
+
+        todayText = findViewById(R.id.actionbar_today);
+        ImageView left = findViewById(R.id.actionbar_left);
+        ImageView right = findViewById(R.id.actionbar_right);
+        TextView back = findViewById(R.id.actionbar_back);
         todayText.setText(date);
         left.setOnClickListener(new DateChangeListener(-1));
         right.setOnClickListener(new DateChangeListener(1));
@@ -121,12 +113,15 @@ public class MainActivity extends AppCompatActivity {
                 fragment.updateList(date, true);
             }
         });
-
-        actionBar.setCustomView(view);
-
     }
 
-    private void normalActionBar() {
+    private void simpleToolbar() {
+        customToolbar.setVisibility(View.GONE);
+        simpleToolbar.setVisibility(View.VISIBLE);
+
+        setSupportActionBar(simpleToolbar);
+        actionBar = getSupportActionBar();
+
         actionBar.setDisplayShowCustomEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.app_name);
@@ -147,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.fragment, fragments[0]);
         ft.commit();
-        customizeActionBar();
+        customToolBar();
     }
 
     private class DateChangeListener implements View.OnClickListener {
