@@ -28,9 +28,6 @@
     <string name="stock_number">每人获配</string>
     <string name="stock">股</string>
     <string name="yuan">元</string>
-    <string name="none">&#160;&#160;&#160;&#160;-</string>
-    <string name="space">&#160;&#160;</string>
-
 
     <string name="add_user">添加投资者</string>
     <string name="my_profit">我的收益</string>

@@ -99,7 +99,7 @@ public class IpoDetailActivity extends AppCompatActivity {
     public void setViews() {
         final DecimalFormat df = new DecimalFormat("#,###.00");
         LinearLayout layout = findViewById(R.id.activity_ipo_detail);
-        addTextView(layout, getString(R.string.issue_price), "￥" + String.valueOf(myIpo.getIpoItem().getIssuePrice()));
+        addTextView(layout, getString(R.string.issue_price), myIpo.getIpoItem().getIssuePrice() == 0 ? "-" : "￥" + String.valueOf(myIpo.getIpoItem().getIssuePrice()));
         addTextView(layout, getString(R.string.list_date), myIpo.getIpoItem().getListedDate() == null ? "-" : myIpo.getIpoItem().getListedDate());
 
         if (myIpo.getIpoItem().isApplied()) {
@@ -352,7 +352,7 @@ public class IpoDetailActivity extends AppCompatActivity {
         TextView date = view.findViewById(R.id.table_notice_date);
         title.setText(notice.getTitle());
         date.setText(notice.getDate());
-        layout.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();

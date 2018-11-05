@@ -5,6 +5,7 @@ package cn.ryanman.app.offlineipo.model;
  */
 
 public class IpoTodayFull {
+
     private Status event;
     private IpoItem ipo;
 

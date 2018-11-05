@@ -106,15 +106,15 @@ public class IpoListAdapter extends BaseAdapter implements Filterable {
         //显示发行价
         if (items2.get(position).getIssuePrice() != 0) {
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.issuePrice.setText(context.getString(R.string.issue_price) + context.getString(R.string.space)+ "￥" + df.format(items2.get(position).getIssuePrice()));
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + "  ￥" + df.format(items2.get(position).getIssuePrice()));
         } else {
-            holder.issuePrice.setText(context.getString(R.string.issue_price) + R.string.none);
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + "    -");
         }
 
 
         holder.actionLayout.setVisibility(View.VISIBLE);
         if (AppUtils.isListed(items2.get(position))) {
-            holder.current.setText(context.getString(R.string.have_listed) + context.getString(R.string.space) + items2.get(position).getListedDate());
+            holder.current.setText(context.getString(R.string.have_listed) + "  " + items2.get(position).getListedDate());
         } else if (Value.ipoTodayMap.containsKey(items2.get(position).getName())) {
             int resId = context.getResources().getIdentifier(Value.ipoTodayMap.get(items2.get(position).getName()).toString(), "string", Value.PACKAGENAME);
             holder.current.setText(resId);

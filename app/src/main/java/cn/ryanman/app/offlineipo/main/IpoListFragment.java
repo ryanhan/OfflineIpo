@@ -59,8 +59,9 @@ public class IpoListFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(IpoListFragment.this.getActivity(),
                         IpoDetailActivity.class);
-                intent.putExtra(Value.IPO_NAME, ipoList.get(position).getName());
-                intent.putExtra(Value.IPO_CODE, ipoList.get(position).getCode());
+                IpoItem ipoItem = (IpoItem) ipoListAdapter.getItem(position);
+                intent.putExtra(Value.IPO_NAME, ipoItem.getName());
+                intent.putExtra(Value.IPO_CODE, ipoItem.getCode());
                 startActivity(intent);
             }
         });

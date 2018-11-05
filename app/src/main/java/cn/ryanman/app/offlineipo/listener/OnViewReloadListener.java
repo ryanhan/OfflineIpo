@@ -5,5 +5,5 @@ package cn.ryanman.app.offlineipo.listener;
  */
 
 public interface OnViewReloadListener {
-    public void reload(Object object);
+    void reload(Object object);
 }

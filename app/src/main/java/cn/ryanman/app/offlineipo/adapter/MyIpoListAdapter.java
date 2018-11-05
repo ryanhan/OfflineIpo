@@ -78,22 +78,22 @@ public class MyIpoListAdapter extends ArrayAdapter<MyIpo> {
 
         if (getItem(position).getIpoItem().getIssuePrice() != 0) {
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.issuePrice.setText(context.getString(R.string.issue_price) + context.getString(R.string.space) + "￥" + df.format(getItem(position).getIpoItem().getIssuePrice()));
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + "  ￥" + df.format(getItem(position).getIpoItem().getIssuePrice()));
         } else {
-            holder.issuePrice.setText(context.getString(R.string.issue_price) + R.string.none);
+            holder.issuePrice.setText(context.getString(R.string.issue_price) + "    -");
         }
 
         if (getItem(position).getStockShare() != 0) {
-            holder.stockNumber.setText(context.getString(R.string.stock_number) + context.getString(R.string.space) + String.valueOf(getItem(position).getStockShare()) + context.getString(R.string.stock) + " × " + getItem(position).getPersonNumber() + "人");
+            holder.stockNumber.setText(context.getString(R.string.stock_number) + "  " + String.valueOf(getItem(position).getStockShare()) + context.getString(R.string.stock) + " × " + getItem(position).getPersonNumber() + "人");
         } else {
-            holder.stockNumber.setText(context.getString(R.string.stock_number) + context.getString(R.string.none));
+            holder.stockNumber.setText(context.getString(R.string.stock_number) + "    -");
         }
 
         if (getItem(position).getEarnAmount() != 0) {
             DecimalFormat df = new DecimalFormat("#.00");
-            holder.benefit.setText(context.getString(R.string.benefit) + context.getString(R.string.space) + "￥" + df.format(getItem(position).getEarnAmount()));
+            holder.benefit.setText(context.getString(R.string.benefit) + "  ￥" + df.format(getItem(position).getEarnAmount()));
         } else {
-            holder.benefit.setText(context.getString(R.string.benefit) + context.getString(R.string.none));
+            holder.benefit.setText(context.getString(R.string.benefit) + "    -");
         }
 
         if (!getItem(position).getIpoItem().isApplied()) {

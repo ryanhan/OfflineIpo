@@ -112,9 +112,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
             holder = new EventViewHolder();
             convertView = mInflater.inflate(
                     R.layout.adapter_ipo_today_group, null);
-            holder.eventName = (TextView) convertView.findViewById(R.id.adapter_event_name);
-            holder.arrow = (ImageView) convertView.findViewById(R.id.adapter_arrow);
-            holder.layout = (LinearLayout) convertView.findViewById(R.id.ipo_group_layout);
+            holder.eventName = convertView.findViewById(R.id.adapter_event_name);
+            holder.arrow = convertView.findViewById(R.id.adapter_arrow);
+            holder.layout = convertView.findViewById(R.id.ipo_group_layout);
             convertView.setTag(holder);
         } else {
             holder = (EventViewHolder) convertView.getTag();
@@ -166,9 +166,9 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
 
             if (ipoItem.getIssuePrice() != 0) {
                 DecimalFormat df = new DecimalFormat("#.00");
-                holder.issuePrice.setText(context.getString(R.string.issue_price) + context.getString(R.string.space)+ "￥" + df.format(ipoItem.getIssuePrice()));
+                holder.issuePrice.setText(context.getString(R.string.issue_price) + "  ￥" + df.format(ipoItem.getIssuePrice()));
             } else {
-                holder.issuePrice.setText(context.getString(R.string.issue_price) + R.string.none);
+                holder.issuePrice.setText(context.getString(R.string.issue_price) + "    -");
             }
 
             holder.ipoCurrentLayout.setVisibility(View.GONE);
