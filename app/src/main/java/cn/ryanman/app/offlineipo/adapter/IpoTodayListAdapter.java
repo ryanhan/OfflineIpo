@@ -159,10 +159,13 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
         holder.ipoCode.setText(ipoItem.getCode());
 
         if (ipoItem.getOfflineDate() == null) {
-            holder.ipoCurrentLayout.setVisibility(View.VISIBLE);
             holder.priceLayout.setVisibility(View.GONE);
+            holder.ipoCurrentLayout.setVisibility(View.VISIBLE);
             holder.actionLayout.setVisibility(View.INVISIBLE);
         } else {
+            holder.priceLayout.setVisibility(View.VISIBLE);
+            holder.ipoCurrentLayout.setVisibility(View.GONE);
+            holder.actionLayout.setVisibility(View.VISIBLE);
 
             if (ipoItem.getIssuePrice() != 0) {
                 DecimalFormat df = new DecimalFormat("#.00");
@@ -171,8 +174,6 @@ public class IpoTodayListAdapter extends BaseExpandableListAdapter {
                 holder.issuePrice.setText(context.getString(R.string.issue_price) + "    -");
             }
 
-            holder.ipoCurrentLayout.setVisibility(View.GONE);
-            holder.actionLayout.setVisibility(View.VISIBLE);
             if (!ipoItem.isApplied()) {
                 holder.actionImage.setImageResource(R.drawable.ic_add);
                 holder.actionImage.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent));
